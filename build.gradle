@@ -1,0 +1,121 @@
+plugins {
+    id('java-library')
+    id('maven-publish')
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id('pl.allegro.tech.build.axion-release') version "1.13.6"
+}
+
+scmVersion {
+    versionCreator System.getenv('USE_BRANCH_VERSION') != null ? 'versionWithBranch' : 'simple'
+    versionIncrementer 'incrementMinor' // default=incrementPatch
+    ignoreUncommittedChanges = false
+    branchVersionIncrementer = [
+            'hotfix/.*'  : { c -> c.currentVersion.incrementPatchVersion() },
+            'release/.*' : 'incrementMinorIfNotOnRelease'
+    ]
+    hooks {
+        pre 'fileUpdate', [file: 'README.md', pattern: {v, c -> /version: $v/}, replacement: {v, c -> "vers/ion: $v"}]
+        pre 'commit'
+    }
+    localOnly = true
+}
+
+version = scmVersion.version
+group = "io.kangov.stixj"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+    maven {
+        url "https://gitlab.com/api/v4/groups/60764984/-/packages/maven"
+        name "Gitlab"
+        credentials(HttpHeaderCredentials) {
+            if (project.hasProperty("gitlab-darren")) { // the token at the feed-ng subgroup level
+                name = 'Private-Token'
+                value = project.property("gitlab-darren")
+            } else {
+                name = "Job-Token"
+                value = System.getenv("CI_JOB_TOKEN")
+            }
+        }
+        authentication {
+            header(HttpHeaderAuthentication)
+        }
+    }
+    maven {
+        url 'https://jitpack.io'
+    }
+}
+
+dependencies {
+
+    annotationProcessor("org.immutables:value:2.9.2")
+
+    implementation platform("com.fasterxml.jackson:jackson-bom:2.14.0")
+    implementation "com.fasterxml.jackson.core:jackson-databind"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+    implementation "com.fasterxml.jackson.module:jackson-module-parameter-names"
+
+    implementation "org.immutables:value:2.9.2"
+    implementation "org.immutables:annotate:2.9.2"
+    implementation "org.immutables:serial:2.9.2"
+    implementation "jakarta.annotation:jakarta.annotation-api:2.1.0"
+//    implementation "org.hibernate.validator:hibernate-validator:6.0.13.Final"
+//    implementation "com.jayway.jsonpath:json-path:2.7.0"
+//    implementation "org.springframework:spring-expression:5.3.24"
+//    implementation "org.glassfish:javax.el:3.0.1-b09"
+//    implementation "am.ik.yavi:yavi:0.9.1"
+//    implementation("io.vertx:vertx-json-schema:4.4.0")
+//    implementation("com.networknt:json-schema-validator:1.0.76");
+
+    runtimeOnly "ch.qos.logback:logback-classic:1.2.11"
+
+//    testImplementation "org.skyscreamer:jsonassert:1.5.1"
+    testImplementation "org.assertj:assertj-core:3.23.1"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.3.1'
+    testImplementation 'net.andreinc.mockneat:mockneat:0.4.2'
+
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+
+}
+
+java {
+    sourceCompatibility = JavaVersion.toVersion("17")
+    targetCompatibility = JavaVersion.toVersion("17")
+}
+
+tasks.named('shadowJar', ShadowJar) {
+    enableRelocation true
+    relocationPrefix "myapp"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        library(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url "https://gitlab.com/api/v4/projects/${System.getenv("CI_PROJECT_ID")}/packages/maven"
+            name "Gitlab"
+            credentials(HttpHeaderCredentials) {
+                name = "Job-Token"
+                value = System.getenv("CI_JOB_TOKEN")
+            }
+            authentication {
+                header(HttpHeaderAuthentication)
+            }
+        }
+    }
+}
+
+
+

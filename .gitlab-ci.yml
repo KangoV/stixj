@@ -1,0 +1,59 @@
+
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+
+before_script:
+  - GRADLE_USER_HOME="$(pwd)/.gradle"
+  - export GRADLE_USER_HOME
+
+stages:
+  - build
+  - publish
+
+cache:
+  key: "$CI_COMMIT_REF_SLUG"
+  policy: pull-push
+  paths:
+    - cache/caches/
+    - cache/notifications/
+    - cache/wrapper/
+
+build_job:
+  stage: build
+  image: openjdk:17.0-jdk-buster
+  coverage: '/Code coverage: \d+\.\d+/'
+  script:
+    - pip install stix2-validator
+    - ./gradlew --build-cache --gradle-user-home cache/ build jacocoTestReport
+  artifacts:
+    paths: ["build/libs/*.jar","build/reports/jacoco/test/jacocoTestReport.xml"]
+    expire_in: 1 week
+
+publish_artefacts:
+  stage: publish
+  image: openjdk:17.0-jdk-buster
+  cache:
+    policy: pull
+  script:
+    - ./gradlew --build-cache --gradle-user-home cache/ publish
+  needs: ["build_job"]
+  artifacts:
+    paths: ["build/libs/*.jar"]
+    expire_in: 1 week
+
+publish_coverage:
+  # Must be in a stage later than test-jdk11's stage.
+  # The `visualize` stage does not exist by default.
+  # Please define it first, or chose an existing stage like `deploy`.
+  stage: publish
+  image: registry.gitlab.com/haynes/jacoco2cobertura:1.0.7
+  cache: [] # cache not needed
+  script:
+    # convert report from jacoco to cobertura, using relative project path
+    - python /opt/cover2cover.py build/reports/jacoco/test/jacocoTestReport.xml $CI_PROJECT_DIR/src/main/java/ > build/cobertura.xml
+  needs: ["build_job"]
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: build/cobertura.xml
