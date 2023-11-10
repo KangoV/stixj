@@ -87,10 +87,10 @@ java {
     targetCompatibility = JavaVersion.toVersion("17")
 }
 
-tasks.named('shadowJar', ShadowJar) {
-    enableRelocation true
-    relocationPrefix "myapp"
-}
+//tasks.named('shadowJar', ShadowJar) {
+//    enableRelocation true
+//    relocationPrefix "myapp"
+//}
 
 test {
     useJUnitPlatform()
