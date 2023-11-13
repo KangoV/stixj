@@ -1,8 +1,12 @@
 plugins {
-    id('java-library')
+    id 'io.micronaut.library' version '4.1.2'
     id('maven-publish')
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id('pl.allegro.tech.build.axion-release') version "1.13.6"
+}
+
+micronaut {
+    version("4.1.2")
 }
 
 scmVersion {
@@ -26,41 +30,38 @@ group = "io.kangov.stixj"
 repositories {
     mavenLocal()
     mavenCentral()
-    jcenter()
-    maven {
-        url "https://gitlab.com/api/v4/groups/60764984/-/packages/maven"
-        name "Gitlab"
-        credentials(HttpHeaderCredentials) {
-            if (project.hasProperty("gitlab-darren")) { // the token at the feed-ng subgroup level
-                name = 'Private-Token'
-                value = project.property("gitlab-darren")
-            } else {
-                name = "Job-Token"
-                value = System.getenv("CI_JOB_TOKEN")
-            }
-        }
-        authentication {
-            header(HttpHeaderAuthentication)
-        }
-    }
-    maven {
-        url 'https://jitpack.io'
-    }
 }
 
 dependencies {
 
-    annotationProcessor("org.immutables:value:2.9.2")
+    // START -- Micronaut IOC minimum
+    annotationProcessor "io.micronaut:micronaut-inject-java"
+    implementation "io.micronaut:micronaut-inject"
+    implementation "io.micronaut:micronaut-runtime"
+    testImplementation "io.micronaut.test:micronaut-test-junit5"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:5.9.1"
+    // END
 
-    implementation platform("com.fasterxml.jackson:jackson-bom:2.14.0")
-    implementation "com.fasterxml.jackson.core:jackson-databind"
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8"
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
-    implementation "com.fasterxml.jackson.module:jackson-module-parameter-names"
+
+
+    annotationProcessor("org.immutables:value:2.9.2")
+    annotationProcessor("io.micronaut.validation:micronaut-validation-processor")
+    annotationProcessor("io.micronaut.serde:micronaut-serde-processor:2.4.0")
+
+    implementation("io.micronaut.validation:micronaut-validation")
+    implementation("io.micronaut.serde:micronaut-serde-jackson:2.4.0")
+
+    implementation platform("com.fasterxml.jackson:jackson-bom:2.15.2")
+    implementation "com.fasterxml.jackson.core:jackson-annotations"
+    compileOnly "com.fasterxml.jackson.core:jackson-databind"
+//    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8"
+//    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+//    implementation "com.fasterxml.jackson.module:jackson-module-parameter-names"
 
     implementation "org.immutables:value:2.9.2"
     implementation "org.immutables:annotate:2.9.2"
     implementation "org.immutables:serial:2.9.2"
+    implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation "jakarta.annotation:jakarta.annotation-api:2.1.0"
 //    implementation "org.hibernate.validator:hibernate-validator:6.0.13.Final"
 //    implementation "com.jayway.jsonpath:json-path:2.7.0"
@@ -74,11 +75,8 @@ dependencies {
 
 //    testImplementation "org.skyscreamer:jsonassert:1.5.1"
     testImplementation "org.assertj:assertj-core:3.23.1"
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.3.1'
-    testImplementation 'net.andreinc.mockneat:mockneat:0.4.2'
+    testImplementation 'net.andreinc:mockneat:0.4.8'
 
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
 
 }
 
@@ -100,19 +98,6 @@ publishing {
     publications {
         library(MavenPublication) {
             from components.java
-        }
-    }
-    repositories {
-        maven {
-            url "https://gitlab.com/api/v4/projects/${System.getenv("CI_PROJECT_ID")}/packages/maven"
-            name "Gitlab"
-            credentials(HttpHeaderCredentials) {
-                name = "Job-Token"
-                value = System.getenv("CI_JOB_TOKEN")
-            }
-            authentication {
-                header(HttpHeaderAuthentication)
-            }
         }
     }
 }
