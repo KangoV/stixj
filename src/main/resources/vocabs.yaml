@@ -1,0 +1,9 @@
+vocabs:
+  - name: identity-classes
+    type: must
+    values:
+      - individual
+      - group
+      - organization,
+      - class
+      - unknown
