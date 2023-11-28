@@ -3,30 +3,29 @@ package io.kangov.stix.core.sdo.objects;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import io.kangov.stix.common.type.ExternalReference;
 import io.kangov.stix.core.sdo.SdoObject;
+import io.kangov.stix.enums.Vocabs;
 import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.validation.constraints.Vocab;
 import io.micronaut.core.annotation.Introspected;
-import io.micronaut.core.annotation.NonNull;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 
-import java.util.*;
+import java.util.Optional;
 import java.util.function.UnaryOperator;
 
-import static io.kangov.stix.enums.Vocabs.Vocab.IDENTITY_CLASS;
-import static io.kangov.stix.enums.Vocabs.Vocab.INDUSTRY_SECTORS;
+import static io.kangov.stix.enums.Vocabs.Vocab.REGION;
 
 /**
- * identity
+ * location
  * <p>
  * Identities can represent actual individuals, organizations, or groups (e.g., ACME, Inc.) as well as classes of individuals, organizations, or groups.
  * 
  */
 @Value.Immutable
 @Serial.Version(1L)
-//@DefaultTypeValue(value = "identity", groups = { DefaultValuesProcessor.class })
+@JsonTypeName("location")
+//@DefaultTypeValue(value = "location", groups = { DefaultValuesProcessor.class })
 @Value.Style(
     optionalAcceptNullable = true,
     visibility = Value.Style.ImplementationVisibility.PACKAGE,
@@ -36,30 +35,38 @@ import static io.kangov.stix.enums.Vocabs.Vocab.INDUSTRY_SECTORS;
     validationMethod = Value.Style.ValidationMethod.NONE, // let bean validation do it
     additionalJsonAnnotations = { JsonTypeName.class },
     depluralize = true)
-@JsonTypeName("identity")
-@JsonSerialize(as = Identity.class)
-@JsonDeserialize(builder = Identity.Builder.class)
+@JsonSerialize(as = Location.class)
+@JsonDeserialize(builder = Location.Builder.class)
 @JsonPropertyOrder({
     "type",
+    "spec_version",
     "id",
-    "created_by_ref",
     "created",
     "modified",
+    "created_by_ref",
     "revoked",
     "labels",
+    "confidence",
+    "lang",
     "external_references",
     "object_marking_refs",
     "granular_markings",
     "name",
     "description",
-    "identity_class",
-    "sectors",
-    "contact_information"})
+    "latitude",
+    "longitude",
+    "precision",
+    "region",
+    "country",
+    "administrative_area",
+    "city",
+    "street_address",
+    "postal_code"})
 @Redactable
 @SuppressWarnings("unused")
 @Introspected
 
-public interface Identity extends SdoObject {
+public interface Location extends SdoObject {
 
     /**
      * Exposes the generated builder outside this package
@@ -68,50 +75,62 @@ public interface Identity extends SdoObject {
      * visible outside this package, this builder inherits and exposes all public
      * methods defined on the generated implementation's Builder class.
      */
-    class Builder extends IdentityImpl.Builder {
-        public Builder addExternalReference(UnaryOperator<ExternalReference.Builder> func) {
-            addExternalReference(func.apply(ExternalReference.builder()).build());
-            return this;
-        }
-    }
+    class Builder extends LocationImpl.Builder {}
 
-    static Identity create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
-    static Identity createBundle(UnaryOperator<Builder> spec) { return create(spec); }
+    static Location create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
+    static Location createLocation(UnaryOperator<Builder> spec) { return create(spec); }
     static Builder builder(UnaryOperator<Builder> spec) { return spec.apply(builder()); }
     static Builder builder() { return new Builder(); }
 
-    default Identity update(UnaryOperator<Builder> builder) {
+    default Location update(UnaryOperator<Builder> builder) {
         return builder.apply(builder()).build();
     }
 
-    // Note for the labels attribute:
-    // The list of roles that this Identity performs (e.g., CEO, Domain Administrators, Doctors, Hospital, or Retailer). No open vocabulary is yet defined for this property.
-
-    @NonNull
     @JsonProperty("name")
     @Redactable(useMask = true)
-    String getName();
+    Optional<String> getName();
 
     @JsonProperty("description")
     @Redactable
     Optional<String> getDescription();
 
-    @JsonProperty("roles")
+    @JsonProperty("longitude")
     @Redactable
-    Set<String> getRoles();
+    Optional<String> getLongitude();
 
-    @JsonProperty("identity_class")
-    @Redactable(useMask = true)
-    @Vocab(IDENTITY_CLASS)
-//    Optional<@Vocab(IDENTITY_CLASS) String> getIdentityClass();
-    Optional<String> getIdentityClass();
-
-    @JsonProperty("sectors")
+    @JsonProperty("latitude")
     @Redactable
-    Set<@Vocab(INDUSTRY_SECTORS) String> getSectors();
+    Optional<String> getLatitude();
 
-    @JsonProperty("contact_information")
+    @JsonProperty("precision")
     @Redactable
-    Optional<String> getContactInformation();
+    Optional<String> getPrecision();
+
+    @JsonProperty("region")
+    @Vocab(REGION)
+    @Redactable
+    Optional<String> getRegion();
+
+    @JsonProperty("country")
+//    @Length(min = 2, max = 2)
+    @Redactable
+    Optional<String> getCountry();
+
+    @JsonProperty("administrative_area")
+    @Redactable
+    Optional<String> getAdministrativeArea();
+
+    @JsonProperty("city")
+    @Redactable
+    Optional<String> getCity();
+
+    @JsonProperty("stree_address")
+    @Redactable
+    Optional<String> getStreetAddress();
+
+    @JsonProperty("postal_code")
+    @Redactable
+    Optional<String> getPostalCode();
+
 
 }

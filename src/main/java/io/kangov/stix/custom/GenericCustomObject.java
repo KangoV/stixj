@@ -1,23 +1,18 @@
-package io.kangov.stix.core.sdo.types;
+package io.kangov.stix.custom;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import io.kangov.stix.common.property.StixCustomProperties;
-import io.micronaut.core.annotation.Introspected;
-import jakarta.validation.constraints.NotBlank;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 
-import java.io.Serializable;
 import java.util.function.UnaryOperator;
 
-/**
- * kill-chain-phase
- * <p>
- * The kill-chain-phase represents a phase in a kill chain.
- */
-@Value.Immutable @Serial.Version(1L)
+
+@Value.Immutable
+@Serial.Version(1L)
+//@DefaultTypeValue(value = "", groups = {DefaultValuesProcessor.class})
 @Value.Style(
     optionalAcceptNullable = true,
     visibility = Value.Style.ImplementationVisibility.PACKAGE,
@@ -27,16 +22,22 @@ import java.util.function.UnaryOperator;
     validationMethod = Value.Style.ValidationMethod.NONE, // let bean validation do it
     additionalJsonAnnotations = { JsonTypeName.class },
     depluralize = true)
-@JsonSerialize(as = KillChainPhase.class)
-@JsonDeserialize(builder = KillChainPhase.Builder.class)
+@JsonSerialize(as = GenericCustomObject.class)
+@JsonDeserialize(builder = GenericCustomObject.Builder.class)
 @JsonPropertyOrder({
-    "kill_chain_name",
-    "phase_name"
-})
+    "type",
+    "id",
+    "created_by_ref",
+    "created",
+    "modified",
+    "revoked",
+    "labels",
+    "external_references",
+    "object_marking_refs",
+    "granular_markings"})
 @SuppressWarnings("unused")
-@Introspected
 
-public interface KillChainPhase extends StixCustomProperties, Serializable {
+public interface GenericCustomObject extends CustomObject {
 
     /**
      * Exposes the generated builder outside this package
@@ -45,23 +46,16 @@ public interface KillChainPhase extends StixCustomProperties, Serializable {
      * visible outside this package, this builder inherits and exposes all public
      * methods defined on the generated implementation's Builder class.
      */
-    class Builder extends KillChainPhaseImpl.Builder {}
+    class Builder extends GenericCustomObjectImpl.Builder {
+    }
 
-    static KillChainPhase create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
-    static KillChainPhase createKillChainPhase(UnaryOperator<Builder> spec) { return create(spec); }
+    static GenericCustomObject create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
+    static GenericCustomObject createBundle(UnaryOperator<Builder> spec) { return create(spec); }
     static Builder builder(UnaryOperator<Builder> spec) { return spec.apply(builder()); }
     static Builder builder() { return new Builder(); }
 
-    default KillChainPhase update(UnaryOperator<Builder> builder) {
+    default GenericCustomObject update(UnaryOperator<Builder> builder) {
         return builder.apply(builder()).build();
     }
-
-    @NotBlank
-    @JsonProperty("kill_chain_name")
-    String killChainName();
-
-    @NotBlank
-    @JsonProperty("phase_name")
-    String phaseName();
 
 }

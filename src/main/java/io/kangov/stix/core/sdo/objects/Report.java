@@ -3,30 +3,34 @@ package io.kangov.stix.core.sdo.objects;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import io.kangov.stix.common.type.ExternalReference;
+import io.kangov.stix.bundle.Bundleable;
 import io.kangov.stix.core.sdo.SdoObject;
+import io.kangov.stix.enums.Vocabs;
 import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.validation.constraints.Vocab;
 import io.micronaut.core.annotation.Introspected;
-import io.micronaut.core.annotation.NonNull;
+import jakarta.validation.constraints.*;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 
-import java.util.*;
+import java.time.Instant;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.UnaryOperator;
 
-import static io.kangov.stix.enums.Vocabs.Vocab.IDENTITY_CLASS;
-import static io.kangov.stix.enums.Vocabs.Vocab.INDUSTRY_SECTORS;
+import static io.kangov.stix.enums.Vocabs.Vocab.REPORT_TYPE;
 
 /**
- * identity
+ * report
  * <p>
- * Identities can represent actual individuals, organizations, or groups (e.g., ACME, Inc.) as well as classes of individuals, organizations, or groups.
+ * Reports are collections of threat intelligence focused on one or more topics, such as a 
+ * description of a threat actor, malware, or attack technique, including context and related details.
  * 
  */
 @Value.Immutable
 @Serial.Version(1L)
-//@DefaultTypeValue(value = "identity", groups = { DefaultValuesProcessor.class })
+@JsonTypeName("report")
+//@DefaultTypeValue(value = "report", groups = {DefaultValuesProcessor.class})
 @Value.Style(
     optionalAcceptNullable = true,
     visibility = Value.Style.ImplementationVisibility.PACKAGE,
@@ -36,9 +40,8 @@ import static io.kangov.stix.enums.Vocabs.Vocab.INDUSTRY_SECTORS;
     validationMethod = Value.Style.ValidationMethod.NONE, // let bean validation do it
     additionalJsonAnnotations = { JsonTypeName.class },
     depluralize = true)
-@JsonTypeName("identity")
-@JsonSerialize(as = Identity.class)
-@JsonDeserialize(builder = Identity.Builder.class)
+@JsonSerialize(as = Report.class)
+@JsonDeserialize(builder = Report.Builder.class)
 @JsonPropertyOrder({
     "type",
     "id",
@@ -52,14 +55,13 @@ import static io.kangov.stix.enums.Vocabs.Vocab.INDUSTRY_SECTORS;
     "granular_markings",
     "name",
     "description",
-    "identity_class",
-    "sectors",
-    "contact_information"})
+    "published",
+    "object_refs"})
 @Redactable
 @SuppressWarnings("unused")
 @Introspected
 
-public interface Identity extends SdoObject {
+public interface Report extends SdoObject {
 
     /**
      * Exposes the generated builder outside this package
@@ -68,26 +70,24 @@ public interface Identity extends SdoObject {
      * visible outside this package, this builder inherits and exposes all public
      * methods defined on the generated implementation's Builder class.
      */
-    class Builder extends IdentityImpl.Builder {
-        public Builder addExternalReference(UnaryOperator<ExternalReference.Builder> func) {
-            addExternalReference(func.apply(ExternalReference.builder()).build());
-            return this;
-        }
-    }
+    class Builder extends ReportImpl.Builder {}
 
-    static Identity create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
-    static Identity createBundle(UnaryOperator<Builder> spec) { return create(spec); }
+    static Report create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
+    static Report createReport(UnaryOperator<Builder> spec) { return create(spec); }
     static Builder builder(UnaryOperator<Builder> spec) { return spec.apply(builder()); }
     static Builder builder() { return new Builder(); }
 
-    default Identity update(UnaryOperator<Builder> builder) {
+    default Report update(UnaryOperator<Builder> builder) {
         return builder.apply(builder()).build();
     }
 
-    // Note for the labels attribute:
-    // The list of roles that this Identity performs (e.g., CEO, Domain Administrators, Doctors, Hospital, or Retailer). No open vocabulary is yet defined for this property.
+    @Override
+    @Redactable(useMask = true)
+    @Vocab(REPORT_TYPE)
+    @Size(min = 1)
+    Set<String> getLabels();
 
-    @NonNull
+    @NotBlank
     @JsonProperty("name")
     @Redactable(useMask = true)
     String getName();
@@ -96,22 +96,17 @@ public interface Identity extends SdoObject {
     @Redactable
     Optional<String> getDescription();
 
-    @JsonProperty("roles")
-    @Redactable
-    Set<String> getRoles();
-
-    @JsonProperty("identity_class")
+    @NotNull
+    @JsonProperty("published")
     @Redactable(useMask = true)
-    @Vocab(IDENTITY_CLASS)
-//    Optional<@Vocab(IDENTITY_CLASS) String> getIdentityClass();
-    Optional<String> getIdentityClass();
+    Instant getPublished();
 
-    @JsonProperty("sectors")
-    @Redactable
-    Set<@Vocab(INDUSTRY_SECTORS) String> getSectors();
-
-    @JsonProperty("contact_information")
-    @Redactable
-    Optional<String> getContactInformation();
+    @Size(min = 1, message = "Must have at least one Report object reference")
+    @JsonProperty("object_refs")
+    @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
+    @JsonIdentityReference(alwaysAsId=true)
+//    @JsonDeserialize( converter = BundleableObjectSetConverter.class)
+    @Redactable(useMask = true)
+    Set<Bundleable> getObjectRefs();
 
 }

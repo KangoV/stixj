@@ -34,32 +34,38 @@ repositories {
 
 dependencies {
 
-
-    annotationProcessor("io.micronaut.serde:micronaut-serde-processor:2.4.0")
-    annotationProcessor("io.micronaut.validation:micronaut-validation-processor")
+    annotationProcessor "org.immutables:value:2.10.0"
+    annotationProcessor "io.micronaut.validation:micronaut-validation-processor"
     annotationProcessor "io.micronaut:micronaut-inject-java"
 
-    implementation("io.micronaut.serde:micronaut-serde-jackson:2.4.0")
+    implementation "io.micronaut.serde:micronaut-serde-jackson:2.4.0"
 
-    // START -- Micronaut IOC minimum
     implementation "io.micronaut:micronaut-inject"
     implementation "io.micronaut:micronaut-runtime"
-    implementation("io.micronaut.validation:micronaut-validation")
-    testImplementation "io.micronaut.test:micronaut-test-junit5"
-    testImplementation "org.junit.jupiter:junit-jupiter-engine:5.9.1"
-    // END
+    implementation "io.micronaut.validation:micronaut-validation"
 
     implementation platform("com.fasterxml.jackson:jackson-bom:2.15.2")
     implementation "com.fasterxml.jackson.core:jackson-annotations"
+    implementation "com.fasterxml.jackson.core:jackson-databind"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+//    implementation "com.fasterxml.jackson.datatype:jackson-datatype-guava"
+    implementation "com.fasterxml.jackson.module:jackson-module-parameter-names"
+
+    implementation "org.immutables:value:2.10.0"
+    implementation "org.immutables:annotate:2.10.0"
+    implementation "org.immutables:serial:2.10.0"
 
 //    implementation("com.networknt:json-schema-validator:1.0.76");
 
     runtimeOnly "ch.qos.logback:logback-classic:1.2.11"
-    runtimeOnly("org.yaml:snakeyaml")
+    runtimeOnly "org.yaml:snakeyaml"
 
 //    testImplementation "org.skyscreamer:jsonassert:1.5.1"
+    testImplementation "io.micronaut.test:micronaut-test-junit5"
     testImplementation "org.assertj:assertj-core:3.23.1"
     testImplementation 'net.andreinc:mockneat:0.4.8'
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:5.9.1"
 
 
 }

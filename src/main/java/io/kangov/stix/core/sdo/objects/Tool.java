@@ -3,30 +3,34 @@ package io.kangov.stix.core.sdo.objects;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import io.kangov.stix.common.type.ExternalReference;
 import io.kangov.stix.core.sdo.SdoObject;
+import io.kangov.stix.core.sdo.types.KillChainPhase;
+import io.kangov.stix.enums.Vocabs;
 import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.validation.constraints.Vocab;
 import io.micronaut.core.annotation.Introspected;
-import io.micronaut.core.annotation.NonNull;
+import jakarta.validation.constraints.NotBlank;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 
-import java.util.*;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.UnaryOperator;
 
-import static io.kangov.stix.enums.Vocabs.Vocab.IDENTITY_CLASS;
-import static io.kangov.stix.enums.Vocabs.Vocab.INDUSTRY_SECTORS;
+import static io.kangov.stix.enums.Vocabs.Vocab.TOOL_TYPE;
 
 /**
- * identity
+ * tool
  * <p>
- * Identities can represent actual individuals, organizations, or groups (e.g., ACME, Inc.) as well as classes of individuals, organizations, or groups.
+ * Tools are legitimate software that can be used by threat actors to perform attacks.
+ * This SDO MUST NOT be used to characterize malware. 
+ * Further, Tool MUST NOT be used to characterize tools used as part of a course of action in response to an attack.
  * 
  */
 @Value.Immutable
 @Serial.Version(1L)
-//@DefaultTypeValue(value = "identity", groups = { DefaultValuesProcessor.class })
+@JsonTypeName("tool")
+//@DefaultTypeValue(value = "tool", groups = { DefaultValuesProcessor.class })
 @Value.Style(
     optionalAcceptNullable = true,
     visibility = Value.Style.ImplementationVisibility.PACKAGE,
@@ -36,31 +40,28 @@ import static io.kangov.stix.enums.Vocabs.Vocab.INDUSTRY_SECTORS;
     validationMethod = Value.Style.ValidationMethod.NONE, // let bean validation do it
     additionalJsonAnnotations = { JsonTypeName.class },
     depluralize = true)
-@JsonTypeName("identity")
-@JsonSerialize(as = Identity.class)
-@JsonDeserialize(builder = Identity.Builder.class)
+@JsonSerialize(as = Tool.class)
+@JsonDeserialize(builder = Tool.Builder.class)
 @JsonPropertyOrder({
     "type",
     "id",
     "created_by_ref",
     "created",
     "modified",
-    "revoked",
-    "labels",
+    "revoked", "labels",
     "external_references",
     "object_marking_refs",
     "granular_markings",
     "name",
     "description",
-    "identity_class",
-    "sectors",
-    "contact_information"})
+    "kill_chain_phases",
+    "tool_version"})
 @Redactable
 @SuppressWarnings("unused")
 @Introspected
 
-public interface Identity extends SdoObject {
-
+public interface Tool extends SdoObject {
+    
     /**
      * Exposes the generated builder outside this package
      * <p>
@@ -68,26 +69,30 @@ public interface Identity extends SdoObject {
      * visible outside this package, this builder inherits and exposes all public
      * methods defined on the generated implementation's Builder class.
      */
-    class Builder extends IdentityImpl.Builder {
-        public Builder addExternalReference(UnaryOperator<ExternalReference.Builder> func) {
-            addExternalReference(func.apply(ExternalReference.builder()).build());
+    class Builder extends ToolImpl.Builder {
+        public Builder killChainPhase(UnaryOperator<KillChainPhase.Builder> func) {
+            this.addKillChainPhase(func.apply(KillChainPhase.builder()).build());
             return this;
         }
+
     }
 
-    static Identity create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
-    static Identity createBundle(UnaryOperator<Builder> spec) { return create(spec); }
+    static Tool create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
+    static Tool createTool(UnaryOperator<Builder> spec) { return create(spec); }
     static Builder builder(UnaryOperator<Builder> spec) { return spec.apply(builder()); }
     static Builder builder() { return new Builder(); }
 
-    default Identity update(UnaryOperator<Builder> builder) {
+    default Tool update(UnaryOperator<Builder> builder) {
         return builder.apply(builder()).build();
     }
 
-    // Note for the labels attribute:
-    // The list of roles that this Identity performs (e.g., CEO, Domain Administrators, Doctors, Hospital, or Retailer). No open vocabulary is yet defined for this property.
+    @Override
+    @Vocab(TOOL_TYPE)
+//    @Length(min = 1)
+    @Redactable(useMask = true)
+    Set<String> getLabels();
 
-    @NonNull
+    @NotBlank
     @JsonProperty("name")
     @Redactable(useMask = true)
     String getName();
@@ -96,22 +101,12 @@ public interface Identity extends SdoObject {
     @Redactable
     Optional<String> getDescription();
 
-    @JsonProperty("roles")
+    @JsonProperty("kill_chain_phases")
     @Redactable
-    Set<String> getRoles();
+    Set<KillChainPhase> getKillChainPhases();
 
-    @JsonProperty("identity_class")
-    @Redactable(useMask = true)
-    @Vocab(IDENTITY_CLASS)
-//    Optional<@Vocab(IDENTITY_CLASS) String> getIdentityClass();
-    Optional<String> getIdentityClass();
-
-    @JsonProperty("sectors")
+    @JsonProperty("tool_version")
     @Redactable
-    Set<@Vocab(INDUSTRY_SECTORS) String> getSectors();
-
-    @JsonProperty("contact_information")
-    @Redactable
-    Optional<String> getContactInformation();
+    Optional<String> getToolVersion();
 
 }

@@ -1,9 +1,10 @@
 package io.kangov.stix;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.kangov.stix.bundle.Bundle;
 import io.kangov.stix.bundle.Bundleable;
 import io.micronaut.json.JsonMapper;
 import io.micronaut.json.tree.JsonNode;
-import io.micronaut.serde.ObjectMapper;
 import io.micronaut.validation.Validated;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -27,14 +28,12 @@ public class Parser {
         this.objectMapper = objectMapper;
     }
 
-    public  <T> @Valid T readObject(String str, Class<T> bundleable) {
+    @Valid
+    public  <T> T readObject(String str, Class<T> bundleable) {
         try {
             log.debug("Serializing {} to: {}", bundleable.getSimpleName(), str);
-            var jsonNode = objectMapper.readValue(str, JsonNode.class);
-            var typeNode = jsonNode.get("type");
-            var type = typeNode != null ? typeNode.getStringValue() : "!UNKNOWN!";
-            var obj = objectMapper.readValueFromTree(jsonNode,bundleable);
-            log.debug("Serialized {} of type {} to: {}", bundleable.getSimpleName(), type, obj);
+            var obj = objectMapper.readValue(str, bundleable);
+            log.debug("Serialized {} to: {}", bundleable.getSimpleName(),  obj);
             return obj;
         } catch (Exception e) {
             throw new RuntimeException("Failed to deserialize a " + bundleable.getSimpleName(), e);
@@ -44,12 +43,35 @@ public class Parser {
     public String writeObject(@Valid Bundleable bundleable) {
         try {
             log.debug("Serializing {}", bundleable);
-            var jsonNode = objectMapper.writeValueToTree(bundleable);
-            var str = objectMapper.writeValueAsString(jsonNode);
+            var str = objectMapper.writeValueAsString(bundleable);
             log.debug("Serialized {} to: {}", bundleable.getClass().getSimpleName(), str);
             return str;
         } catch (Exception e) {
             throw new RuntimeException("Failed to serialize a " + bundleable.getClass().getSimpleName(), e);
+        }
+    }
+
+    @Valid
+    public Bundle readBundle(String str) {
+        var name = Bundle.class.getSimpleName();
+        try {
+            log.debug("Serializing {} to: {}", name, str);
+            var obj = objectMapper.readValue(str, Bundle.class);
+            log.debug("Serialized {} to: {}", name,  obj);
+            return obj;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to deserialize a " + name, e);
+        }
+    }
+
+    public String writeBundle(@Valid Bundle bundle) {
+        try {
+            log.debug("Serializing {}", bundle);
+            var str = objectMapper.writeValueAsString(bundle);
+            log.debug("Serialized {} to: {}", bundle.getClass().getSimpleName(), str);
+            return str;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to serialize a " + bundle.getClass().getSimpleName(), e);
         }
     }
 
@@ -61,4 +83,7 @@ public class Parser {
         return map;
     }
 
+    public ObjectMapper objectMapper() {
+        return this.objectMapper;
+    }
 }

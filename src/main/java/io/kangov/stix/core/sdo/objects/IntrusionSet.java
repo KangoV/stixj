@@ -3,30 +3,34 @@ package io.kangov.stix.core.sdo.objects;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import io.kangov.stix.common.type.ExternalReference;
 import io.kangov.stix.core.sdo.SdoObject;
 import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.validation.constraints.Vocab;
 import io.micronaut.core.annotation.Introspected;
-import io.micronaut.core.annotation.NonNull;
+import jakarta.validation.constraints.NotBlank;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 
-import java.util.*;
+import java.time.Instant;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.UnaryOperator;
 
-import static io.kangov.stix.enums.Vocabs.Vocab.IDENTITY_CLASS;
-import static io.kangov.stix.enums.Vocabs.Vocab.INDUSTRY_SECTORS;
+import static io.kangov.stix.enums.Vocabs.Vocab.ATTACK_MOTIVATION;
+import static io.kangov.stix.enums.Vocabs.Vocab.ATTACK_RESOURCE_LEVEL;
 
 /**
- * identity
+ * intrusion-set
  * <p>
- * Identities can represent actual individuals, organizations, or groups (e.g., ACME, Inc.) as well as classes of individuals, organizations, or groups.
+ * An Intrusion Set is a grouped set of adversary behavior and resources with common properties that is believed to be orchestrated by a single organization.
  * 
  */
 @Value.Immutable
 @Serial.Version(1L)
-//@DefaultTypeValue(value = "identity", groups = { DefaultValuesProcessor.class })
+@JsonTypeName("intrusion-set")
+//@DefaultTypeValue(
+//    value = "intrusion-set",
+//    groups = { DefaultValuesProcessor.class })
 @Value.Style(
     optionalAcceptNullable = true,
     visibility = Value.Style.ImplementationVisibility.PACKAGE,
@@ -36,9 +40,8 @@ import static io.kangov.stix.enums.Vocabs.Vocab.INDUSTRY_SECTORS;
     validationMethod = Value.Style.ValidationMethod.NONE, // let bean validation do it
     additionalJsonAnnotations = { JsonTypeName.class },
     depluralize = true)
-@JsonTypeName("identity")
-@JsonSerialize(as = Identity.class)
-@JsonDeserialize(builder = Identity.Builder.class)
+@JsonSerialize(as = IntrusionSet.class)
+@JsonDeserialize(builder = IntrusionSet.Builder.class)
 @JsonPropertyOrder({
     "type",
     "id",
@@ -52,14 +55,18 @@ import static io.kangov.stix.enums.Vocabs.Vocab.INDUSTRY_SECTORS;
     "granular_markings",
     "name",
     "description",
-    "identity_class",
-    "sectors",
-    "contact_information"})
+    "aliases",
+    "first_seen",
+    "last_seen",
+    "goals",
+    "resource_level",
+    "primary_motivation",
+    "secondary_motivation"})
 @Redactable
 @SuppressWarnings("unused")
 @Introspected
 
-public interface Identity extends SdoObject {
+public interface IntrusionSet extends SdoObject {
 
     /**
      * Exposes the generated builder outside this package
@@ -68,26 +75,18 @@ public interface Identity extends SdoObject {
      * visible outside this package, this builder inherits and exposes all public
      * methods defined on the generated implementation's Builder class.
      */
-    class Builder extends IdentityImpl.Builder {
-        public Builder addExternalReference(UnaryOperator<ExternalReference.Builder> func) {
-            addExternalReference(func.apply(ExternalReference.builder()).build());
-            return this;
-        }
-    }
+    class Builder extends IntrusionSetImpl.Builder {}
 
-    static Identity create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
-    static Identity createBundle(UnaryOperator<Builder> spec) { return create(spec); }
+    static IntrusionSet create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
+    static IntrusionSet createIntrusionSet(UnaryOperator<Builder> spec) { return create(spec); }
     static Builder builder(UnaryOperator<Builder> spec) { return spec.apply(builder()); }
     static Builder builder() { return new Builder(); }
 
-    default Identity update(UnaryOperator<Builder> builder) {
+    default IntrusionSet update(UnaryOperator<Builder> builder) {
         return builder.apply(builder()).build();
     }
 
-    // Note for the labels attribute:
-    // The list of roles that this Identity performs (e.g., CEO, Domain Administrators, Doctors, Hospital, or Retailer). No open vocabulary is yet defined for this property.
-
-    @NonNull
+    @NotBlank
     @JsonProperty("name")
     @Redactable(useMask = true)
     String getName();
@@ -96,22 +95,35 @@ public interface Identity extends SdoObject {
     @Redactable
     Optional<String> getDescription();
 
-    @JsonProperty("roles")
+    @JsonProperty("aliases")
     @Redactable
-    Set<String> getRoles();
+    Set<String> getAliases();
 
-    @JsonProperty("identity_class")
-    @Redactable(useMask = true)
-    @Vocab(IDENTITY_CLASS)
-//    Optional<@Vocab(IDENTITY_CLASS) String> getIdentityClass();
-    Optional<String> getIdentityClass();
-
-    @JsonProperty("sectors")
+    @JsonProperty("first_seen")
     @Redactable
-    Set<@Vocab(INDUSTRY_SECTORS) String> getSectors();
+    Optional<Instant> getFirstSeen();
 
-    @JsonProperty("contact_information")
+    @JsonProperty("last_seen")
     @Redactable
-    Optional<String> getContactInformation();
+    Optional<Instant> getLastSeen();
+
+    @JsonProperty("goals")
+    @Redactable
+    Set<String> getGoals();
+
+    @JsonProperty("resource_level")
+    @Vocab(ATTACK_RESOURCE_LEVEL)
+    @Redactable
+    Optional<String> getResourceLevel();
+
+    @JsonProperty("primary_motivation")
+    @Vocab(ATTACK_MOTIVATION)
+    @Redactable
+    Optional<String> getPrimaryMotivation();
+
+    @JsonProperty("secondary_motivations")
+    @Vocab(ATTACK_MOTIVATION)
+    @Redactable
+    Set<String> getSecondaryMotivations();
 
 }

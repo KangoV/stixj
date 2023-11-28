@@ -1,6 +1,7 @@
 package io.kangov.stix.validation.constraints;
 
-import io.kangov.stix.validation.StartsWithValidator;
+import io.kangov.stix.enums.Vocabs;
+import io.kangov.stix.validation.VocabValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -9,15 +10,16 @@ import java.lang.annotation.*;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Constraint(validatedBy = { StartsWithValidator.class })
+@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
 @Retention(RUNTIME)
-@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE, TYPE_PARAMETER })
-@Repeatable(StartsWith.List.class)
-public @interface StartsWith {
+@Repeatable(Vocab.List.class)
+@Documented
+@Constraint(validatedBy = { VocabValidator.class })
+public @interface Vocab {
 
-    String value();
+    Vocabs.Vocab value();
 
-    String message() default "{io.kangov.stix.validation.constraints.StartsWith.message})"; // (2)
+    String message() default "{io.kangov.stix.validation.constraints.Vocab.message})"; // (2)
     Class<?>[] groups() default { };
     Class<? extends Payload>[] payload() default { };
 
@@ -25,7 +27,7 @@ public @interface StartsWith {
     @Retention(RUNTIME)
     @Documented
     @interface List {
-        StartsWith[] value(); // (3)
+        Vocab[] value(); // (3)
     }
 
 }

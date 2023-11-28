@@ -1,0 +1,108 @@
+package io.kangov.stix.config;
+
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import io.kangov.stix.bundle.Bundle;
+import io.kangov.stix.core.sdo.objects.Identity;
+import io.micronaut.context.annotation.*;
+
+@Factory
+public class Factories {
+
+    @Bean
+    ObjectMapper objectMapper() {
+        return new ObjectMapper()
+            .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
+            .registerModule(new ParameterNamesModule())
+            .registerModule(new Jdk8Module())
+            .registerModule(new JavaTimeModule())
+            .registerModule(generateStixSubTypesModule())
+            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+    }
+
+    private static SimpleModule generateStixSubTypesModule() {
+
+        SimpleModule module = new SimpleModule();
+
+        Class<?>[] sdoClasses = {
+//            AttackPattern.class,
+//            Campaign.class,
+//            CourseOfAction.class,
+            Identity.class,
+//            Indicator.class,
+//            Infrastructure.class,
+//            IntrusionSet.class,
+//            Location.class,
+//            Malware.class,
+//            ObservedData.class,
+//            Report.class,
+//            ThreatActor.class,
+//            Tool.class,
+//            Vulnerability.class,
+//            Grouping.class
+        };
+
+        Class<?>[] sroClasses = {
+//            Relationship.class,
+//            Sighting.class
+        };
+
+        Class<?>[] dataMarkingClasses = {
+//            MarkingDefinition.class,
+//            Statement.class,
+//            Tlp.class
+        };
+
+        Class<?>[] bundleClasses = {
+            Bundle.class
+        };
+
+        Class<?>[] cyberObservableClasses = {
+//            Artifact.class,
+//            AutonomousSystem.class,
+//            Directory.class,
+//            DomainName.class,
+//            EmailAddress.class,
+//            EmailMessage.class,
+//            File.class,
+//            Ipv4Address.class,
+//            Ipv6Address.class,
+//            MacAddress.class,
+//            Mutex.class,
+//            NetworkTraffic.class,
+//            Process.class,
+//            Software.class,
+//            Url.class,
+//            UserAccount.class,
+//            WindowsRegistryKey.class,
+//            X509Certificate.class
+        };
+
+        Class<?>[] cyberObservableExtensionClasses = {
+//            ArchiveFileExtension.class,
+//            HttpRequestExtension.class,
+//            IcmpExtension.class,
+//            NetworkSocketExtension.class,
+//            NtfsFileExtenstion.class,
+//            PdfFileExtension.class,
+//            RasterImageFileExtension.class,
+//            TcpExtension.class,
+//            UnixAccountExtension.class,
+//            WindowsPeBinaryFileExtension.class,
+//            WindowsProcessExtension.class,
+//            WindowsServiceExtension.class
+        };
+
+        return module
+            .registerSubtypes(sdoClasses)
+            .registerSubtypes(sroClasses)
+            .registerSubtypes(dataMarkingClasses)
+            .registerSubtypes(bundleClasses)
+            .registerSubtypes(cyberObservableClasses)
+            .registerSubtypes(cyberObservableExtensionClasses);
+
+    }
+}

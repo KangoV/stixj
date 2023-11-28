@@ -32,35 +32,34 @@ public class IdentityTest {
     @Test
     void testObjectToString() {
         var object = new Identity.Builder()
-            .createdByRef("identity--f431f809-377b-45e0-aa1c-6a4751cae5ff")
-            .labels(
+            .addLabels(
                 "label_1",
                 "label_2")
             .lang("en")
-            .confidence(2)
+            .confidence(-1)
             .name("ACME Widget, Inc.")
             .description("ACME Widgets is fictional ;)")
-            .roles(
+            .addRoles(
                 "role_1",
                 "role_2")
             .identityClass("organization")
-//            .sectors(
-//                "communications",
-//                "defense",
-//                "infrastructure")
+            .addSectors(
+                "communications",
+                "defense",
+                "infrastructure")
             .contactInformation("not_contactable")
             .addExternalReference(f -> f
                 .sourceName("veris")
                 .description("description")
                 .url("https://github.com/vz-risk/VCDB/blob/125307638178efddd3ecfe2c267ea434667a4eea/data/json/validated/0001AA7F-C601-424A-B2B8-BE6C9F5164E7.json")
-                .putHashes("SHA-256", "6db12788c37247f2316052e142f42f4b259d6561751e5f401a1ae2a6df9c674b")
+                .putHashe("SHA-256", "6db12788c37247f2316052e142f42f4b259d6561751e5f401a1ae2a6df9c674b")
                 .externalId("external_id")
             )
             .customProperties(Map.of("x_key_1", "value_1"))
             .build();
 
         var str = parser.writeObject(object);
-
+        assertThat(str).isNotNull();
     }
 
 
@@ -80,7 +79,7 @@ public class IdentityTest {
                 "label_1",
                 "label_2"
               ],
-              "confidence": 2,
+              "confidence": -2,
               "external_references": [{
                 "source_name": "veris",
                 "description": "description",
@@ -120,19 +119,19 @@ public class IdentityTest {
     void testPerformance() {
 
         var object = new Identity.Builder()
-            .createdByRef("identity--f431f809-377b-45e0-aa1c-6a4751cae5ff")
-            .labels(
+//            .createdByRef("identity--f431f809-377b-45e0-aa1c-6a4751cae5ff")
+            .addLabels(
                 "label_1",
                 "label_2")
             .lang("en")
-            .confidence(2)
+            .confidence(-2)
             .name("ACME Widget, Inc.")
             .description("ACME Widgets is fictional ;)")
-            .roles(
+            .addRoles(
                 "role_1",
                 "role_2")
             .identityClass("organization")
-            .sectors(
+            .addSectors(
                 "communications",
                 "defense",
                 "infrastructure")
@@ -141,13 +140,13 @@ public class IdentityTest {
                 .sourceName("veris")
                 .description("description")
                 .url("https://github.com/vz-risk/VCDB/blob/125307638178efddd3ecfe2c267ea434667a4eea/data/json/validated/0001AA7F-C601-424A-B2B8-BE6C9F5164E7.json")
-                .putHashes("SHA-256", "6db12788c37247f2316052e142f42f4b259d6561751e5f401a1ae2a6df9c674b")
+                .putHashe("SHA-256", "6db12788c37247f2316052e142f42f4b259d6561751e5f401a1ae2a6df9c674b")
                 .externalId("external_id")
             )
             .customProperties(Map.of("x_key_1", "value_1"))
             .build();
 
-        var count = 1_000;
+        var count = 100_000;
         var start = Instant.now();
         for (int i=0; i< count; i++) {
             var str = parser.writeObject(object);
