@@ -1,19 +1,11 @@
 package io.kangov.stix;
 
 import io.micronaut.context.ApplicationContext;
-import io.micronaut.context.annotation.Factory;
-import io.micronaut.context.annotation.Replaces;
-import io.micronaut.context.event.BeanCreatedEvent;
-import io.micronaut.context.event.BeanCreatedEventListener;
 import io.micronaut.runtime.Micronaut;
-import io.micronaut.serde.ObjectMapper;
-import io.micronaut.serde.config.naming.PropertyNamingStrategy;
 import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Optional;
 
 public class Stix {
 

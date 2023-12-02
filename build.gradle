@@ -38,8 +38,6 @@ dependencies {
     annotationProcessor "io.micronaut.validation:micronaut-validation-processor"
     annotationProcessor "io.micronaut:micronaut-inject-java"
 
-    implementation "io.micronaut.serde:micronaut-serde-jackson:2.4.0"
-
     implementation "io.micronaut:micronaut-inject"
     implementation "io.micronaut:micronaut-runtime"
     implementation "io.micronaut.validation:micronaut-validation"
@@ -51,6 +49,9 @@ dependencies {
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
 //    implementation "com.fasterxml.jackson.datatype:jackson-datatype-guava"
     implementation "com.fasterxml.jackson.module:jackson-module-parameter-names"
+
+//    implementation "org.hibernate.validator:hibernate-validator:6.0.13.Final"
+
 
     implementation "org.immutables:value:2.10.0"
     implementation "org.immutables:annotate:2.10.0"

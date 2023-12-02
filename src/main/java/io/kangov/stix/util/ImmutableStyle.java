@@ -1,7 +1,10 @@
 package io.kangov.stix.util;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import io.micronaut.core.annotation.Introspected;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import org.immutables.value.Value;
-import org.immutables.value.Value.Style.ImplementationVisibility;
 
 import java.lang.annotation.*;
 
@@ -23,13 +26,20 @@ import java.lang.annotation.*;
 @Target({ElementType.PACKAGE, ElementType.TYPE})
 @Retention(RetentionPolicy.CLASS) // Make it class retention for incremental compilation
 @Value.Style(
+    passAnnotations = { Introspected.class },
     optionalAcceptNullable = true,
-    visibility = ImplementationVisibility.PACKAGE,
+    visibility = Value.Style.ImplementationVisibility.PACKAGE,
     overshadowImplementation = true,
-    typeImmutable = "*Impl",
-    typeAbstract = {"*"},
+    typeAbstract="",
+    typeImmutable="*Impl",
+    validationMethod = Value.Style.ValidationMethod.NONE, // let bean validation do it
+    additionalJsonAnnotations = { JsonTypeName.class },
     depluralize = true,
-    defaults = @Value.Immutable(copy = false)
-    )
+    jakarta = true,
+    depluralizeDictionary = {
+        "hash:hashes",
+        "alias:aliases"
+    }
+)
 public @interface ImmutableStyle { // empty
 }

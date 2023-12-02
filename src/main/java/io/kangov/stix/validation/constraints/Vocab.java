@@ -1,6 +1,6 @@
 package io.kangov.stix.validation.constraints;
 
-import io.kangov.stix.enums.Vocabs;
+import io.kangov.stix.v21.enums.Vocabs;
 import io.kangov.stix.validation.VocabValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

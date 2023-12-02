@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.util.StdConverter;
 import io.kangov.stix.Stix;
-import io.kangov.stix.core.sdo.SdoObject;
+import io.kangov.stix.v21.core.sdo.SdoObject;
 
 import java.util.Optional;
 

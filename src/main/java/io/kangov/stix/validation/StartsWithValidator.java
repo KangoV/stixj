@@ -1,7 +1,6 @@
 package io.kangov.stix.validation;
 
 import io.kangov.stix.validation.constraints.StartsWith;
-import io.micronaut.core.annotation.AnnotationValue;
 import io.micronaut.core.annotation.*;
 import io.micronaut.validation.validator.constraints.ConstraintValidator;
 import io.micronaut.validation.validator.constraints.ConstraintValidatorContext;

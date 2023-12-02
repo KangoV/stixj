@@ -2,8 +2,8 @@ package io.kangov.stix.common;
 
 import io.kangov.stix.Parser;
 import io.kangov.stix.Stix;
-import io.kangov.stix.bundle.Bundle;
-import io.kangov.stix.core.sdo.objects.Identity;
+import io.kangov.stix.v21.bundle.Bundle;
+import io.kangov.stix.v21.core.sdo.objects.Identity;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,7 +89,7 @@ public class BundleTest {
                 .sourceName("veris")
                 .description("description")
                 .url("https://github.com/vz-risk/VCDB/blob/125307638178efddd3ecfe2c267ea434667a4eea/data/json/validated/0001AA7F-C601-424A-B2B8-BE6C9F5164E7.json")
-                .putHashe("SHA-256", "6db12788c37247f2316052e142f42f4b259d6561751e5f401a1ae2a6df9c674b")
+                .putHash("SHA-256", "6db12788c37247f2316052e142f42f4b259d6561751e5f401a1ae2a6df9c674b")
                 .externalId("external_id")
             )
             .customProperties(Map.of("x_key_1", "value_1"))

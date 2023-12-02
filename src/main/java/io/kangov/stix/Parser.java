@@ -1,19 +1,15 @@
 package io.kangov.stix;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.kangov.stix.bundle.Bundle;
-import io.kangov.stix.bundle.Bundleable;
-import io.micronaut.json.JsonMapper;
-import io.micronaut.json.tree.JsonNode;
+import io.kangov.stix.v21.bundle.Bundle;
+import io.kangov.stix.v21.bundle.Bundleable;
 import io.micronaut.validation.Validated;
+import io.micronaut.validation.validator.Validator;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Validated
 @Singleton
@@ -22,10 +18,12 @@ public class Parser {
     private static final Logger log = LoggerFactory.getLogger(Parser.class);
 
     private final ObjectMapper objectMapper;
+    private final Validator validator;
 
     @Inject
-    Parser(ObjectMapper objectMapper) {
+    Parser(ObjectMapper objectMapper, Validator validator) {
         this.objectMapper = objectMapper;
+        this.validator = validator;
     }
 
     @Valid
@@ -75,12 +73,8 @@ public class Parser {
         }
     }
 
-    static Map<String, JsonNode> toMap(Iterable<Map.Entry<String, JsonNode>> nodes) {
-        var map = new HashMap<String, JsonNode>();
-        for (Map.Entry<String, JsonNode> entry : nodes) {
-            map.put(entry.getKey(), entry.getValue());
-        }
-        return map;
+    public void validate(@Valid Bundleable bundleable) {
+        validator.validate(bundleable);
     }
 
     public ObjectMapper objectMapper() {

@@ -5,9 +5,13 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
-import io.kangov.stix.bundle.Bundle;
-import io.kangov.stix.core.sdo.objects.Identity;
-import io.micronaut.context.annotation.*;
+import io.kangov.stix.v21.bundle.Bundle;
+import io.kangov.stix.v21.core.sco.objects.*;
+import io.kangov.stix.v21.core.sdo.objects.*;
+import io.micronaut.context.annotation.Bean;
+import io.micronaut.context.annotation.Factory;
+
+import java.lang.Process;
 
 @Factory
 public class Factories {
@@ -20,7 +24,9 @@ public class Factories {
             .registerModule(new Jdk8Module())
             .registerModule(new JavaTimeModule())
             .registerModule(generateStixSubTypesModule())
-            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+            .enable(SerializationFeature.INDENT_OUTPUT)
+            ;
     }
 
     private static SimpleModule generateStixSubTypesModule() {
@@ -28,21 +34,22 @@ public class Factories {
         SimpleModule module = new SimpleModule();
 
         Class<?>[] sdoClasses = {
-//            AttackPattern.class,
-//            Campaign.class,
-//            CourseOfAction.class,
+            AttackPattern.class,
+            Campaign.class,
+            CourseOfAction.class,
+            Grouping.class,
             Identity.class,
-//            Indicator.class,
-//            Infrastructure.class,
-//            IntrusionSet.class,
-//            Location.class,
-//            Malware.class,
-//            ObservedData.class,
-//            Report.class,
-//            ThreatActor.class,
-//            Tool.class,
-//            Vulnerability.class,
-//            Grouping.class
+            Indicator.class,
+            Infrastructure.class,
+            IntrusionSet.class,
+            Location.class,
+            Malware.class,
+            MalwareAnalysis.class,
+            ObservedData.class,
+            Report.class,
+            ThreatActor.class,
+            Tool.class,
+            Vulnerability.class
         };
 
         Class<?>[] sroClasses = {
@@ -61,24 +68,24 @@ public class Factories {
         };
 
         Class<?>[] cyberObservableClasses = {
-//            Artifact.class,
-//            AutonomousSystem.class,
-//            Directory.class,
-//            DomainName.class,
-//            EmailAddress.class,
-//            EmailMessage.class,
-//            File.class,
-//            Ipv4Address.class,
-//            Ipv6Address.class,
-//            MacAddress.class,
-//            Mutex.class,
-//            NetworkTraffic.class,
-//            Process.class,
-//            Software.class,
-//            Url.class,
-//            UserAccount.class,
-//            WindowsRegistryKey.class,
-//            X509Certificate.class
+            Artifact.class,
+            AutonomousSystem.class,
+            Directory.class,
+            DomainName.class,
+            EmailAddress.class,
+            EmailMessage.class,
+            File.class,
+            Ipv4Address.class,
+            Ipv6Address.class,
+            MacAddress.class,
+            Mutex.class,
+            NetworkTraffic.class,
+            Process.class,
+            Software.class,
+            Url.class,
+            UserAccount.class,
+            WindowsRegistryKey.class,
+            X509Certificate.class
         };
 
         Class<?>[] cyberObservableExtensionClasses = {
