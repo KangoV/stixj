@@ -6,16 +6,20 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.util.StdConverter;
 import io.kangov.stix.Stix;
 import io.kangov.stix.v21.core.sdo.SdoObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
 /**
  * Generates a Dehydrated Domain Object based on an ID.
  */
-public class DomainObjectOptionalConverter extends StdConverter<String, Optional<SdoObject>> {
+public class DomainObjectOptionalConverter extends StdConverter<String, SdoObject> {
+
+    private static final Logger log = LoggerFactory.getLogger(DomainObjectOptionalConverter.class);
 
     @Override
-    public Optional<SdoObject> convert(String value) {
+    public SdoObject convert(String value) {
             String[] parsedValue = value.split("--");
 
             if (parsedValue.length == 2){
@@ -27,7 +31,9 @@ public class DomainObjectOptionalConverter extends StdConverter<String, Optional
                 node.put("hydrated", false);
 
                 try {
-                    return Optional.ofNullable(mapper.treeToValue(node, SdoObject.class));
+                    var sdoObject = mapper.treeToValue(node, SdoObject.class);
+                    log.debug("created: {}", sdoObject);
+                    return sdoObject; //Optional.ofNullable(sdoObject);
                     //@TODO add more logic
 
                 } catch (JsonProcessingException e) {

@@ -7,12 +7,12 @@ public interface SdoObject
         extends
             Bundleable,
             SpecVersion,
-    CreatedByRef,
-    Created,
+            CreatedByRef,
+            Created,
             Modified,
             Revoked,
             Labels,
-    Confidence,
+            Confidence,
             Lang,
             ExternalReferences,
             StixCustomProperties {

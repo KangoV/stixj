@@ -4,43 +4,33 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.redaction.Redactable;
+import io.kangov.stix.util.ImmutableStyle;
 import io.kangov.stix.v21.bundle.Bundleable;
+import io.kangov.stix.v21.common.type.ExternalReference;
 import io.kangov.stix.v21.core.sdo.SdoObject;
-import io.kangov.stix.validation.constraints.Vocab;
 import io.micronaut.core.annotation.Introspected;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 
-import java.time.Instant;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.UnaryOperator;
 
-import static io.kangov.stix.v21.enums.Vocabs.Vocab.REPORT_TYPE;
-
 /**
- * report
+ * identity
  * <p>
- * Reports are collections of threat intelligence focused on one or more topics, such as a 
- * description of a threat actor, malware, or attack technique, including context and related details.
+ * Identities can represent actual individuals, organizations, or groups (e.g., ACME, Inc.) as well as classes of individuals, organizations, or groups.
  * 
  */
 @Value.Immutable
 @Serial.Version(1L)
-@JsonTypeName("report")
-//@DefaultTypeValue(value = "report", groups = {DefaultValuesProcessor.class})
-@Value.Style(
-    optionalAcceptNullable = true,
-    visibility = Value.Style.ImplementationVisibility.PACKAGE,
-    overshadowImplementation = true,
-    typeAbstract="",
-    typeImmutable="*Impl",
-    validationMethod = Value.Style.ValidationMethod.NONE, // let bean validation do it
-    additionalJsonAnnotations = { JsonTypeName.class },
-    depluralize = true)
-@JsonSerialize(as = Report.class)
-@JsonDeserialize(builder = Report.Builder.class)
+//@DefaultTypeValue(value = "identity", groups = { DefaultValuesProcessor.class })
+@ImmutableStyle
+@JsonTypeName("note")
+@JsonSerialize(as = Note.class)
+@JsonDeserialize(builder = Note.Builder.class)
 @JsonPropertyOrder({
     "type",
     "id",
@@ -52,15 +42,15 @@ import static io.kangov.stix.v21.enums.Vocabs.Vocab.REPORT_TYPE;
     "external_references",
     "object_marking_refs",
     "granular_markings",
-    "name",
-    "description",
-    "published",
+    "abstract",
+    "content",
+    "authors",
     "object_refs"})
 @Redactable
 @SuppressWarnings("unused")
 @Introspected
 
-public interface Report extends SdoObject {
+public interface Note extends SdoObject {
 
     /**
      * Exposes the generated builder outside this package
@@ -69,34 +59,36 @@ public interface Report extends SdoObject {
      * visible outside this package, this builder inherits and exposes all public
      * methods defined on the generated implementation's Builder class.
      */
-    class Builder extends ReportImpl.Builder {}
+    class Builder extends NoteImpl.Builder {
+        public Builder addExternalReference(UnaryOperator<ExternalReference.Builder> func) {
+            return addExternalReference(func.apply(ExternalReference.builder()).build());
+        }
+    }
 
-    static Report create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
-    static Report createReport(UnaryOperator<Builder> spec) { return create(spec); }
+    static Note create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
+    static Note createBundle(UnaryOperator<Builder> spec) { return create(spec); }
     static Builder builder(UnaryOperator<Builder> spec) { return spec.apply(builder()); }
     static Builder builder() { return new Builder(); }
 
-    default Report update(UnaryOperator<Builder> builder) {
+    default Note update(UnaryOperator<Builder> builder) {
         return builder.apply(builder()).build();
     }
 
+    // Note for the labels attribute:
+    // The list of roles that this Identity performs (e.g., CEO, Domain Administrators, Doctors, Hospital, or Retailer). No open vocabulary is yet defined for this property.
+
+    @JsonProperty("abstract")
+    @Redactable(useMask = true)
+    Optional<String> getAbstract();
+
     @NotBlank
-    @JsonProperty("name")
+    @JsonProperty("content")
     @Redactable(useMask = true)
-    String getName();
+    String getContent();
 
-    @JsonProperty("description")
+    @JsonProperty("authors")
     @Redactable
-    Optional<String> getDescription();
-
-    @JsonProperty("report_types")
-    @Redactable(useMask = true)
-    Set<@Vocab(REPORT_TYPE) String> reportTypes();
-
-    @NotNull
-    @JsonProperty("published")
-    @Redactable(useMask = true)
-    Instant getPublished();
+    Set<@NotBlank String> getAuthors();
 
     @Size(min = 1, message = "Must have at least one Report object reference")
     @JsonProperty("object_refs")

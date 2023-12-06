@@ -18,8 +18,11 @@ public class Vocabs {
         ACCOUNT_TYPE                ( ACCOUNT_TYPE_OV ),
         ATTACK_MOTIVATION           ( ATTACK_MOTIVATION_OV ),
         ATTACK_RESOURCE_LEVEL       ( ATTACK_RESOURCE_LEVEL_OV ),
+        GROUPING_CONTEXT            ( GROUPING_CONTEXT_OV),
         IDENTITY_CLASS              ( IDENTITY_CLASS_OV ),
         IMPLEMENTATION_LANGUAGES    ( IMPLEMENTATION_LANGUAGES_OV ),
+        INDICATOR_TYPE              ( INDICATOR_TYPE_OV ),
+        INDICATOR_PATTERN           ( INDICATOR_PATTERN_OV ),
         INDUSTRY_SECTORS            ( INDUSTRY_SECTOR_OV ),
         INFRASTRUCTURE_TYPE         ( INFRASTRUCTURE_TYPE_OV) ,
         MALWARE_CAPABILITIES        ( MALWARE_CAPABILITIES_OV ),
@@ -36,7 +39,8 @@ public class Vocabs {
         ENCRYPTION_ALGORITHM        ( ENCRYPTION_ALGORITHM_ENUM ),
         WINDOWS_REGISTRY_DATATYPE   ( WINDOWS_REGISTRY_DATATYPE_ENUM ),
         // LOOKUPS
-        MIME_TYPE                   ( MIME_TYPE_LOOKUP )
+        MIME_TYPE                   ( MIME_TYPE_LOOKUP ),
+        COUNTRY_CODE_2              ( COUNTRY_ISO3166_ALPHA2 )
         ;
 
         private final Set<String> entries;
@@ -584,7 +588,7 @@ public class Vocabs {
         "zho", "znd", "zul", "zun", "zxx", "zza"
     );
 
-    public static final Set<String> COUNTRY_CODES = Set.of(
+    public static final Set<String> COUNTRY_ISO3166_ALPHA2 = Set.of(
         "AC", "AD", "AE", "AF", "AG", "AI", "AL", "AM", "AN", "AO", "AP", "AQ",
         "AR", "AS", "AT", "AU", "AW", "AX", "AZ", "BA", "BB", "BD", "BE", "BF",
         "BG", "BH", "BI", "BJ", "BL", "BM", "BN", "BO", "BQ", "BR", "BS", "BT",

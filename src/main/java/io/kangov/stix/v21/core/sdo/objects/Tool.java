@@ -85,12 +85,6 @@ public interface Tool extends SdoObject {
         return builder.apply(builder()).build();
     }
 
-    @Override
-    @Vocab(TOOL_TYPE)
-//    @Length(min = 1)
-    @Redactable(useMask = true)
-    Set<String> getLabels();
-
     @NotBlank
     @JsonProperty("name")
     @Redactable(useMask = true)
@@ -102,8 +96,7 @@ public interface Tool extends SdoObject {
 
     @JsonProperty("tool_types")
     @Redactable
-    @Vocab(TOOL_TYPE)
-    Set<String> getToolTypes();
+    Set<@Vocab(TOOL_TYPE) String> getToolTypes();
 
     @JsonProperty("aliases")
     @Redactable

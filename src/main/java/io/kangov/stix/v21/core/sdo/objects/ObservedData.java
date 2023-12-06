@@ -90,10 +90,12 @@ public interface ObservedData extends SdoObject {
     @Redactable(useMask = true)
     Instant getLastObserved();
 
-    @NotNull @Positive
+    @NotNull
+    @Positive
     @JsonProperty("number_observed")
     @Redactable(useMask = true)
-    @Range(min = 1, max = 999999999)
+    @Range(min = 1, max = 999_999_999)
+    @Deprecated(since = "2.1")
     Integer getNumberObserved();
 
     @JsonProperty("objects")
@@ -102,5 +104,12 @@ public interface ObservedData extends SdoObject {
 //    @JsonDeserialize(using = CyberObservableSetFieldDeserializer.class)
 //    @Deprecated
     Set<ScoObject> getObjects();
+
+    @JsonProperty("object_refs")
+    @Redactable(useMask = true)
+//    @JsonSerialize(using = CyberObservableSetFieldSerializer.class)
+//    @JsonDeserialize(using = CyberObservableSetFieldDeserializer.class)
+//    @Deprecated
+    Set<ScoObject> getObjectRefs();
 
 }

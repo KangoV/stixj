@@ -5,13 +5,19 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.v21.core.sdo.SdoObject;
+import io.kangov.stix.v21.enums.Vocabs;
+import io.kangov.stix.validation.constraints.Vocab;
 import io.micronaut.core.annotation.Introspected;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
+
+import static io.kangov.stix.v21.enums.Vocabs.Vocab.GROUPING_CONTEXT;
 
 /**
  * <p>
@@ -97,12 +103,16 @@ public interface Grouping extends SdoObject {
     @Redactable
     Optional<String> getDescription();
 
+
+    @NotBlank
     @JsonProperty("context")
     @Redactable
+    @Vocab(GROUPING_CONTEXT)
     String getContext();
 
     @JsonProperty("object_refs")
     @Redactable
-    List<String> getObjectRefs();
+    @Size(min=1)
+    List<@NotBlank String> getObjectRefs();
 
 }

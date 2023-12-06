@@ -120,6 +120,7 @@ public class IdentityTest {
     void test_Name_not_blank() {
         var object = builder.name(null).build();
         var violations = validator.validate(object);
+        violations.stream().forEach(v -> System.out.println("got: "+v.getMessage()));
         assertThat(violations).hasSize(1);
     }
 
@@ -132,6 +133,7 @@ public class IdentityTest {
             .build();
         var violations = validator.validate(object);
         assertThat(violations).hasSize(1);
+
 
         // There are no roles, so nothing to test with @Min, so no violations should be generated.
         object = builder

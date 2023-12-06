@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.v21.core.sdo.SdoObject;
+import io.kangov.stix.v21.enums.Vocabs;
 import io.kangov.stix.validation.constraints.Vocab;
 import io.micronaut.core.annotation.Introspected;
 import org.immutables.serial.Serial;
@@ -95,15 +96,15 @@ public interface Location extends SdoObject {
 
     @JsonProperty("longitude")
     @Redactable
-    Optional<String> getLongitude();
+    Optional<Double> getLongitude();
 
     @JsonProperty("latitude")
     @Redactable
-    Optional<String> getLatitude();
+    Optional<Double> getLatitude();
 
     @JsonProperty("precision")
     @Redactable
-    Optional<String> getPrecision();
+    Optional<Double> getPrecision();
 
     @JsonProperty("region")
     @Vocab(REGION)
@@ -113,8 +114,12 @@ public interface Location extends SdoObject {
     @JsonProperty("country")
 //    @Length(min = 2, max = 2)
     @Redactable
+    @Vocab(Vocabs.Vocab.COUNTRY_CODE_2)
     Optional<String> getCountry();
 
+    /*
+     * https://www.ip2location.com/downloads/ip2location-iso3166-2.zip
+     */
     @JsonProperty("administrative_area")
     @Redactable
     Optional<String> getAdministrativeArea();
@@ -123,7 +128,7 @@ public interface Location extends SdoObject {
     @Redactable
     Optional<String> getCity();
 
-    @JsonProperty("stree_address")
+    @JsonProperty("street_address")
     @Redactable
     Optional<String> getStreetAddress();
 

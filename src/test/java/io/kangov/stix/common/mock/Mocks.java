@@ -275,9 +275,9 @@ public class Mocks {
 
         fake.coinFlip(() -> builder.name(random.kebabWords(5)));
         fake.coinFlip(() -> builder.description(random.spacedWords(10)));
-        fake.coinFlip(() -> builder.latitude(random.floatAsString(1, 50L)));
-        fake.coinFlip(() -> builder.longitude(random.floatAsString(1, 50L)));
-        fake.coinFlip(() -> builder.precision(random.floatAsString(1, 50L)));
+        fake.coinFlip(() -> builder.latitude(random.doubleVal(-90.0, 90.0)));
+        fake.coinFlip(() -> builder.longitude(random.doubleVal(-180.0, 180.0)));
+        fake.coinFlip(() -> builder.precision(random.doubleVal()));
         fake.coinFlip(() -> builder.region(random.elementFrom(Vocabs.Vocab.REGION.entries())));
         fake.coinFlip(() -> builder.country(random.countryIso2()));
         fake.coinFlip(() -> builder.administrativeArea(random.word()));
@@ -355,22 +355,22 @@ public class Mocks {
 
         // ## --- specific
 
-        builder.isFamily(random.bool());
-        fake.coinFlip(() -> builder.product(random.kebabWords(2)));
+        builder.product(random.kebabWords(5));
         fake.coinFlip(() -> builder.version(random.word()));
-        fake.coinFlip(() -> fake.repeatBetween(0, 5, () -> builder.addMalwareType(random.elementFrom(MALWARE_TYPE.entries()))));
-        fake.coinFlip(() -> fake.repeatBetween(0, 5, () -> builder.addAliase(random.word())));
-        fake.coinFlip(() -> fake.repeatBetween(0, 5, () -> builder.addKillChainPhase(mockKillChainPhase())));
-        fake.coinFlip(() -> fake.repeatBetween(0, 5, () -> {
-            var first_seen = random.instant();
-            builder.firstSeen(first_seen);
-            builder.lastSeen(random.instantAfter(first_seen));
-        }));
-        // TODO: operting system refs
-        fake.coinFlip(() -> fake.repeatBetween(0, 5, () -> builder.addArchitectureExecutionEnv(random.elementFrom(PROCESSOR_ARCHITECTURE.entries()))));
-        fake.coinFlip(() -> fake.repeatBetween(0, 5, () -> builder.addImplementationLanguage(random.elementFrom(IMPLEMENTATION_LANGUAGES.entries()))));
-        fake.coinFlip(() -> fake.repeatBetween(0, 5, () -> builder.addCapabilities(random.elementFrom(MALWARE_CAPABILITIES.entries()))));
-        // TODO: sample refs
+        fake.coinFlip(() -> builder.hostVMRef(random.word()));
+        fake.coinFlip(() -> fake.repeatBetween(0, 5, () -> builder.addOperatingSystemRef(random.word())));
+        fake.coinFlip(() -> fake.repeatBetween(0, 5, () -> builder.addInstalledSoftwareRef(random.word())));
+        fake.coinFlip(() -> builder.configurationVersion(random.word()));
+        fake.coinFlip(() -> fake.repeatBetween(0, 5, () -> builder.addModule(random.word())));
+        fake.coinFlip(() -> builder.analysisEngineVersion(random.word()));
+        fake.coinFlip(() -> builder.analysisDefinitionVersion(random.word()));
+        fake.coinFlip(() -> builder.submitted(random.instant()));
+        fake.coinFlip(() -> builder.analysisStarted(random.instant()));
+        fake.coinFlip(() -> builder.analysisEnded(random.instant()));
+        fake.coinFlip(() -> builder.resultName(random.word()));
+        fake.coinFlip(() -> builder.result(random.elementFrom(MALWARE_RESULT)));
+        fake.coinFlip(() -> fake.repeatBetween(0, 5, () -> builder.addAnalysisScoRef(random.word())));
+        fake.coinFlip(() -> builder.sampleRef(random.word()));
 
         return builder.build();
 

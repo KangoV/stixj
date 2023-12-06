@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.v21.core.sdo.SdoObject;
+import io.kangov.stix.v21.enums.Vocabs;
 import io.kangov.stix.validation.constraints.Vocab;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.NotBlank;
@@ -100,7 +101,7 @@ public interface ThreatActor extends SdoObject {
     @Size(min = 1, message = "Must have at least one value from threat-actor-label-ov")
     @Vocab(THREAT_ACTOR_TYPE)
     @Redactable(useMask = true)
-    Set<@Size(min = 1) String> getThreatActorTypes();
+    Set<String> getThreatActorTypes();
 
     @JsonProperty("aliases")
     @Redactable
@@ -108,16 +109,16 @@ public interface ThreatActor extends SdoObject {
 
     @JsonProperty("first_seen")
     @Redactable
-    Instant firstSeen();
+    Optional<Instant> firstSeen();
 
     @JsonProperty("last_seen")
     @Redactable
-    Instant lastSeen();
+    Optional<Instant> lastSeen();
 
 //    @Vocab(ThreatActorRoles.class)
     @JsonProperty("roles")
     @Redactable
-    Set<String> getRoles();
+    Set<@Vocab(THREAT_ACTOR_ROLE) String> getRoles();
 
     @JsonProperty("goals")
     @Redactable
@@ -139,14 +140,11 @@ public interface ThreatActor extends SdoObject {
     Optional<String> getPrimaryMotivation();
 
     @JsonProperty("secondary_motivations")
-    @Vocab(ATTACK_MOTIVATION)
     @Redactable
-    Set<String> getSecondaryMotivations();
+    Set<@Vocab(ATTACK_MOTIVATION) String> getSecondaryMotivations();
 
     @JsonProperty("personal_motivations")
-    @JsonInclude(NON_EMPTY)
-    @Vocab(ATTACK_MOTIVATION)
     @Redactable
-    Set<String> getPersonalMotivations();
+    Set<@Vocab(ATTACK_MOTIVATION) String> getPersonalMotivations();
 
 }

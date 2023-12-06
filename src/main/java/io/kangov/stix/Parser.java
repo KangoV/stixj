@@ -26,12 +26,11 @@ public class Parser {
         this.validator = validator;
     }
 
-    @Valid
-    public  <T> T readObject(String str, Class<T> bundleable) {
+    public  <T> @Valid T readObject(String str, Class<T> bundleable) {
         try {
-            log.debug("Serializing {} to: {}", bundleable.getSimpleName(), str);
+            log.debug("Deserializing {} to: {}", bundleable.getSimpleName(), str);
             var obj = objectMapper.readValue(str, bundleable);
-            log.debug("Serialized {} to: {}", bundleable.getSimpleName(),  obj);
+            log.debug("Deserialized {} to: {}", bundleable.getSimpleName(),  obj);
             return obj;
         } catch (Exception e) {
             throw new RuntimeException("Failed to deserialize a " + bundleable.getSimpleName(), e);
@@ -49,13 +48,12 @@ public class Parser {
         }
     }
 
-    @Valid
-    public Bundle readBundle(String str) {
+    public @Valid Bundle readBundle(String str) {
         var name = Bundle.class.getSimpleName();
         try {
-            log.debug("Serializing {} to: {}", name, str);
+            log.debug("Deserializing {} to: {}", name, str);
             var obj = objectMapper.readValue(str, Bundle.class);
-            log.debug("Serialized {} to: {}", name,  obj);
+            log.debug("Deserialized {} to: {}", name,  obj);
             return obj;
         } catch (Exception e) {
             throw new RuntimeException("Failed to deserialize a " + name, e);

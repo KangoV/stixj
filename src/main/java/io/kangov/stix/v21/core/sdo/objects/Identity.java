@@ -82,7 +82,7 @@ public interface Identity extends SdoObject {
     // Note for the labels attribute:
     // The list of roles that this Identity performs (e.g., CEO, Domain Administrators, Doctors, Hospital, or Retailer). No open vocabulary is yet defined for this property.
 
-    @NotBlank(message = "If name supplied it cannot be blank")
+    @NotBlank
     @JsonProperty("name")
     @Redactable(useMask = true)
     String getName();

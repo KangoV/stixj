@@ -42,11 +42,11 @@ public class Randoms {
     public long positiveLong()                  { return mock.longs().range(0L, Long.MAX_VALUE).get(); }
     public long negativeLong()                  { return mock.longs().range(Long.MIN_VALUE, Long.MAX_VALUE).get(); }
 
-    public double doubleVal()                         { return mock.doubles().get(); }
-    public double doubleVal(double upper)             { return mock.doubles().range(0, upper).get(); }
-    public double doubleVal(double lower, long upper) { return mock.doubles().range(lower, upper).get(); }
-    public double positiveDouble()                    { return mock.doubles().range(0, Double.MAX_VALUE).get(); }
-    public double negativeDouble()                    { return mock.doubles().range(Double.MIN_VALUE, Double.MAX_VALUE).get(); }
+    public double doubleVal()                           { return mock.doubles().get(); }
+    public double doubleVal(double upper)               { return mock.doubles().range(0, upper).get(); }
+    public double doubleVal(double lower, double upper) { return mock.doubles().range(lower, upper).get(); }
+    public double positiveDouble()                      { return mock.doubles().range(0, Double.MAX_VALUE).get(); }
+    public double negativeDouble()                      { return mock.doubles().range(Double.MIN_VALUE, Double.MAX_VALUE).get(); }
 
     public String joinedWords(Range range, String sep) { return joinedWords(range.lower(), range.upper(), sep);  }
     public String joinedWords(int upper, String sep)   { return joinedWords(1, upper, sep);  }

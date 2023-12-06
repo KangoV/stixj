@@ -83,6 +83,6 @@ public interface CourseOfAction extends SdoObject {
 
     @JsonProperty("action")
     @Redactable(useMask = true)
-    Set<String> getAction();
+    Set<@NotBlank String> getAction();
 
 }

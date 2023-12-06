@@ -1,11 +1,12 @@
 package io.kangov.stix.v21.bundle;
 
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.*;
 import io.kangov.stix.v21.common.property.*;
 import io.kangov.stix.v21.custom.CustomObject;
 import io.micronaut.core.annotation.Introspected;
+import jakarta.validation.constraints.NotNull;
+import org.immutables.value.Value;
 
 import java.io.Serializable;
 
@@ -32,5 +33,18 @@ public interface Bundleable
     Type,
     ObjectMarkingRefs,
     GranularMarkings {
+
+    /**
+     * Dictates if the object is hydrated.
+     * Hydration is defined as if the Object has only a "ID" or has been properly
+     * hydrated with the expected required fields
+     * @return boolean
+     */
+    @NotNull
+    @Value.Default
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    default boolean getHydrated(){
+        return true;
+    }
 
 }

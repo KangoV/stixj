@@ -8,6 +8,7 @@ import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.v21.core.sdo.types.KillChainPhase;
 import io.kangov.stix.validation.constraints.Vocab;
 import io.micronaut.core.annotation.Introspected;
+import jakarta.validation.constraints.NotBlank;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 
@@ -93,22 +94,23 @@ public interface Infrastructure extends SdoObject {
         return builder.apply(builder()).build();
     }
 
+
+    @NotBlank
     @JsonProperty("name")
     @Redactable(useMask = true)
-    Optional<String> getName();
+    String getName();
 
     @JsonProperty("description")
     @Redactable
     Optional<String> getDescription();
 
     @JsonProperty("infrastructure_types")
-    @Vocab(INFRASTRUCTURE_TYPE)
     @Redactable(useMask = true)
-    Set<String> getInfrastructureTypes();
+    Set<@Vocab(INFRASTRUCTURE_TYPE) String> getInfrastructureTypes();
 
     @JsonProperty("aliases")
     @Redactable
-    List<String> getAliases();
+    List<@NotBlank String> getAliases();
 
     @JsonProperty("kill_chain_phases")
     @Redactable

@@ -7,6 +7,7 @@ import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 
@@ -82,11 +83,11 @@ public interface Campaign extends SdoObject {
 
     @JsonProperty("description")
     @Redactable
-    Optional<String> getDescription();
+    Optional<@NotBlank String> getDescription();
 
     @JsonProperty("aliases")
     @Redactable
-    Set<String> getAliases();
+    Set<@NotBlank String> getAliases();
 
     @JsonProperty("first_seen")
     @Redactable

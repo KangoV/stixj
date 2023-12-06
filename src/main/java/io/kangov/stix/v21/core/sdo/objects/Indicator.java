@@ -6,8 +6,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.v21.core.sdo.types.KillChainPhase;
+import io.kangov.stix.v21.enums.Vocabs;
+import io.kangov.stix.validation.constraints.Vocab;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 
@@ -86,6 +89,7 @@ public interface Indicator extends SdoObject {
         return builder.apply(builder()).build();
     }
 
+    @NotBlank
     @JsonProperty("name")
     @Redactable
     Optional<String> getName();
@@ -94,11 +98,27 @@ public interface Indicator extends SdoObject {
     @Redactable
     Optional<String> getDescription();
 
+    @JsonProperty("indicator_types")
+    @Redactable
+    Set<@Vocab(Vocabs.Vocab.INDICATOR_TYPE) String> getIndicatorTypes();
+
     @NotBlank
     @JsonProperty("pattern")
     @Redactable(useMask = true)
     String getPattern();
 
+    @NotBlank
+    @JsonProperty("pattern_type")
+    @Redactable
+    @Vocab(Vocabs.Vocab.INDICATOR_PATTERN)
+    String getPatternType();
+
+    @NotBlank
+    @JsonProperty("pattern_version")
+    @Redactable(useMask = true)
+    String getPatternVersion();
+
+    @NotNull
     @JsonProperty("valid_from")
     @Redactable(useMask = true)
     Instant getValidFrom();

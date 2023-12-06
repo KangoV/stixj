@@ -8,6 +8,7 @@ import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.v21.core.sdo.types.KillChainPhase;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 
@@ -85,8 +86,12 @@ public interface AttackPattern extends SdoObject {
     @Redactable
     Optional<String> getDescription();
 
+    @JsonProperty("aliases")
+    @Redactable
+    Set<@NotBlank String> getAliases();
+
     @JsonProperty("kill_chain_phases")
     @Redactable
-    Set<KillChainPhase> getKillChainPhases();
+    Set<@NotNull KillChainPhase> getKillChainPhases();
 
 }
