@@ -110,7 +110,7 @@ public interface Indicator extends SdoObject {
     @NotBlank
     @JsonProperty("pattern_type")
     @Redactable
-    @Vocab(Vocabs.Vocab.INDICATOR_PATTERN)
+    @Vocab(Vocabs.Vocab.PATTERN_TYPE)
     String getPatternType();
 
     @NotBlank

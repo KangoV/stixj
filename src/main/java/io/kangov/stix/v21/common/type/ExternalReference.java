@@ -35,11 +35,7 @@ import java.util.function.UnaryOperator;
 })
 @ImmutableStyle
 
-public interface ExternalReference
-        extends
-//            GenericValidation,
-    StixCustomProperties,
-            Serializable {
+public interface ExternalReference extends StixCustomProperties, Serializable {
 
     /**
      * Exposes the generated builder outside this package

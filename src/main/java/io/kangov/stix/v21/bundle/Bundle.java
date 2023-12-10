@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.util.ImmutableStyle;
 import io.kangov.stix.v21.common.property.*;
 import io.micronaut.core.annotation.Introspected;
-import io.micronaut.logging.LogLevel;
 import jakarta.validation.constraints.Size;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
@@ -42,9 +41,9 @@ import java.util.stream.Stream;
 public interface Bundle
     extends
         Serializable,
-    Id,
-    Type,
-    SpecVersion,
+        Id,
+        Type,
+        SpecVersion,
         StixCustomProperties {
 
     /**
@@ -79,18 +78,32 @@ public interface Bundle
         return (Set<T>) stream(type).collect(Collectors.toUnmodifiableSet());
     }
 
-    default <T extends Bundleable> Optional<T> findFirst(Class<T> type) {
-        return stream(type).findFirst();
-    }
-
-    default <T extends Bundleable> T getFirst(Class<T> type) {
-        return stream(type).findFirst().orElseThrow(() -> new IllegalStateException("No objects of type: "+ type.getSimpleName()));
-    }
-
+    /**
+     * Returns a stream that emits objects from this bundle matching the provided predicate
+     *
+     * @param filter the predicate to match objects in this bundle against
+     * @return
+     */
     default Stream<Bundleable> stream(Predicate<Bundleable> filter) {
         return getObjects().stream().filter(filter);
     }
 
+    /**
+     * Returns a stream that emits objects of {@code type} from this bundle matching the provided {@code filter}
+     *
+     * @param filter to match objects in this bundle against
+     * @return a stream that emits objects of {@code type} from this bundle matching the provided {@code filter}
+     */
+    default <T extends Bundleable> Stream<T> stream(Class<T> type, Predicate<T> filter) {
+        return stream(type).filter(filter);
+    }
+
+    /**
+     * Returns a stream that emits objects from this bundle matching the provided {@code filter}
+     *
+     * @param type  to match objects in this bundle against
+     * @return a stream that emits objects from this bundle matching the provided {@code filter}
+     */
     default <T extends Bundleable> Stream<T> stream(Class<T> type) {
         return (Stream<T>) stream(obj -> type.isAssignableFrom(obj.getClass()));
     }

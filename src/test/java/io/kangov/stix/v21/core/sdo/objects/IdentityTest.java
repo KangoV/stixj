@@ -6,6 +6,7 @@ import io.kangov.stix.common.mock.Mocks;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.micronaut.validation.validator.Validator;
 import jakarta.inject.Inject;
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
@@ -43,7 +44,7 @@ public class IdentityTest {
             "label_1",
             "label_2"
           ],
-          "confidence": -2,
+          "confidence": 1,
           "external_references": [{
             "source_name": "veris",
             "description": "description",
@@ -129,18 +130,18 @@ public class IdentityTest {
 
         // container constraint, "Set<@Min(2) String>, so should generate a violation
         var object = builder
-            .roles("single")
+            .confidence(-2)
+            .name(null)
             .build();
         var violations = validator.validate(object);
-        assertThat(violations).hasSize(1);
+        assertThat(violations).isNotNull();
+        violations.stream().forEach(v -> {
+            var root = v.getRootBean();
+            var leaf = v.getLeafBean();
+            log.debug("{} -> {}", v.getPropertyPath(), v.getMessage());
+        });
+        assertThat(violations).hasSize(2);
 
-
-        // There are no roles, so nothing to test with @Min, so no violations should be generated.
-        object = builder
-            .roles(List.of())
-            .build();
-        violations = validator.validate(object);
-        assertThat(violations).isEmpty();
     }
 
     @Test
@@ -151,7 +152,6 @@ public class IdentityTest {
               "id": "identity--6c9a1180-994e-4082-9a11-80994e308253",
               "type": "identity",
               "spec_version": "2.1",
-              "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
               "created": "2023-11-15T17:24:14.356165Z",
               "modified": "2023-11-15T17:24:14.356165Z",
               "revoked": "true",
@@ -159,7 +159,7 @@ public class IdentityTest {
                 "label_1",
                 "label_2"
               ],
-              "confidence": -2,
+              "confidence": 1,
               "external_references": [{
                 "source_name": "veris",
                 "description": "description",

@@ -2,10 +2,12 @@ package io.kangov.stix.v21.core.sdo;
 
 import io.kangov.stix.v21.bundle.Bundleable;
 import io.kangov.stix.v21.common.property.*;
+import io.kangov.stix.v21.core.Relateable;
 
 public interface SdoObject
         extends
             Bundleable,
+            Relateable,
             SpecVersion,
             CreatedByRef,
             Created,

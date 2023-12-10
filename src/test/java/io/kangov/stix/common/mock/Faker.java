@@ -29,7 +29,6 @@ public class Faker {
         if (random.bool(probability)) action.run();
     }
 
-
     void coinFlip(Runnable action) {
         if (random.bool()) action.run();
     }

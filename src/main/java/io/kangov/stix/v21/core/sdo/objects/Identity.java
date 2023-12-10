@@ -34,6 +34,7 @@ import static io.kangov.stix.v21.enums.Vocabs.Vocab.INDUSTRY_SECTORS;
 @JsonDeserialize(builder = Identity.Builder.class)
 @JsonPropertyOrder({
     "type",
+    "spec_version",
     "id",
     "created_by_ref",
     "created",

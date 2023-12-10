@@ -1,4 +1,4 @@
-package io.kangov.stix.common;
+package io.kangov.stix.v21;
 
 import io.micronaut.core.annotation.*;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;

@@ -1,5 +1,6 @@
 package io.kangov.stix.validation;
 
+import io.kangov.stix.v21.enums.Vocabs;
 import io.kangov.stix.validation.constraints.Vocab;
 import io.micronaut.core.annotation.*;
 import io.micronaut.validation.validator.constraints.ConstraintValidator;
@@ -16,6 +17,8 @@ import java.util.Optional;
 public class VocabValidator implements ConstraintValidator<Vocab, Object> {
 
     private static final Logger log = LoggerFactory.getLogger(VocabValidator.class);
+
+    private Vocabs.Vocab vocab;
 
     @Override
     public boolean isValid(
@@ -35,9 +38,9 @@ public class VocabValidator implements ConstraintValidator<Vocab, Object> {
 
         context.messageTemplate("invalid value ("+val+"), must be between {min} and {max}"); // (1)
 
-        if (val instanceof String s) {
+        if (val instanceof String string) {
 
-            return true;
+            return vocab.contains(string);
 
         } else if (val instanceof Iterable v) {
 
@@ -47,5 +50,20 @@ public class VocabValidator implements ConstraintValidator<Vocab, Object> {
             throw new IllegalArgumentException("Unsupported type: " + value.getClass().getName());
         }
 
+    }
+
+    /**
+     * Initializes the validator in preparation for {@link #isValid(Object, ConstraintValidatorContext)} calls. The
+     * constraint annotation for a given constraint declaration is passed.
+     * <p>
+     * This method is guaranteed to be called before any use of this instance for validation.
+     * <p>
+     * The default implementation is a no-op.
+     *
+     * @param constraintAnnotation annotation instance for a given constraint declaration
+     */
+    @Override
+    public void initialize(Vocab constraintAnnotation) {
+        this.vocab = constraintAnnotation.value();
     }
 }

@@ -2,56 +2,72 @@ package io.kangov.stix.v21.enums;
 
 import java.util.*;
 
+import static io.kangov.stix.v21.enums.Vocabs.Type.CLOSED;
+
 /**
  * STIX 2.1 WD04 open vocabularies
  */
 public class Vocabs {
 
-    public enum Containing {
-        SHOULD,
-        MUST
+    public enum Type {
+        OPEN,
+        CLOSED
     }
 
     public enum Vocab implements Iterable<String> {
 
         // VOCABS
-        ACCOUNT_TYPE                ( ACCOUNT_TYPE_OV ),
-        ATTACK_MOTIVATION           ( ATTACK_MOTIVATION_OV ),
-        ATTACK_RESOURCE_LEVEL       ( ATTACK_RESOURCE_LEVEL_OV ),
-        GROUPING_CONTEXT            ( GROUPING_CONTEXT_OV),
-        IDENTITY_CLASS              ( IDENTITY_CLASS_OV ),
-        IMPLEMENTATION_LANGUAGES    ( IMPLEMENTATION_LANGUAGES_OV ),
-        INDICATOR_TYPE              ( INDICATOR_TYPE_OV ),
-        INDICATOR_PATTERN           ( INDICATOR_PATTERN_OV ),
-        INDUSTRY_SECTORS            ( INDUSTRY_SECTOR_OV ),
-        INFRASTRUCTURE_TYPE         ( INFRASTRUCTURE_TYPE_OV) ,
-        MALWARE_CAPABILITIES        ( MALWARE_CAPABILITIES_OV ),
-        MALWARE_RESULT              ( MALWARE_RESULT_OV ),
-        MALWARE_TYPE                ( MALWARE_TYPE_OV ),
-        PROCESSOR_ARCHITECTURE      ( PROCESSOR_ARCHITECTURE_OV ),
-        REGION                      ( REGION_OV ),
-        REPORT_TYPE                 ( REPORT_TYPE_OV ),
-        THREAT_ACTOR_ROLE           ( THREAT_ACTOR_ROLE_OV ),
-        THREAT_ACTOR_SOPHISTICATION ( THREAT_ACTOR_SOPHISTICATION_OV ),
-        THREAT_ACTOR_TYPE           ( THREAT_ACTOR_TYPE_OV ),
-        TOOL_TYPE                   ( TOOL_TYPE_OV ),
-        // ENUMS
-        ENCRYPTION_ALGORITHM        ( ENCRYPTION_ALGORITHM_ENUM ),
-        WINDOWS_REGISTRY_DATATYPE   ( WINDOWS_REGISTRY_DATATYPE_ENUM ),
+
+        ACCOUNT_TYPE                  ( ACCOUNT_TYPE_OV,                    "account-type-ov"                            ),
+        ATTACK_MOTIVATION             ( ATTACK_MOTIVATION_OV,               "attack-motivation-ov"                       ),
+        ATTACK_RESOURCE_LEVEL         ( ATTACK_RESOURCE_LEVEL_OV,           "attack-resource-level-ov"                   ),
+        ENCRYPTION_ALGORITHM          ( ENCRYPTION_ALGORITHM_ENUM,          "encryption-algorithm-enum",          CLOSED ),
+        EXTENSION_TYPES               ( EXTENSION_TYPE_ENUM,                "extension-type-enum",                CLOSED ),
+        GROUPING_CONTEXT              ( GROUPING_CONTEXT_OV,                "grouping-context-ov"                        ),
+        HASHING_ALGORITHM             ( HASH_ALGORITHM_OV,                  "hash-algorithm-ov"                          ),
+        IDENTITY_CLASS                ( IDENTITY_CLASS_OV,                  "identity-class-ov"                          ),
+        IMPLEMENTATION_LANGUAGES      ( IMPLEMENTATION_LANGUAGES_OV,        "implementation-language-ov"                 ),
+        INDICATOR_TYPE                ( INDICATOR_TYPE_OV,                  "indicator-type-ov"                          ),
+        INDUSTRY_SECTORS              ( INDUSTRY_SECTOR_OV,                 "industry-sector-ov"                         ),
+        INFRASTRUCTURE_TYPE           ( INFRASTRUCTURE_TYPE_OV,             "infrastructure-type-ov"                     ),
+        MALWARE_CAPABILITIES          ( MALWARE_CAPABILITIES_OV,            "malware-capabilities-ov"                    ),
+        MALWARE_RESULT                ( MALWARE_RESULT_OV,                  "malware-result-ov"                          ),
+        MALWARE_TYPE                  ( MALWARE_TYPE_OV,                    "malware-type-ov"                            ),
+        NETWORK_SOCKET_ADDRESS_FAMILY ( NETWORK_SOCKET_ADDRESS_FAMILY_ENUM, "network-socket-address-family-enum", CLOSED ),
+        NETWORK_SOCKET_TYPE           ( NETWORK_SOCKET_TYPE_ENUM,           "network-socket-type-enum",           CLOSED ),
+        OPINION                       ( OPINION_ENUM,                       "opinion-enum",                       CLOSED ),
+        PATTERN_TYPE                  ( PATTERN_TYPE_OV,                    "pattern-type-ov"                            ),
+        PROCESSOR_ARCHITECTURE        ( PROCESSOR_ARCHITECTURE_OV,          "processor-architecture-ov"                  ),
+        REGION                        ( REGION_OV,                          "region-ov"                                  ),
+        REPORT_TYPE                   ( REPORT_TYPE_OV,                     "report-type-ov"                             ),
+        THREAT_ACTOR_ROLE             ( THREAT_ACTOR_ROLE_OV,               "threat-actor-role-ov"                       ),
+        THREAT_ACTOR_SOPHISTICATION   ( THREAT_ACTOR_SOPHISTICATION_OV,     "threat-actor-sophistication-ov"             ),
+        THREAT_ACTOR_TYPE             ( THREAT_ACTOR_TYPE_OV,               "threat-actor-type-ov"                       ),
+        TOOL_TYPE                     ( TOOL_TYPE_OV,                       "tool-type-ov"                               ),
+        WINDOWS_INTEGRITY_LEVEL       ( WINDOWS_INTEGRITY_LEVEL_ENUM,       "windows-integrity-level-enum",       CLOSED ),
+        WINDOWS_PEBINARY_TYPE         ( WINDOWS_PEBINARY_TYPE_OV,           "windows-pebinary-type-ov"                   ),
+        WINDOWS_REGISTRY_DATATYPE     ( WINDOWS_REGISTRY_DATATYPE_ENUM,     "windows-registry-datatype-enum",     CLOSED ),
+        WINDOWS_SERVICE_START_TYPE    ( WINDOWS_SERVICE_START_TYPE_ENUM,    "windows-service-start-type-enum",    CLOSED ),
+        WINDOWS_SERVICE_STATUS        ( WINDOWS_SERVICE_STATUS_ENUM,        "windows-service-status-enum",        CLOSED ),
+        WINDOWS_SERVICE_TYPE          ( WINDOWS_SERVICE_TYPE_ENUM,          "windows-service-type-enum",          CLOSED ),
+
         // LOOKUPS
-        MIME_TYPE                   ( MIME_TYPE_LOOKUP ),
-        COUNTRY_CODE_2              ( COUNTRY_ISO3166_ALPHA2 )
-        ;
+
+        MIME_TYPE                     ( MIME_TYPES,                         "mime-type"                                  ),
+        COUNTRY_CODE_2                ( COUNTRY_ISO3166_ALPHA2,             "country-code-2"                             ),
+        SOFTWARE_LANG_CODE            ( SOFTWARE_LANG_CODES,                "software-lang-code",                 CLOSED );
 
         private final Set<String> entries;
-        private final Containing containing;
+        private final String name;
+        private final Type containing;
 
-        Vocab(Set<String> entries) {
-            this(entries, Containing.SHOULD);
+        Vocab(Set<String> entries, String name) {
+            this(entries, name, Type.OPEN);
         }
 
-        Vocab(Set<String> entries, Containing containing) {
+        Vocab(Set<String> entries, String name, Type containing) {
             this.entries = entries;
+            this.name = name;
             this.containing = containing;
         }
 
@@ -59,13 +75,16 @@ public class Vocabs {
             return this.entries;
         }
 
-        public Containing containing() {
+        public Type type() {
             return this.containing;
         }
 
+        public String vocabName() {
+            return this.name;
+        }
         @Override
         public String toString() {
-            return this.toString().toLowerCase().replace("_", "-") + "-ov";
+            return vocabName();
         }
 
         public Set<String> dedup(Iterable<String> actuals) {
@@ -78,7 +97,7 @@ public class Vocabs {
             return result;
         }
 
-        public Set<String> dedup(String ... actuals) {
+        public Set<String> dedup(String... actuals) {
             var result = new HashSet<String>();
             for (String actual : actuals) {
                 if (!contains(actual)) {
@@ -92,20 +111,13 @@ public class Vocabs {
             return entries.contains(entry);
         }
 
-        /**
-         * Returns an iterator over elements of type {@code T}.
-         *
-         * @return an Iterator.
-         */
         @Override
         public Iterator<String> iterator() {
             return entries().iterator();
         }
     }
 
-    // -- LOOKUPS (non-spec vocabs)
-
-    public static final Set<String> MIME_TYPE_LOOKUP = Set.of(
+    public static final Set<String> MIME_TYPES = Set.of(
         "application",
         "audio",
         "font",
@@ -118,31 +130,19 @@ public class Vocabs {
         "video"
     );
 
-    // -- ENUMS
-
     public static final Set<String> ENCRYPTION_ALGORITHM_ENUM = Set.of(
         "AES-256-GCM",
         "ChaCha20-Poly1305",
         "mime-type-indicated"
     );
 
-    public static final Set<String> WINDOWS_REGISTRY_DATATYPE_ENUM = Set.of(
-        "REG_NONE",
-        "REG_SZ",
-        "REG_EXPAND_SZ",
-        "REG_BINARY",
-        "REG_DWORD",
-        "REG_DWORD_BIG_ENDIAN",
-        "REG_DWORD_LITTLE_ENDIAN",
-        "REG_LINK, REG_MULTI_SZ",
-        "REG_RESOURCE_LIST",
-        "REG_FULL_RESOURCE_DESCRIPTION",
-        "REG_RESOURCE_REQUIREMENTS_LIST",
-        "REG_QWORD",
-        "REG_INVALID_TYPE"
+    public static final Set<String> EXTENSION_TYPE_ENUM = Set.of(
+        "new-sdo",
+        "new-sco",
+        "new-sro",
+        "property-extension",
+        "toplevel-property-extension"
     );
-
-    // -- VOCABS
 
     public static final Set<String> ACCOUNT_TYPE_OV = Set.of(
         "facebook",
@@ -171,7 +171,6 @@ public class Vocabs {
         "unpredictable"
     );
 
-
     public static final Set<String> ATTACK_RESOURCE_LEVEL_OV = Set.of(
         "individual",
         "club",
@@ -181,13 +180,11 @@ public class Vocabs {
         "government"
     );
 
-
     public static final Set<String> GROUPING_CONTEXT_OV = Set.of(
         "suspicious-activity",
         "malware-analysis",
         "unspecified"
     );
-
 
     public static final Set<String> IDENTITY_CLASS_OV = Set.of(
         "individual",
@@ -197,7 +194,6 @@ public class Vocabs {
         "class",
         "unknown"
     );
-
 
     public static final Set<String> IMPLEMENTATION_LANGUAGES_OV = Set.of(
         "applescript",
@@ -223,7 +219,6 @@ public class Vocabs {
         "x86-64"
     );
 
-
     public static final Set<String> INDICATOR_TYPE_OV = Set.of(
         "anomalous-activity",
         "anonymization",
@@ -233,7 +228,6 @@ public class Vocabs {
         "attribution",
         "unknown"
     );
-
 
     public static final Set<String> INDUSTRY_SECTOR_OV = Set.of(
         "agriculture",
@@ -272,7 +266,6 @@ public class Vocabs {
         "utilities"
     );
 
-
     public static final Set<String> INFRASTRUCTURE_TYPE_OV = Set.of(
         "amplification",
         "anonymization",
@@ -291,14 +284,12 @@ public class Vocabs {
         "unknown"
     );
 
-
     public static final Set<String> MALWARE_RESULT_OV = Set.of(
         "malicious",
         "suspicious",
         "benign",
         "unknown"
     );
-
 
     public static final Set<String> MALWARE_TYPE_OV = Set.of(
         "adware",
@@ -324,7 +315,6 @@ public class Vocabs {
         "wiper",
         "worm"
     );
-
 
     public static final Set<String> MALWARE_CAPABILITIES_OV = Set.of(
         "accesses-remote-machines",
@@ -366,8 +356,34 @@ public class Vocabs {
         "violates-system-operational-integrity"
     );
 
+    public static final Set<String> NETWORK_SOCKET_TYPE_ENUM = Set.of(
+        "SOCK_STREAM",
+        "AF_ISOCK_DGRAMNET",
+        "SOCK_RAW",
+        "SOCK_RDM",
+        "SOCK_SEQPACKET"
+    );
 
-    public static final Set<String> INDICATOR_PATTERN_OV = Set.of(
+    public static final Set<String> NETWORK_SOCKET_ADDRESS_FAMILY_ENUM = Set.of(
+        "AF_UNSPEC",
+        "AF_INET",
+        "AF_IPX",
+        "AF_APPLETALK",
+        "AF_NETBIOS",
+        "AF_INET6",
+        "AF_IRDA",
+        "AF_BTH"
+    );
+
+    public static final Set<String> OPINION_ENUM = Set.of(
+        "strongly-disagree",
+        "disagree",
+        "neutral",
+        "agree",
+        "strongly-agree"
+    );
+
+    public static final Set<String> PATTERN_TYPE_OV = Set.of(
         "stix",
         "pcre",
         "sigma",
@@ -375,7 +391,6 @@ public class Vocabs {
         "suricata",
         "yara"
     );
-
 
     public static final Set<String> PROCESSOR_ARCHITECTURE_OV = Set.of(
         "alpha",
@@ -421,7 +436,6 @@ public class Vocabs {
         "antarctica"
     );
 
-
     public static final Set<String> REPORT_TYPE_OV = Set.of(
         "threat-report",
         "attack-pattern",
@@ -435,7 +449,6 @@ public class Vocabs {
         "tool",
         "vulnerability"
     );
-
 
     public static final Set<String> THREAT_ACTOR_TYPE_OV = Set.of(
         "activist",
@@ -452,7 +465,6 @@ public class Vocabs {
         "unknown"
     );
 
-
     public static final Set<String> THREAT_ACTOR_ROLE_OV = Set.of(
         "agent",
         "director",
@@ -463,7 +475,6 @@ public class Vocabs {
         "sponsor"
     );
 
-
     public static final Set<String> THREAT_ACTOR_SOPHISTICATION_OV = Set.of(
         "none",
         "minimal",
@@ -473,7 +484,6 @@ public class Vocabs {
         "innovator",
         "strategic"
     );
-
 
     public static final Set<String> TOOL_TYPE_OV = Set.of(
         "denial-of-service",
@@ -486,8 +496,7 @@ public class Vocabs {
         "unknown"
     );
 
-
-    public static final Set<String> HASH_ALGO_OV = Set.of(
+    public static final Set<String> HASH_ALGORITHM_OV = Set.of(
         "MD5",
         "SHA-1",
         "SHA-256",
@@ -498,6 +507,12 @@ public class Vocabs {
         "TLSH"
     );
 
+    public static final Set<String> WINDOWS_INTEGRITY_LEVEL_ENUM = Set.of(
+        "low",
+        "medium",
+        "high",
+        "system"
+    );
 
     public static final Set<String> WINDOWS_PEBINARY_TYPE_OV = Set.of(
         "exe",
@@ -505,34 +520,48 @@ public class Vocabs {
         "sys"
     );
 
-    public static final Set<String> LANG_CODES = Set.of(
-        "af", "af-ZA", "ar", "ar-AE", "ar-BH", "ar-DZ", "ar-EG", "ar-IQ", "ar-JO",
-        "ar-KW", "ar-LB", "ar-LY", "ar-MA", "ar-OM", "ar-QA", "ar-SA", "ar-SY",
-        "ar-TN", "ar-YE", "az", "az-AZ", "az-Cyrl-AZ", "be", "be-BY", "bg", "bg-BG",
-        "bs-BA", "ca", "ca-ES", "cs", "cs-CZ", "cy", "cy-GB", "da", "da-DK", "de",
-        "de-AT", "de-CH", "de-DE", "de-LI", "de-LU", "dv", "dv-MV", "el", "el-GR",
-        "en", "en-AU", "en-BZ", "en-CA", "en-CB", "en-GB", "en-IE", "en-JM",
-        "en-NZ", "en-PH", "en-TT", "en-US", "en-ZA", "en-ZW", "eo", "es", "es-AR",
-        "es-BO", "es-CL", "es-CO", "es-CR", "es-DO", "es-EC", "es-ES", "es-GT",
-        "es-HN", "es-MX", "es-NI", "es-PA", "es-PE", "es-PR", "es-PY", "es-SV",
-        "es-UY", "es-VE", "et", "et-EE", "eu", "eu-ES", "fa", "fa-IR", "fi",
-        "fi-FI", "fo", "fo-FO", "fr", "fr-BE", "fr-CA", "fr-CH", "fr-FR", "fr-LU",
-        "fr-MC", "gl", "gl-ES", "gu", "gu-IN", "he", "he-IL", "hi", "hi-IN", "hr",
-        "hr-BA", "hr-HR", "hu", "hu-HU", "hy", "hy-AM", "id", "id-ID", "is",
-        "is-IS", "it", "it-CH", "it-IT", "ja", "ja-JP", "ka", "ka-GE", "kk",
-        "kk-KZ", "kn", "kn-IN", "ko", "ko-KR", "kok", "kok-IN", "ky", "ky-KG",
-        "lt", "lt-LT", "lv", "lv-LV", "mi", "mi-NZ", "mk", "mk-MK", "mn", "mn-MN",
-        "mr", "mr-IN", "ms", "ms-BN", "ms-MY", "mt", "mt-MT", "nb", "nb-NO", "nl",
-        "nl-BE", "nl-NL", "nn-NO", "ns", "ns-ZA", "pa", "pa-IN", "pl", "pl-PL",
-        "ps", "ps-AR", "pt", "pt-BR", "pt-PT", "qu", "qu-BO", "qu-EC", "qu-PE",
-        "ro", "ro-RO", "ru", "ru-RU", "sa", "sa-IN", "se", "se-FI", "se-NO",
-        "se-SE", "sk", "sk-SK", "sl", "sl-SI", "sq", "sq-AL", "sr-BA", "sr-Cyrl-BA",
-        "sr-SP", "sr-Cyrl-SP", "sv", "sv-FI", "sv-SE", "sw", "sw-KE", "syr",
-        "syr-SY", "ta", "ta-IN", "te", "te-IN", "th", "th-TH", "tl", "tl-PH", "tn",
-        "tn-ZA", "tr", "tr-TR", "tt", "tt-RU", "ts", "uk", "uk-UA", "ur", "ur-PK",
-        "uz", "uz-UZ", "uz-Cyrl-UZ", "vi", "vi-VN", "xh", "xh-ZA", "zh", "zh-CN",
-        "zh-HK", "zh-MO", "zh-SG", "zh-TW", "zu", "zu-ZA"
-        );
+    public static final Set<String> WINDOWS_REGISTRY_DATATYPE_ENUM = Set.of(
+        "REG_NONE",
+        "REG_SZ",
+        "REG_EXPAND_SZ",
+        "REG_BINARY",
+        "REG_DWORD",
+        "REG_DWORD_BIG_ENDIAN",
+        "REG_DWORD_LITTLE_ENDIAN",
+        "REG_LINK",
+        "REG_MULTI_SZ",
+        "REG_RESOURCE_LIST",
+        "REG_FULL_RESOURCE_DESCRIPTION",
+        "REG_RESOURCE_REQUIREMENTS_LIST",
+        "REG_QWORD",
+        "REG_INVALID_TYPE"
+    );
+
+    public static final Set<String> WINDOWS_SERVICE_START_TYPE_ENUM = Set.of(
+        "SERVICE_AUTO_START",
+        "SERVICE_BOOT_START",
+        "SERVICE_DEMAND_START",
+        "SERVICE_DISABLED",
+        "SERVICE_SYSTEM_ALERT"
+    );
+
+    public static final Set<String> WINDOWS_SERVICE_TYPE_ENUM = Set.of(
+        "SERVICE_KERNEL_DRIVER",
+        "SERVICE_FILE_SYSTEM_DRIVER",
+        "SERVICE_WIN32_OWN_PROCESS",
+        "SERVICE_WIN32_SHARE_PROCESS"
+    );
+
+    public static final Set<String> WINDOWS_SERVICE_STATUS_ENUM = Set.of(
+        "SERVICE_CONTINUE_PENDING",
+        "SERVICE_PAUSE_PENDING",
+        "SERVICE_PAUSED",
+        "SERVICE_RUNNING",
+        "SERVICE_START_PENDING",
+        "SERVICE_STOP_PENDING",
+        "SERVICE_STOPPED"
+    );
+
 
     public static final Set<String> SOFTWARE_LANG_CODES = Set.of(
         "aar", "abk", "ace", "ach", "ada", "ady", "afa", "afh", "afr", "ain",
@@ -865,7 +894,5 @@ public class Vocabs {
         "TCP_TIMESTAMPS",
         "TCP_USER_TIMEOUT",
         "TCP_WINDOW_CLAMP"
-        );
+    );
 }
-
-

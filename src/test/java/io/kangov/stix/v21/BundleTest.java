@@ -4,6 +4,7 @@ import io.kangov.stix.Parser;
 import io.kangov.stix.Stix;
 import io.kangov.stix.v21.bundle.Bundle;
 import io.kangov.stix.v21.bundle.Bundleable;
+import io.kangov.stix.v21.common.type.IdentityRef;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.v21.core.sdo.objects.Identity;
 import io.kangov.stix.v21.core.sdo.objects.Indicator;
@@ -16,7 +17,6 @@ import java.time.Instant;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.InstanceOfAssertFactories.type;
 
 
 public class BundleTest {
@@ -57,7 +57,19 @@ public class BundleTest {
             "pattern": "[ file:hashes.'SHA-256' = '4bac27393bdd9777ce02453256c5577cd02275510b2227f473d03f533924f877' ]",
             "pattern_type": "stix",
             "valid_from": "2016-01-01T00:00:00Z"
-        }
+        },
+        {
+             "type": "malware",
+             "spec_version": "2.1",
+             "id": "malware--3a41e552-999b-4ad3-bedc-332b6d9ff80c",
+             "created": "2016-11-12T14:31:09.000Z",
+             "modified": "2016-11-12T14:31:09.000Z",
+             "is_family": true,
+             "malware_types": [
+               "bot"
+             ],
+             "name": "IMDDOS"
+        },
     ]
 }
     """;
@@ -73,7 +85,7 @@ public class BundleTest {
     );
 
     private static final Bundleable indicator = Indicator.create(i -> i
-        .createdByRef(identity)
+        .createdByRef(new IdentityRef(identity.getId(), identity))
         .addIndicatorType("malicious-activity")
         .name("Poison Ivy Malware")
         .description("This file is part of Poison Ivy")
@@ -97,18 +109,19 @@ public class BundleTest {
     }
 
     @Test
-    void testSerialise() {
+    void testWrite() {
         var str = parser.writeBundle(BUNDLE_OBJECT);
 //        log.debug("To JSON : \n{}", str);
         assertThat(str).isNotNull();
     }
 
     @Test
-    void testDeserialise() throws Exception{
+    void testRead() throws Exception{
         var bundle = parser.readBundle(BUNDLE_STRING);
-        var indicator = bundle.getFirst(Indicator.class);
-        var identity = getCreatedByRef(indicator);
-        assertThat(identity.getIdentityClass()).contains("organization");
+        assertThat(bundle).isNotNull();
+        var actual = bundle.stream(Identity.class).findFirst().get();
+        var expected = bundle.stream(Indicator.class).findFirst().get().getCreatedByRef().identity();
+        assertThat(actual).isSameAs(expected);
     }
 
     @Disabled
@@ -123,7 +136,7 @@ public class BundleTest {
         log.info("Completed {} iterations in {} ms", count, Duration.between(start, finish).toMillis());
     }
 
-    private <T extends SdoObject> Identity getCreatedByRef(T t) {
+    private <T extends SdoObject> IdentityRef getCreatedByRef(T t) {
         var opt = t.getCreatedByRef();
         //assertThat(opt).isPresent();
         return opt; //.get();

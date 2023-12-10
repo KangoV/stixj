@@ -17,7 +17,13 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = { VocabValidator.class })
 public @interface Vocab {
 
+    enum InclusionType {
+        MUST,
+        SHOULD
+    }
+
     Vocabs.Vocab value();
+    InclusionType inclusion() default InclusionType.SHOULD;
 
     String message() default "{io.kangov.stix.validation.constraints.Vocab.message})"; // (2)
     Class<?>[] groups() default { };

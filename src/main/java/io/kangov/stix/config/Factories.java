@@ -8,6 +8,7 @@ import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import io.kangov.stix.v21.bundle.Bundle;
 import io.kangov.stix.v21.core.sco.objects.*;
 import io.kangov.stix.v21.core.sdo.objects.*;
+import io.kangov.stix.v21.core.sro.objects.Relationship;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 
@@ -53,7 +54,7 @@ public class Factories {
         };
 
         Class<?>[] sroClasses = {
-//            Relationship.class,
+            Relationship.class,
 //            Sighting.class
         };
 
