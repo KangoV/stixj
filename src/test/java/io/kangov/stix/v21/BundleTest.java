@@ -35,7 +35,7 @@ public class BundleTest {
             "created": "2023-11-15T17:24:14.356165Z",
             "modified": "2023-11-15T17:24:14.356165Z",
             "revoked": "true",
-            "confidence": -2,
+            "confidence": 1,
             "lang": "en",
             "name": "ACME Widget, Inc.",
             "description": "ACME Widgets is fictional ;)",
@@ -59,17 +59,25 @@ public class BundleTest {
             "valid_from": "2016-01-01T00:00:00Z"
         },
         {
-             "type": "malware",
-             "spec_version": "2.1",
-             "id": "malware--3a41e552-999b-4ad3-bedc-332b6d9ff80c",
-             "created": "2016-11-12T14:31:09.000Z",
-             "modified": "2016-11-12T14:31:09.000Z",
-             "is_family": true,
-             "malware_types": [
-               "bot"
-             ],
-             "name": "IMDDOS"
+            "type": "malware",
+            "spec_version": "2.1",
+            "id": "malware--3a41e552-999b-4ad3-bedc-332b6d9ff80c",
+            "created": "2016-11-12T14:31:09.000Z",
+            "modified": "2016-11-12T14:31:09.000Z",
+            "is_family": true,
+            "malware_types": [ "bot" ],
+            "name": "IMDDOS"
         },
+        {
+            "type": "relationship",
+            "spec_version": "2.1",
+            "id": "relationship--81f12913-1372-4c96-85ec-E9034ac98aba",
+            "created": "2016-11-23T10:42:39.000Z",
+            "modified": "2016-11-23T10:42:39.000Z",
+            "relationship_type": "consists-of",
+            "source_ref": "malware--3a41e552-999b-4ad3-bedc-332b6d9ff80c",
+            "target_ref": "indicator--8e2e2d2b-17d4-4cbf-938f-98ee46b3cd3f"
+        }
     ]
 }
     """;

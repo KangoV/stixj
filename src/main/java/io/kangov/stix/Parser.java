@@ -156,7 +156,7 @@ public class Parser {
     }
 
 
-    private Bundleable processNode(ObjectNode objectNode, ObjectCache cache) throws Exception {
+    @Valid Bundleable processNode(ObjectNode objectNode, ObjectCache cache) throws Exception {
 
         var id = objectNode.get(ID).asText();
         var type = objectNode.get(TYPE).asText();

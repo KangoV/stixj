@@ -89,7 +89,6 @@ public interface Indicator extends SdoObject {
         return builder.apply(builder()).build();
     }
 
-    @NotBlank
     @JsonProperty("name")
     @Redactable
     Optional<String> getName();
@@ -113,10 +112,9 @@ public interface Indicator extends SdoObject {
     @Vocab(Vocabs.Vocab.PATTERN_TYPE)
     String getPatternType();
 
-    @NotBlank
     @JsonProperty("pattern_version")
     @Redactable(useMask = true)
-    String getPatternVersion();
+    Optional<String> getPatternVersion();
 
     @NotNull
     @JsonProperty("valid_from")
