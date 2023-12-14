@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.util.ImmutableStyle;
 import io.kangov.stix.v21.bundle.Bundleable;
+import io.kangov.stix.v21.common.type.BundleableRef;
 import io.kangov.stix.v21.common.type.IdentityRef;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.validation.constraints.Vocab;
@@ -67,8 +68,10 @@ public interface Report extends SdoObject {
      * methods defined on the generated implementation's Builder class.
      */
     class Builder extends ReportImpl.Builder {
-        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); };
+        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); }
         public Builder createdByRef(Identity identity) { return createdByRef(IdentityRef.create(identity)); }
+        public Builder addObjectRef(Bundleable obj) { return addObjectRef(BundleableRef.create(obj)); }
+        public Builder addObjectRef(String str) { return addObjectRef(BundleableRef.create(str)); }
     }
 
     static Report create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
@@ -100,10 +103,7 @@ public interface Report extends SdoObject {
 
     @Size(min = 1, message = "Must have at least one Report object reference")
     @JsonProperty("object_refs")
-    @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
-    @JsonIdentityReference(alwaysAsId=true)
-//    @JsonDeserialize( converter = BundleableObjectSetConverter.class)
     @Redactable(useMask = true)
-    Set<Bundleable> getObjectRefs();
+    Set<BundleableRef> getObjectRefs();
 
 }

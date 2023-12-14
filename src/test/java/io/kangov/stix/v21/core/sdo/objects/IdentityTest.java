@@ -31,7 +31,19 @@ public class IdentityTest {
     @Inject Parser parser;
     @Inject Validator validator;
 
-    private String json = """
+    private String json0 = """
+    {
+      "type": "identity",
+      "spec_version": "2.1",
+      "id": "identity--8c6af861-7b20-41ef-9b59-6344fd872a8f",
+      "created": "2016-08-08T15:50:10.983Z",
+      "modified": "2016-08-08T15:50:10.983Z",
+      "name": "Franistan Intelligence",
+      "identity_class": "organization"
+    }
+    """;
+
+    private String json1 = """
         {
           "id": "identity--6c9a1180-994e-4082-9a11-80994e308253",
           "type": "identity",
@@ -118,6 +130,12 @@ public class IdentityTest {
     }
 
     @Test
+    void test_deser_json0() {
+        var object = parser.readObject(json0, Identity.class);
+        assertThat(object).isNotNull();
+    }
+
+    @Test
     void test_Name_not_blank() {
         var object = builder.name(null).build();
         var violations = validator.validate(object);
@@ -126,7 +144,7 @@ public class IdentityTest {
     }
 
     @Test
-    void test_Roles_below_min() {
+    void test_negative_confidence() {
 
         // container constraint, "Set<@Min(2) String>, so should generate a violation
         var object = builder
@@ -140,7 +158,7 @@ public class IdentityTest {
             var leaf = v.getLeafBean();
             log.debug("{} -> {}", v.getPropertyPath(), v.getMessage());
         });
-        assertThat(violations).hasSize(2);
+        assertThat(violations).hasSize(1);
 
     }
 

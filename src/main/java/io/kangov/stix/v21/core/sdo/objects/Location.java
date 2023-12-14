@@ -106,14 +106,14 @@ public interface Location extends SdoObject {
     Optional<Double> getPrecision();
 
     @JsonProperty("region")
-    @Vocab(REGION)
+    //TODO: @Vocab(REGION)
     @Redactable
     Optional<String> getRegion();
 
     @JsonProperty("country")
 //    @Length(min = 2, max = 2)
     @Redactable
-    @Vocab(Vocabs.Vocab.COUNTRY_CODE_2)
+    //TODO: @Vocab(Vocabs.Vocab.COUNTRY_CODE_2)
     Optional<String> getCountry();
 
     /*

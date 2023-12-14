@@ -10,7 +10,7 @@ import io.kangov.stix.v21.core.sdo.SdoObject;
 import java.io.IOException;
 
 @JsonSerialize(using = SdoObjectRef.Serializer.class)
-public record SdoObjectRef(String id, SdoObject object) {
+public record SdoObjectRef(String id, SdoObject object) implements ObjectRef<SdoObject> {
 
     public static class Serializer extends StdSerializer<SdoObjectRef> {
         public Serializer() { this(null); }

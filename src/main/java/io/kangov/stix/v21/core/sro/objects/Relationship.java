@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.util.ImmutableStyle;
+import io.kangov.stix.v21.common.type.BundleableRef;
 import io.kangov.stix.v21.common.type.SdoObjectRef;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.v21.core.sro.SroObject;
@@ -59,10 +60,10 @@ public interface Relationship extends SroObject {
      * methods defined on the generated implementation's Builder class.
      */
     class Builder extends RelationshipImpl.Builder {
-        Builder targetRef(String id)     { return targetRef(new SdoObjectRef(id, null)); }
-        Builder targetRef(SdoObject obj) { return targetRef(new SdoObjectRef(obj.getId(), obj)); }
-        Builder sourceRef(String id)     { return sourceRef(new SdoObjectRef(id, null)); }
-        Builder sourceRef(SdoObject obj) { return sourceRef(new SdoObjectRef(obj.getId(), obj)); }
+        Builder targetRef(String id)     { return targetRef(new BundleableRef(id, null)); }
+        Builder targetRef(SdoObject obj) { return targetRef(new BundleableRef(obj.getId(), obj)); }
+        Builder sourceRef(String id)     { return sourceRef(new BundleableRef(id, null)); }
+        Builder sourceRef(SdoObject obj) { return sourceRef(new BundleableRef(obj.getId(), obj)); }
     }
 
     static Relationship create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
@@ -86,12 +87,12 @@ public interface Relationship extends SroObject {
     @NotNull
     @JsonProperty("source_ref")
     @Redactable(useMask = true)
-    SdoObjectRef getSourceRef();
+    BundleableRef getSourceRef();
 
     @NotNull
     @JsonProperty("target_ref")
     @Redactable(useMask = true)
-    SdoObjectRef getTargetRef();
+    BundleableRef getTargetRef();
 
     @JsonProperty("start_time")
     @Redactable

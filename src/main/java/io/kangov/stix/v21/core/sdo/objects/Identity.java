@@ -31,7 +31,7 @@ import static io.kangov.stix.v21.enums.Vocabs.Vocab.INDUSTRY_SECTORS;
 @Serial.Version(1L)
 //@DefaultTypeValue(value = "object", groups = { DefaultValuesProcessor.class })
 @ImmutableStyle
-@JsonTypeName("object")
+@JsonTypeName("identity")
 @JsonSerialize(as = Identity.class)
 @JsonDeserialize(builder = Identity.Builder.class)
 @JsonPropertyOrder({

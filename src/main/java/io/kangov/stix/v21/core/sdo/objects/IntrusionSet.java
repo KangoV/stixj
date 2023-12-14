@@ -114,14 +114,12 @@ public interface IntrusionSet extends SdoObject {
     Set<@NotBlank String> getGoals();
 
     @JsonProperty("resource_level")
-    @Vocab(ATTACK_RESOURCE_LEVEL)
     @Redactable
-    Optional<String> getResourceLevel();
+    Optional<@Vocab(ATTACK_RESOURCE_LEVEL) String> getResourceLevel();
 
     @JsonProperty("primary_motivation")
-    @Vocab(ATTACK_MOTIVATION)
     @Redactable
-    Optional<String> getPrimaryMotivation();
+    Optional<@Vocab(ATTACK_MOTIVATION) String> getPrimaryMotivation();
 
     @JsonProperty("secondary_motivations")
     @Redactable

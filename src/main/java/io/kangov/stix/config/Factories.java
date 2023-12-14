@@ -10,6 +10,9 @@ import io.kangov.stix.v21.core.sco.objects.*;
 import io.kangov.stix.v21.core.sdo.objects.*;
 import io.kangov.stix.v21.core.sro.objects.Relationship;
 import io.kangov.stix.v21.core.sro.objects.Sighting;
+import io.kangov.stix.v21.meta.mdo.MarkingDefinition;
+import io.kangov.stix.v21.meta.mdo.objects.Statement;
+import io.kangov.stix.v21.meta.mdo.objects.Tlp;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 
@@ -60,9 +63,9 @@ public class Factories {
         };
 
         Class<?>[] dataMarkingClasses = {
-//            MarkingDefinition.class,
-//            Statement.class,
-//            Tlp.class
+            MarkingDefinition.class,
+            Statement.class,
+            Tlp.class
         };
 
         Class<?>[] bundleClasses = {

@@ -20,8 +20,9 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
     use = JsonTypeInfo.Id.NAME,
     include = JsonTypeInfo.As.EXISTING_PROPERTY,
     property = "type",
-    visible = true,
-    defaultImpl = CustomObject.class)
+    visible = true //,
+//    defaultImpl = CustomObject.class
+)
 @JsonInclude(value = NON_EMPTY, content= NON_EMPTY)
 @Introspected
 
@@ -31,7 +32,9 @@ public interface Bundleable
         ObjectMarkingRefs,
         GranularMarkings {
 
-    String SPEC_VERSION = "spec_version";
+    String SPEC_VERSION        = "spec_version";
+    String OBJECT_MARKING_REFS = "object_marking_refs";
+    String GRANULAR_MARKINGS   = "granular_markings";
 
     /**
      * Dictates if the object is hydrated.

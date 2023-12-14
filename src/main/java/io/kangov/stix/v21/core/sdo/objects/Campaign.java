@@ -85,7 +85,7 @@ public interface Campaign extends SdoObject {
 
     @JsonProperty("description")
     @Redactable
-    Optional<@NotBlank String> getDescription();
+    Optional<String> getDescription();
 
     @JsonProperty("aliases")
     @Redactable

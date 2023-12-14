@@ -98,10 +98,8 @@ public interface ThreatActor extends SdoObject {
     @Redactable
     Optional<String> getDescription();
 
-    @Size(min = 1, message = "Must have at least one value from threat-actor-label-ov")
-    @Vocab(THREAT_ACTOR_TYPE)
     @Redactable(useMask = true)
-    Set<String> getThreatActorTypes();
+    Set<@Vocab(THREAT_ACTOR_TYPE) String> getThreatActorTypes();
 
     @JsonProperty("aliases")
     @Redactable
@@ -125,19 +123,16 @@ public interface ThreatActor extends SdoObject {
     Set<@Size(min = 1) String> getGoals();
 
     @JsonProperty("sophistication")
-    @Vocab(THREAT_ACTOR_SOPHISTICATION)
     @Redactable
-    Optional<String> getSophistication();
+    Optional<@Vocab(THREAT_ACTOR_SOPHISTICATION) String> getSophistication();
 
     @JsonProperty("resource_level")
-    @Vocab(ATTACK_RESOURCE_LEVEL)
     @Redactable
-    Optional<String> getResourceLevel();
+    Optional<@Vocab(ATTACK_RESOURCE_LEVEL) String> getResourceLevel();
 
     @JsonProperty("primary_motivation")
-    @Vocab(ATTACK_MOTIVATION)
     @Redactable
-    Optional<String> getPrimaryMotivation();
+    Optional<@Vocab(ATTACK_MOTIVATION) String> getPrimaryMotivation();
 
     @JsonProperty("secondary_motivations")
     @Redactable

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.util.ImmutableStyle;
-import io.kangov.stix.v21.common.type.IdentityRef;
+import io.kangov.stix.v21.common.type.*;
 import io.kangov.stix.v21.core.sco.ScoObject;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.validation.constraints.Range;
@@ -108,6 +108,6 @@ public interface ObservedData extends SdoObject {
 
     @JsonProperty("object_refs")
     @Redactable(useMask = true)
-    Set<ScoObject> getObjectRefs();
+    Set<BundleableRef> getObjectRefs();
 
 }

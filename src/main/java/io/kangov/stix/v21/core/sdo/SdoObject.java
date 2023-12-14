@@ -26,8 +26,6 @@ public interface SdoObject
     String CONFIDENCE = "confidence";
     String LANG = "lang";
     String EXTERNAL_REFERENCE = "external_references";
-    String OBJECT_MARKING_REFS = "object_marking_refs";
-    String GRANULAR_MARKINGS = "granular_markings";
 
     /**
      * This is used with the SROs.  The SRO interface enforces what relationships can be created.  The Relationships can then be stored in the Domain object if they choose.

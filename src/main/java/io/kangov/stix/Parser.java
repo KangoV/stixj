@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.*;
 import io.kangov.stix.v21.bundle.Bundle;
 import io.kangov.stix.v21.bundle.Bundleable;
-import io.kangov.stix.v21.common.type.IdentityRef;
-import io.kangov.stix.v21.common.type.SdoObjectRef;
+import io.kangov.stix.v21.common.type.*;
+import io.kangov.stix.v21.core.sco.ScoObject;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.v21.core.sdo.objects.Identity;
 import io.micronaut.validation.Validated;
@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.function.Function;
+import java.util.function.*;
 
 @Validated
 @Singleton
@@ -42,13 +42,13 @@ public class Parser {
         this.validator = validator;
     }
 
-    public  <T> @Valid T readObject(String str, Class<T> bundleable) {
+    public <T> @Valid T readObject(String str, Class<T> bundleable) {
         try {
             log.debug("Deserializing {} to: {}", bundleable.getSimpleName(), str);
             var node = objectMapper.readTree(str);
             var cache = addToCache(node, new ObjectCache());
             var obj = processNode((ObjectNode) node, cache);
-            log.debug("Deserialized {} to: {}", bundleable.getSimpleName(),  obj);
+            log.debug("Deserialized {} to: {}", bundleable.getSimpleName(), obj);
             return (T) obj;
         } catch (Exception e) {
             throw new ParseException("Failed to deserialize a " + bundleable.getSimpleName(), e);
@@ -91,7 +91,7 @@ public class Parser {
                 }
                 var bundle = builder.build();
 
-                log.debug("Deserialized {} to:\n{}", BUNDLE,  bundle);
+                log.debug("Deserialized {} to:\n{}", BUNDLE, bundle);
                 return bundle;
 
             } else {
@@ -128,12 +128,13 @@ public class Parser {
             private static Entry create(ObjectNode objectNode) {
                 return new Entry(objectNode.get(ID).asText(), objectNode, null);
             }
+
             private static Entry create(Bundleable bundleable) {
                 return new Entry(bundleable.getId(), null, bundleable);
             }
         }
 
-        private final Map<String,Entry> entries = new HashMap<>();
+        private final Map<String, Entry> entries = new HashMap<>();
 
         @Nonnull
         @Override
@@ -179,102 +180,57 @@ public class Parser {
         // see if the node to process has a createdByRef node
         // if so, then we should process it and set the generated POJO on the object node. Jackson will then use
         // the pojo when de-serialising which is awesome!
-        var createByRefNode = objectNode.get(CREATED_BY_REF);
-        if (createByRefNode != null) {
-            var refId = createByRefNode.asText();
-            var identity = (Identity) processReference(refId, cache);
-            IdentityRef identityRef = null;
-            if (identity != null) {
-                identityRef = IdentityRef.create(identity);
-            } else {
-                identityRef = IdentityRef.create(id);
-            }
-            objectNode.putPOJO(CREATED_BY_REF, identityRef);
-        }
 
-        // Now we can start looking for relationships
+        processOptionalReference(CREATED_BY_REF, objectNode, cache, (i, b) -> new IdentityRef(i, (Identity) b));
+
         if (type.equals("relationship")) {
-
-            log.debug("processing standard relationship {}", id);
-
-            var sdo = (SdoObject) createReference(objectNode, "source_ref", cache);
-            objectNode.putPOJO("source_ref", new SdoObjectRef(sdo.getId(), sdo));
-
-            sdo = (SdoObject) createReference(objectNode, "target_node", cache);
-            objectNode.putPOJO("target_ref", new SdoObjectRef(sdo.getId(), sdo));
-
+            processRequiredReference("source_ref", objectNode, cache, BundleableRef::new);
+            processRequiredReference("target_ref", objectNode, cache, BundleableRef::new);
         }
-
+        if (type.equals("observed-data")) {
+            processReferences("object_refs", objectNode, cache, BundleableRef::new);
+        }
+        if (type.equals("report")) {
+            processReferences("object_refs", objectNode, cache, BundleableRef::new);
+        }
         if (type.equals("sighting")) {
-
-            log.debug("processing sighting {}", id);
-
-            var sdo = (SdoObject) createReference(objectNode, "sighting_of_ref", cache);
-            objectNode.putPOJO("sighting_of_ref", new SdoObjectRef(sdo.getId(), sdo));
-
-            // Process the where sighted ref identifiers
-            // - get the array node
-            // - for each array entry
-            //   - process the reference to return an object
-            var refs = (ArrayNode) objectNode.get("where_sighted_refs");
-            if (refs != null) {
-                var list = new ArrayList<SdoObjectRef>();
-                for (var iterator = refs.elements(); iterator.hasNext();) {
-                    var refNode = iterator.next();
-                    var obj = processReference(refNode.asText(), cache);
-                    if (obj != null) {
-                        list.add(new SdoObjectRef(obj.getId(), (SdoObject) obj));
-                    } else {
-                        list.add(new SdoObjectRef(refNode.asText(), null));
-                    }
-                    iterator.remove();
-                }
-                list.forEach(refs::addPOJO);
-            }
-
-            refs = (ArrayNode) objectNode.get("observed_data_refs");
-            if (refs != null) {
-                var list = new ArrayList<SdoObjectRef>();
-                for (var iterator = refs.elements(); iterator.hasNext();) {
-                    var refNode = iterator.next();
-                    var obj = processReference(refNode.asText(), cache);
-                    if (obj != null) {
-                        list.add(new SdoObjectRef(obj.getId(), (SdoObject) obj));
-                    } else {
-                        list.add(new SdoObjectRef(refNode.asText(), null));
-                    }
-                    iterator.remove();
-                }
-                list.forEach(refs::addPOJO);
-            }
-
+            processRequiredReference("sighting_of_ref", objectNode, cache, (i, b) -> new SdoObjectRef(i, (SdoObject) b));
+            processReferences("where_sighted_refs", objectNode, cache, (i, b) -> new SdoObjectRef(i, (SdoObject) b));
+            processReferences("observed_data_refs", objectNode, cache, (i, b) -> new SdoObjectRef(i, (SdoObject) b));
         }
-
-
 
         try {
             var object = objectMapper.treeToValue(objectNode, Bundleable.class);
             cache.put(ObjectCache.Entry.create(object));
             return object;
         } catch (Exception e) {
-            log.error("De-serialisation of {} failed", id);
-            throw new ParseException(e);
+            throw new ParseException("De-serialisation of "+id+" failed", e);
         }
     }
 
-    private Bundleable createReference(ObjectNode containingNode, String refNodeName, ObjectCache cache) throws Exception {
-        Bundleable obj = null;
-        var refNode = containingNode.get(refNodeName);
-        if (refNode == null) {
-            var type = containingNode.get(TYPE).asText();
-            var id = containingNode.get(ID).asText();
-            throw new ParseException("Missing attribute for ["+ type + ":(" + id + ")]: target_ref");
-        }
-        obj = processReference(refNode.asText(), cache);
-        return obj;
+    private <T extends Bundleable> void processRequiredReference(String fieldName, ObjectNode containerNode, ObjectCache cache, BiFunction<String,Bundleable,ObjectRef<T>> refFactory) throws Exception {
+        processReference(fieldName, containerNode, cache, true, refFactory);
     }
 
-    private Bundleable processReference(String id, ObjectCache cache) throws Exception {
+    private <T extends Bundleable> void processOptionalReference(String fieldName, ObjectNode containerNode, ObjectCache cache, BiFunction<String,Bundleable,ObjectRef<T>> refFactory) throws Exception {
+        processReference(fieldName, containerNode, cache, false, refFactory);
+    }
+
+    private <T extends Bundleable> void processReference(String fieldName, ObjectNode containerNode, ObjectCache cache, boolean required, BiFunction<String,Bundleable,ObjectRef<T>> refFactory) throws Exception {
+        var refNode = containerNode.get(fieldName);
+        if (refNode != null) {
+            var obj = resolveReference(refNode.asText(), cache);
+            containerNode.putPOJO(fieldName, refFactory.apply(obj.getId(), obj));
+        } else {
+            if (required) {
+                var type = containerNode.get(TYPE).asText();
+                var id = containerNode.get(ID).asText();
+                throw new ParseException("Missing required attribute for [" + type + ":(" + id + ")]: " + fieldName);
+            }
+        }
+    }
+
+    private Bundleable resolveReference(String id, ObjectCache cache) throws Exception {
         log.debug("processing forward reference: {}", id);
         Bundleable target = null;
         if (cache.contains(id)) {
@@ -287,6 +243,23 @@ public class Parser {
             }
         }
         return target;
+    }
+
+    private <T extends Bundleable> void processReferences(String fieldName, JsonNode containerNode, ObjectCache cache, BiFunction<String,Bundleable,ObjectRef<T>> refFactory) throws Exception {
+        var refs = (ArrayNode) containerNode.get(fieldName);
+        if (refs != null) {
+            var list = new ArrayList<ObjectRef<T>>();
+            for (var iterator = refs.elements(); iterator.hasNext();) {
+                var refNode = iterator.next();
+                var refId = refNode.asText();
+                var obj = resolveReference(refId, cache);
+                var ref = refFactory.apply(refId, obj);
+                list.add(ref);
+                iterator.remove();
+            }
+            list.forEach(refs::addPOJO);
+        }
+
     }
 
     private static ObjectCache addToCache(JsonNode jsonNode, ObjectCache cache) {

@@ -10,7 +10,7 @@ import io.kangov.stix.v21.core.sdo.objects.Identity;
 import java.io.IOException;
 
 @JsonSerialize(using = IdentityRef.Serializer.class)
-public record IdentityRef(String id, Identity object) {
+public record IdentityRef(String id, Identity object) implements ObjectRef<Identity> {
 
     public static class Serializer extends StdSerializer<IdentityRef> {
         public Serializer() { this(null); }
