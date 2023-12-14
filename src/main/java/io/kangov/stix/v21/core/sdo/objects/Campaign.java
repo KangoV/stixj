@@ -4,10 +4,11 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.redaction.Redactable;
+import io.kangov.stix.util.ImmutableStyle;
+import io.kangov.stix.v21.common.type.IdentityRef;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 
@@ -15,6 +16,9 @@ import java.time.Instant;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.UnaryOperator;
+
+import static io.kangov.stix.v21.bundle.Bundleable.*;
+import static io.kangov.stix.v21.core.sdo.SdoObject.*;
 
 /**
  * campaign
@@ -25,27 +29,22 @@ import java.util.function.UnaryOperator;
 @Value.Immutable @Serial.Version(1L)
 @JsonTypeName("campaign")
 //@DefaultTypeValue(value = "campaign", groups = { DefaultValuesProcessor.class })
-@Value.Style(
-    optionalAcceptNullable = true,
-    visibility = Value.Style.ImplementationVisibility.PACKAGE,
-    overshadowImplementation = true,
-    typeAbstract="",
-    typeImmutable="*Impl",
-    validationMethod = Value.Style.ValidationMethod.NONE, // let bean validation do it
-    additionalJsonAnnotations = { JsonTypeName.class },
-    depluralize = true)
+@ImmutableStyle
 @JsonSerialize(as = Campaign.class) @JsonDeserialize(builder = Campaign.Builder.class)
 @JsonPropertyOrder({
-    "type",
-    "id",
-    "created_by_ref",
-    "created",
-    "modified",
-    "revoked",
-    "labels",
-    "external_references",
-    "object_marking_refs",
-    "granular_markings",
+    TYPE,
+    SPEC_VERSION,
+    ID,
+    CREATED_BY_REF,
+    CREATED,
+    MODIFIED,
+    REVOKED,
+    LABELS,
+    CONFIDENCE,
+    LANG,
+    EXTERNAL_REFERENCE,
+    OBJECT_MARKING_REFS,
+    GRANULAR_MARKINGS,
     "name",
     "description",
     "aliases",
@@ -65,7 +64,10 @@ public interface Campaign extends SdoObject {
      * visible outside this package, this builder inherits and exposes all public
      * methods defined on the generated implementation's Builder class.
      */
-    class Builder extends CampaignImpl.Builder {}
+    class Builder extends CampaignImpl.Builder {
+        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); };
+        public Builder createdByRef(Identity identity) { return createdByRef(IdentityRef.create(identity)); }
+    }
 
     static Campaign create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
     static Campaign createCampaign(UnaryOperator<Builder> spec) { return create(spec); }

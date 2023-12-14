@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.redaction.Redactable;
+import io.kangov.stix.util.ImmutableStyle;
+import io.kangov.stix.v21.common.type.IdentityRef;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.v21.enums.Vocabs;
 import io.kangov.stix.validation.constraints.Vocab;
@@ -14,6 +16,8 @@ import org.immutables.value.Value;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
 
+import static io.kangov.stix.v21.bundle.Bundleable.*;
+import static io.kangov.stix.v21.core.sdo.SdoObject.*;
 import static io.kangov.stix.v21.enums.Vocabs.Vocab.REGION;
 
 /**
@@ -26,31 +30,23 @@ import static io.kangov.stix.v21.enums.Vocabs.Vocab.REGION;
 @Serial.Version(1L)
 @JsonTypeName("location")
 //@DefaultTypeValue(value = "location", groups = { DefaultValuesProcessor.class })
-@Value.Style(
-    optionalAcceptNullable = true,
-    visibility = Value.Style.ImplementationVisibility.PACKAGE,
-    overshadowImplementation = true,
-    typeAbstract="",
-    typeImmutable="*Impl",
-    validationMethod = Value.Style.ValidationMethod.NONE, // let bean validation do it
-    additionalJsonAnnotations = { JsonTypeName.class },
-    depluralize = true)
+@ImmutableStyle
 @JsonSerialize(as = Location.class)
 @JsonDeserialize(builder = Location.Builder.class)
 @JsonPropertyOrder({
-    "type",
-    "spec_version",
-    "id",
-    "created",
-    "modified",
-    "created_by_ref",
-    "revoked",
-    "labels",
-    "confidence",
-    "lang",
-    "external_references",
-    "object_marking_refs",
-    "granular_markings",
+    TYPE,
+    SPEC_VERSION,
+    ID,
+    CREATED_BY_REF,
+    CREATED,
+    MODIFIED,
+    REVOKED,
+    LABELS,
+    CONFIDENCE,
+    LANG,
+    EXTERNAL_REFERENCE,
+    OBJECT_MARKING_REFS,
+    GRANULAR_MARKINGS,
     "name",
     "description",
     "latitude",
@@ -75,7 +71,10 @@ public interface Location extends SdoObject {
      * visible outside this package, this builder inherits and exposes all public
      * methods defined on the generated implementation's Builder class.
      */
-    class Builder extends LocationImpl.Builder {}
+    class Builder extends LocationImpl.Builder {
+        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); };
+        public Builder createdByRef(Identity identity) { return createdByRef(IdentityRef.create(identity)); }
+    }
 
     static Location create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
     static Location createLocation(UnaryOperator<Builder> spec) { return create(spec); }

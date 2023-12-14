@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.function.UnaryOperator;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static io.kangov.stix.v21.bundle.Bundleable.*;
 
 /**
  * process
@@ -31,8 +32,9 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 @JsonInclude(value = NON_EMPTY, content= NON_EMPTY)
 @JsonTypeName("process")
 @JsonPropertyOrder({
-    "id",
-    "type",
+    TYPE,
+    SPEC_VERSION,
+    ID,
     "extensions",
     "is_hidden",
     "pid",

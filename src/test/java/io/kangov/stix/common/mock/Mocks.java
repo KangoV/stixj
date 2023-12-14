@@ -39,13 +39,13 @@ public class Mocks {
         fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
-        fake.coinFlip(() -> fake.repeatFor(10, () -> builder.addExternalReferences(mockExternalReference())));
+        fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addObjectMarkingRef(mockMarkingDefinition())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addGranularMarking(mockGranularMarking())));
 
         // ## --- specific
         builder.name(random.spacedWords(5));
-        fake.coinFlip(() -> fake.repeatFor(5, () -> builder.addKillChainPhase(mockKillChainPhase())));
+        fake.coinFlip(() -> fake.repeatUpTo(5, () -> builder.addKillChainPhase(mockKillChainPhase())));
         fake.coinFlip(() -> builder.description(random.spacedWords(5)));
 
         return builder.build();
@@ -67,7 +67,7 @@ public class Mocks {
         fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
-        fake.coinFlip(() -> fake.repeatFor(10, () -> builder.addExternalReferences(mockExternalReference())));
+        fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addObjectMarkingRef(mockMarkingDefinition())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addGranularMarking(mockGranularMarking())));
 
@@ -81,7 +81,7 @@ public class Mocks {
         builder.name(random.word());
         fake.coinFlip(() -> builder.description(random.spacedWords(5)));
         fake.coinFlip(() -> builder.objective(random.spacedWords(25)));
-        fake.coinFlip(() -> fake.repeatBetween(1, 5,  () -> builder.addAliase(random.joinedWords(5, "-"))));
+        fake.coinFlip(() -> fake.repeatBetween(1, 5,  () -> builder.addAlias(random.joinedWords(5, "-"))));
 
         return builder.build();
     }
@@ -102,7 +102,7 @@ public class Mocks {
         fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
-        fake.coinFlip(() -> fake.repeatFor(10, () -> builder.addExternalReferences(mockExternalReference())));
+        fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addObjectMarkingRef(mockMarkingDefinition())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addGranularMarking(mockGranularMarking())));
 
@@ -130,7 +130,7 @@ public class Mocks {
         fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
-        fake.coinFlip(() -> fake.repeatFor(10, () -> builder.addExternalReferences(mockExternalReference())));
+        fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addObjectMarkingRef(mockMarkingDefinition())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addGranularMarking(mockGranularMarking())));
 
@@ -159,7 +159,7 @@ public class Mocks {
         fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
-        fake.coinFlip(() -> fake.repeatFor(10, () -> builder.addExternalReferences(mockExternalReference())));
+        fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addObjectMarkingRef(mockMarkingDefinition())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addGranularMarking(mockGranularMarking())));
 
@@ -168,8 +168,8 @@ public class Mocks {
         fake.coinFlip(() -> builder.description(random.spacedWords(10)));
         fake.coinFlip(() -> builder.contactInformation(String.format("%s %s", random.email(), random.department())));
         fake.coinFlip(() -> builder.identityClass(random.stringFrom(IDENTITY_CLASS.entries())));
-        fake.coinFlip(() -> fake.repeatFor(10, () -> builder.addRole(random.csvWords(5))));
-        fake.coinFlip(() -> fake.repeatFor( 5, () -> builder.addSector(random.stringFrom(INDUSTRY_SECTORS.entries()))));
+        fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addRole(random.csvWords(5))));
+        fake.coinFlip(() -> fake.repeatUpTo( 5, () -> builder.addSector(random.stringFrom(INDUSTRY_SECTORS.entries()))));
 
         return builder.build();
     }
@@ -191,7 +191,7 @@ public class Mocks {
         fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
-        fake.coinFlip(() -> fake.repeatFor(10, () -> builder.addExternalReferences(mockExternalReference())));
+        fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addObjectMarkingRef(mockMarkingDefinition())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addGranularMarking(mockGranularMarking())));
 
@@ -208,6 +208,44 @@ public class Mocks {
         fake.coinFlip(() -> fake.repeatBetween(0, 15, () -> builder.addKillChainPhase(mockKillChainPhase())));
 
         return builder.build();
+    }
+
+    public Infrastructure mockInfrastructure() {
+
+        var builder = Infrastructure.builder();
+
+        // ## --- common
+        var objectCreated = random.instant();
+        fake.coinFlip(() -> {
+            builder.created(objectCreated);
+            fake.coinFlip(() -> builder.modified(random.instantAfter(objectCreated)));
+        });
+        fake.coinFlip(() -> builder.revoked(true));
+        fake.coinFlip(() -> builder.labels(generateRandomLabels()));
+        fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
+        fake.coinFlip(() -> builder.lang(random.word()));
+        fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
+        fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
+//        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addObjectMarkingRef(mockMarkingDefinition())));
+//        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addGranularMarking(mockGranularMarking())));
+
+        // ## --- specific
+        builder.name(random.spacedWords(3));
+        fake.coinFlip(() -> builder.description(random.spacedWords(5)));
+        fake.coinFlip(() -> fake.repeatUpTo(3, () -> builder.addKillChainPhase(mockKillChainPhase())));
+        fake.coinFlip(() -> fake.repeatBetween(0, 5, () -> builder.addInfrastructureType(randomVocabEntry(INFRASTRUCTURE_TYPE))));
+        fake.coinFlip(() -> fake.repeatBetween(0, 5,  () -> builder.addAlias(random.kebabWords(5))));
+        fake.coinFlip(() -> {
+            var from = random.instant();
+            builder.firstSeen(from);
+            fake.coinFlip(() -> builder.lastSeen(random.instantAfter(from)));
+        });
+
+        return builder.build();
+    }
+
+    public static String randomVocabEntry(Vocabs.Vocab vocab) {
+        return random.elementFrom(vocab.entries());
     }
 
     public IntrusionSet mockIntrusionSet() {
@@ -227,7 +265,7 @@ public class Mocks {
         fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
-        fake.coinFlip(() -> fake.repeatFor(10, () -> builder.addExternalReferences(mockExternalReference())));
+        fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addObjectMarkingRef(mockMarkingDefinition())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addGranularMarking(mockGranularMarking())));
 
@@ -245,7 +283,7 @@ public class Mocks {
         fake.coinFlip(() -> builder.primaryMotivation(random.elementFrom(ATTACK_MOTIVATION.entries())));
         fake.coinFlip(() -> fake.repeatBetween(0, 15, () -> builder.addGoal(random.spacedWords(10))));
         fake.coinFlip(() -> fake.repeatBetween(1, 5,  () -> builder.addSecondaryMotivation(random.elementFrom(ATTACK_MOTIVATION.entries()))));
-        fake.coinFlip(() -> fake.repeatBetween(0, 5,  () -> builder.addAliase(random.kebabWords(5))));
+        fake.coinFlip(() -> fake.repeatBetween(0, 5,  () -> builder.addAlias(random.kebabWords(5))));
 
         return builder.build();
     }
@@ -267,7 +305,7 @@ public class Mocks {
         fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
-        fake.coinFlip(() -> fake.repeatFor(10, () -> builder.addExternalReferences(mockExternalReference())));
+        fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addObjectMarkingRef(mockMarkingDefinition())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addGranularMarking(mockGranularMarking())));
 
@@ -306,7 +344,7 @@ public class Mocks {
         fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
-        fake.coinFlip(() -> fake.repeatFor(10, () -> builder.addExternalReferences(mockExternalReference())));
+        fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addObjectMarkingRef(mockMarkingDefinition())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addGranularMarking(mockGranularMarking())));
 
@@ -349,7 +387,7 @@ public class Mocks {
         fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
-        fake.coinFlip(() -> fake.repeatFor(10, () -> builder.addExternalReferences(mockExternalReference())));
+        fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addObjectMarkingRef(mockMarkingDefinition())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addGranularMarking(mockGranularMarking())));
 
@@ -376,6 +414,35 @@ public class Mocks {
 
     }
 
+    public Note mockNote() {
+
+        var builder = Note.builder();
+
+        // ## --- common
+        var objectCreated = random.instant();
+        fake.coinFlip(() -> {
+            builder.created(objectCreated);
+            fake.coinFlip(() -> builder.modified(random.instantAfter(objectCreated)));
+        });
+        fake.coinFlip(() -> builder.createdByRef(mockIdentity()));
+        fake.coinFlip(() -> builder.revoked(true));
+        fake.coinFlip(() -> builder.labels(generateRandomLabels()));
+        fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
+        fake.coinFlip(() -> builder.lang(random.word()));
+        fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
+        fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
+//        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addObjectMarkingRef(mockMarkingDefinition())));
+//        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addGranularMarking(mockGranularMarking())));
+
+        // ## --- specific
+        fake.coinFlip(() -> builder.summary(random.spacedWords(10)));
+        fake.coinFlip(() -> builder.content(random.spacedWords(32)));
+        fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addAuthor(random.fullName())));
+        // TODO: support object refs
+
+        return builder.build();
+    }
+
     public ObservedData mockObservedData() {
 
         var builder = ObservedData.builder();
@@ -393,7 +460,7 @@ public class Mocks {
         fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
-        fake.coinFlip(() -> fake.repeatFor(10, () -> builder.addExternalReferences(mockExternalReference())));
+        fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addObjectMarkingRef(mockMarkingDefinition())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addGranularMarking(mockGranularMarking())));
 
@@ -424,6 +491,35 @@ public class Mocks {
         return builder.build();
     }
 
+    public Opinion mockOpinion() {
+
+        var builder = Opinion.builder();
+
+        // ## --- common
+        var objectCreated = random.instant();
+        fake.coinFlip(() -> {
+            builder.created(objectCreated);
+            fake.coinFlip(() -> builder.modified(random.instantAfter(objectCreated)));
+        });
+        fake.coinFlip(() -> builder.createdByRef(mockIdentity()));
+        fake.coinFlip(() -> builder.revoked(true));
+        fake.coinFlip(() -> builder.labels(generateRandomLabels()));
+        fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
+        fake.coinFlip(() -> builder.lang(random.word()));
+        fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
+        fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
+//        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addObjectMarkingRef(mockMarkingDefinition())));
+//        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addGranularMarking(mockGranularMarking())));
+
+        // ## --- specific
+        fake.coinFlip(() -> builder.explanation(random.spacedWords(10)));
+        fake.coinFlip(() -> builder.opinion(random.spacedWords(32)));
+        fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addAuthor(random.fullName())));
+        // TODO: support object refs
+
+        return builder.build();
+    }
+
     public Report mockReport() {
 
         Report.Builder builder = Report.builder();
@@ -441,7 +537,7 @@ public class Mocks {
         fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
-        fake.coinFlip(() -> fake.repeatFor(10, () -> builder.addExternalReferences(mockExternalReference())));
+        fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addObjectMarkingRef(mockMarkingDefinition())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addGranularMarking(mockGranularMarking())));
 
@@ -489,7 +585,7 @@ public class Mocks {
         fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
-        fake.coinFlip(() -> fake.repeatFor(10, () -> builder.addExternalReferences(mockExternalReference())));
+        fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addObjectMarkingRef(mockMarkingDefinition())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addGranularMarking(mockGranularMarking())));
 
@@ -505,7 +601,7 @@ public class Mocks {
         fake.coinFlip(() -> builder.sophistication(random.elementFrom(THREAT_ACTOR_SOPHISTICATION.entries())));
         fake.coinFlip(() -> builder.resourceLevel(random.elementFrom(ATTACK_RESOURCE_LEVEL.entries())));
         fake.coinFlip(() -> builder.primaryMotivation(random.elementFrom(ATTACK_MOTIVATION.entries())));
-        fake.coinFlip(() -> fake.repeatBetween(1,  5, () -> builder.addAliase(random.name())));
+        fake.coinFlip(() -> fake.repeatBetween(1,  5, () -> builder.addAlias(random.name())));
         fake.coinFlip(() -> fake.repeatBetween(1,  5, () -> builder.addRole(random.elementFrom(THREAT_ACTOR_ROLE))));
         fake.coinFlip(() -> fake.repeatBetween(1,  5, () -> builder.addGoal(random.spacedWords(10))));
         fake.coinFlip(() -> fake.repeatBetween(1,  5, () -> builder.addThreatActorType(random.elementFrom(THREAT_ACTOR_TYPE.entries()))));
@@ -532,7 +628,7 @@ public class Mocks {
         fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
-        fake.coinFlip(() -> fake.repeatFor(10, () -> builder.addExternalReferences(mockExternalReference())));
+        fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addObjectMarkingRef(mockMarkingDefinition())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addGranularMarking(mockGranularMarking())));
 
@@ -541,7 +637,7 @@ public class Mocks {
         builder.name(random.word());
         fake.coinFlip(() -> builder.description(random.description()));
         fake.coinFlip(() -> builder.toolVersion(String.format("%s.%s.%s", random.integer(0, 5), random.integer(0, 5), random.integer(0, 5))));
-        fake.coinFlip(() -> fake.repeatBetween(0, 15, () -> builder.addAliase(random.word())));
+        fake.coinFlip(() -> fake.repeatBetween(0, 15, () -> builder.addAlias(random.word())));
         fake.coinFlip(() -> fake.repeatBetween(0, 15, () -> builder.addKillChainPhase(mockKillChainPhase())));
         fake.coinFlip(() -> fake.repeatBetween(0, 15, () -> builder.addToolType(random.elementFrom(TOOL_TYPE))));
         fake.coinFlip(() -> builder.toolVersion(random.word()));
@@ -566,7 +662,7 @@ public class Mocks {
         fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
-        fake.coinFlip(() -> fake.repeatFor(10, () -> builder.addExternalReferences(mockExternalReference())));
+        fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addObjectMarkingRef(mockMarkingDefinition())));
 //        fake.coinFlip(() -> fake.repeatFor( 4, () -> builder.addGranularMarking(mockGranularMarking())));
 
@@ -583,7 +679,7 @@ public class Mocks {
 
     Map<String, Object> generateCustomProperties() {
         var map = new HashMap<String, Object>();
-        fake.repeatFor(20, () -> {
+        fake.repeatUpTo(20, () -> {
             var key = random.prefixedWord("x_");
             switch (random.integer(0, 5)) {
                 case 0 -> map.put(key, random.word());
@@ -593,7 +689,7 @@ public class Mocks {
                 case 4 -> map.put(key, random.bool());
                 case 5 -> {
                     var map1 = new HashMap<String, String>();
-                    fake.repeatFor(30, () -> map1.put(random.word(), random.csvWords(10)));
+                    fake.repeatUpTo(30, () -> map1.put(random.word(), random.csvWords(10)));
                     map.put(key, map1);
                 }
             }
@@ -615,7 +711,7 @@ public class Mocks {
 
     Set<String> generateRandomLabels() {
         Set<String> labels = new HashSet<>();
-        fake.repeatFor(19, () -> labels.add(random.word()));
+        fake.repeatUpTo(19, () -> labels.add(random.word()));
         return labels;
     }
 

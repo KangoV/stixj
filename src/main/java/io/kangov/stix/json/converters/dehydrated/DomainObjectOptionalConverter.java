@@ -33,7 +33,7 @@ public class DomainObjectOptionalConverter extends StdConverter<String, SdoObjec
                 try {
                     var sdoObject = mapper.treeToValue(node, SdoObject.class);
                     log.debug("created: {}", sdoObject);
-                    return sdoObject; //Optional.ofNullable(sdoObject);
+                    return sdoObject; //Optional.ofNullable(object);
                     //@TODO add more logic
 
                 } catch (JsonProcessingException e) {

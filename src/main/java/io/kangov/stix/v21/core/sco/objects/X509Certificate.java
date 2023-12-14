@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.util.ImmutableStyle;
+import io.kangov.stix.v21.bundle.Bundleable;
+import io.kangov.stix.v21.StixObject;
 import io.kangov.stix.v21.core.sco.ScoObject;
 import io.kangov.stix.v21.core.sco.types.X509v3Extensions;
 import org.immutables.serial.Serial;
@@ -31,8 +33,9 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 @JsonDeserialize(builder = X509Certificate.Builder.class)
 @JsonInclude(value = NON_EMPTY, content= NON_EMPTY)
 @JsonPropertyOrder({
-    "id",
-    "type",
+    StixObject.TYPE,
+    Bundleable.SPEC_VERSION,
+    StixObject.ID,
     "extensions",
     "is_self_signed",
     "hashes",

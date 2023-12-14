@@ -30,25 +30,28 @@ import static io.kangov.stix.v21.bundle.Bundleable.*;
 @Serial.Version(1L)
 //@DefaultTypeValue( value = "directory", groups = { DefaultValuesProcessor.class })
 @ImmutableStyle
-@JsonTypeName("directory")
-@JsonSerialize(as = Directory.class)
-@JsonDeserialize(builder = Directory.Builder.class)
+@JsonTypeName("x-nominet-block")
+@JsonSerialize(as = XNominetBlock.class)
+@JsonDeserialize(builder = XNominetBlock.Builder.class)
 @JsonPropertyOrder({
     TYPE,
     SPEC_VERSION,
     ID,
-    "extensions",
-    "path",
-    "path_enc",
-    "created",
-    "modified",
-    "accessed",
-    "contains_refs" })
+    "qname",
+    "qtype",
+    "qclass",
+    "src_ip_network_type",
+    "src_ip",
+    "src_port",
+    "rpz_range",
+    "rpz_range_matched",
+    "rpz_zone",
+    "dns_type" })
 @JsonInclude( value = NON_EMPTY, content= NON_EMPTY )
 @SuppressWarnings("unused")
 @Introspected
 
-public interface Directory extends ScoObject {
+public interface XNominetBlock extends ScoObject {
 
     /**
      * Exposes the generated builder outside this package
@@ -57,36 +60,47 @@ public interface Directory extends ScoObject {
      * visible outside this package, this builder inherits and exposes all public
      * methods defined on the generated implementation's Builder class.
      */
-    class Builder extends DirectoryImpl.Builder {
+    class Builder extends XNominetBlockImpl.Builder {
     }
 
-    static Directory create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
-    static Directory createDirectory(UnaryOperator<Builder> spec) { return create(spec); }
+    static XNominetBlock create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
+    static XNominetBlock createXNominetBlock(UnaryOperator<Builder> spec) { return create(spec); }
     static Builder builder(UnaryOperator<Builder> spec) { return spec.apply(builder()); }
     static Builder builder() { return new Builder(); }
 
-    default Directory update(UnaryOperator<Builder> builder) {
+    default XNominetBlock update(UnaryOperator<Builder> builder) {
         return builder.apply(builder()).build();
     }
 
-    @NotBlank
-    @JsonProperty("path")
-    String getPath();
+    @JsonProperty("qname")
+    Optional<String> getQname();
 
-    @JsonProperty("path_enc")
-    Optional<@Pattern(regexp = "^[a-zA-Z0-9/\\.+_:-]{2,250}$") String> getPathEnc();
+    @JsonProperty("qtype")
+    Optional<String> getQType();
 
-    @JsonProperty("created")
-    Optional<Instant> getCreated();
+    @JsonProperty("qclass")
+    Optional<String> getQClass();
 
-    @JsonProperty("modified")
-    Optional<Instant> getModified();
+    @JsonProperty("src_ip_network_type")
+    Optional<String> getSourceIPNetworkType();
 
-    @JsonProperty("accessed")
-    Optional<Instant> getAccessed();
+    @JsonProperty("src_ip")
+    Optional<String> getSourceIP();
 
-    //@TODO add proper support for contains refs.  Must be Set of File or Directory types
-    @JsonProperty("contains_refs")
-    Set<String> getContainsRefs();
+    @JsonProperty("src_port")
+    Optional<Integer> getSourcePort();
+
+    @JsonProperty("rpz_range")
+    Optional<String> getRPZRange();
+
+    @JsonProperty("rpz_range_matched")
+    Optional<String> getRPZRangeMatched();
+
+    @JsonProperty("rpz_zone")
+    Optional<String> getRPZZone();
+
+    @JsonProperty("dns_type")
+    Optional<String> getDNSType();
+
 
 }

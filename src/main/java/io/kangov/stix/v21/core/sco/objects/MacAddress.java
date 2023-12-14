@@ -14,6 +14,7 @@ import org.immutables.value.Value;
 import java.util.function.UnaryOperator;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static io.kangov.stix.v21.bundle.Bundleable.*;
 
 @Value.Immutable
 @Serial.Version(1L)
@@ -24,8 +25,9 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 @JsonDeserialize(builder = MacAddress.Builder.class)
 @JsonInclude(value = NON_EMPTY, content = NON_EMPTY)
 @JsonPropertyOrder({
-    "id",
-    "type",
+    TYPE,
+    SPEC_VERSION,
+    ID,
     "extensions",
     "value"})
 @SuppressWarnings("unused")

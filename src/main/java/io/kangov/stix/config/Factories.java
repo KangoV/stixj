@@ -9,6 +9,7 @@ import io.kangov.stix.v21.bundle.Bundle;
 import io.kangov.stix.v21.core.sco.objects.*;
 import io.kangov.stix.v21.core.sdo.objects.*;
 import io.kangov.stix.v21.core.sro.objects.Relationship;
+import io.kangov.stix.v21.core.sro.objects.Sighting;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 
@@ -55,7 +56,7 @@ public class Factories {
 
         Class<?>[] sroClasses = {
             Relationship.class,
-//            Sighting.class
+            Sighting.class
         };
 
         Class<?>[] dataMarkingClasses = {
@@ -86,7 +87,10 @@ public class Factories {
             Url.class,
             UserAccount.class,
             WindowsRegistryKey.class,
-            X509Certificate.class
+            X509Certificate.class,
+            // TODO: Load these in from application.yml
+            XNominetBlock.class,
+            XNominetThreatFeedSource.class
         };
 
         Class<?>[] cyberObservableExtensionClasses = {

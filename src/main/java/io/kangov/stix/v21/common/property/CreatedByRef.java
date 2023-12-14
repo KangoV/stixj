@@ -15,32 +15,15 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 public interface CreatedByRef {
 
-    class IdentityRefSerializer extends StdSerializer<IdentityRef> {
-        public IdentityRefSerializer() {
-            this(null);
-        }
-        public IdentityRefSerializer(Class<IdentityRef> t) {
-            super(t);
-        }
-        @Override
-        public void serialize(IdentityRef value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
-            if (value != null) {
-                var id = value.identity() != null ? value.identity().getId() : value.id();
-                jgen.writeString(id);
-            }
-        }
-    }
-
     @JsonProperty("created_by_ref")
     @JsonInclude(value = NON_EMPTY, content = NON_EMPTY)
     @JsonPropertyDescription("""
-        The created_by_ref property specifies the id property of the identity object that describes the entity that \
+        The created_by_ref property specifies the id property of the object object that describes the entity that \
         created this object.
         If this attribute is omitted, the source of this information is undefined. This may be used by object creators \
         who wish to remain anonymous.
         """)
-    @JsonSerialize(using=IdentityRefSerializer.class)
-    @Redactable(useMask = true, redactionMask = "identity--__REDACTED__")
+    @Redactable(useMask = true, redactionMask = "object--__REDACTED__")
     IdentityRef getCreatedByRef();
 
 }

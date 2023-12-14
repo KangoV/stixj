@@ -14,7 +14,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Repeatable(Vocab.List.class)
 @Documented
-@Constraint(validatedBy = { VocabValidator.class })
+@Constraint(validatedBy = { /* VocabValidator.class */ })
 public @interface Vocab {
 
     enum InclusionType {

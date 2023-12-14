@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static io.kangov.stix.v21.bundle.Bundleable.*;
 
 /**
  * email-addr
@@ -30,8 +31,9 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 @JsonSerialize(as = EmailAddress.class)
 @JsonDeserialize(builder = EmailAddress.Builder.class)
 @JsonPropertyOrder({
-    "id",
-    "type",
+    TYPE,
+    SPEC_VERSION,
+    ID,
     "extensions",
     "value",
     "display_name",

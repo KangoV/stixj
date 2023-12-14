@@ -17,6 +17,7 @@ import java.util.function.UnaryOperator;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static io.kangov.stix.v21.enums.Vocabs.Vocab.ENCRYPTION_ALGORITHM;
+import static io.kangov.stix.v21.bundle.Bundleable.*;
 
 /**
  * file
@@ -34,8 +35,9 @@ import static io.kangov.stix.v21.enums.Vocabs.Vocab.ENCRYPTION_ALGORITHM;
 @JsonDeserialize(builder = File.Builder.class)
 @JsonInclude(value = NON_EMPTY, content= NON_EMPTY)
 @JsonPropertyOrder({
-    "id",
-    "type",
+    TYPE,
+    SPEC_VERSION,
+    ID,
     "extensions",
     "hashes",
     "size",

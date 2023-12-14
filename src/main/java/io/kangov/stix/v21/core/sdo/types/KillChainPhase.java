@@ -3,6 +3,7 @@ package io.kangov.stix.v21.core.sdo.types;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.kangov.stix.util.ImmutableStyle;
 import io.kangov.stix.v21.common.property.StixCustomProperties;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.NotBlank;
@@ -18,15 +19,7 @@ import java.util.function.UnaryOperator;
  * The kill-chain-phase represents a phase in a kill chain.
  */
 @Value.Immutable @Serial.Version(1L)
-@Value.Style(
-    optionalAcceptNullable = true,
-    visibility = Value.Style.ImplementationVisibility.PACKAGE,
-    overshadowImplementation = true,
-    typeAbstract="",
-    typeImmutable="*Impl",
-    validationMethod = Value.Style.ValidationMethod.NONE, // let bean validation do it
-    additionalJsonAnnotations = { JsonTypeName.class },
-    depluralize = true)
+@ImmutableStyle
 @JsonSerialize(as = KillChainPhase.class)
 @JsonDeserialize(builder = KillChainPhase.Builder.class)
 @JsonPropertyOrder({

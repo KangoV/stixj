@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.kangov.stix.util.ImmutableStyle;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 
@@ -13,15 +14,7 @@ import java.util.function.UnaryOperator;
 @Value.Immutable
 @Serial.Version(1L)
 //@DefaultTypeValue(value = "", groups = {DefaultValuesProcessor.class})
-@Value.Style(
-    optionalAcceptNullable = true,
-    visibility = Value.Style.ImplementationVisibility.PACKAGE,
-    overshadowImplementation = true,
-    typeAbstract="",
-    typeImmutable="*Impl",
-    validationMethod = Value.Style.ValidationMethod.NONE, // let bean validation do it
-    additionalJsonAnnotations = { JsonTypeName.class },
-    depluralize = true)
+@ImmutableStyle
 @JsonSerialize(as = GenericCustomObject.class)
 @JsonDeserialize(builder = GenericCustomObject.Builder.class)
 @JsonPropertyOrder({

@@ -33,12 +33,12 @@ public class Faker {
         if (random.bool()) action.run();
     }
 
-    void repeatFor(int count, Runnable r) {
+    void repeatUpTo(int count, Runnable r) {
         repeatBetween(1, count, r);
     }
 
     void repeatBetween(Range range, Runnable r) {
-        repeatFor(random.integer(range), r);
+        repeatUpTo(random.integer(range), r);
     }
 
     void repeatBetween(int begin, int end, Runnable r) {

@@ -16,34 +16,38 @@ import org.immutables.value.Value;
 import java.util.*;
 import java.util.function.UnaryOperator;
 
+import static io.kangov.stix.v21.bundle.Bundleable.*;
+import static io.kangov.stix.v21.core.sdo.SdoObject.*;
 import static io.kangov.stix.v21.enums.Vocabs.Vocab.IDENTITY_CLASS;
 import static io.kangov.stix.v21.enums.Vocabs.Vocab.INDUSTRY_SECTORS;
 
 /**
- * identity
+ * object
  * <p>
  * Identities can represent actual individuals, organizations, or groups (e.g., ACME, Inc.) as well as classes of individuals, organizations, or groups.
  * 
  */
 @Value.Immutable
 @Serial.Version(1L)
-//@DefaultTypeValue(value = "identity", groups = { DefaultValuesProcessor.class })
+//@DefaultTypeValue(value = "object", groups = { DefaultValuesProcessor.class })
 @ImmutableStyle
-@JsonTypeName("identity")
+@JsonTypeName("object")
 @JsonSerialize(as = Identity.class)
 @JsonDeserialize(builder = Identity.Builder.class)
 @JsonPropertyOrder({
-    "type",
-    "spec_version",
-    "id",
-    "created_by_ref",
-    "created",
-    "modified",
-    "revoked",
-    "labels",
-    "external_references",
-    "object_marking_refs",
-    "granular_markings",
+    TYPE,
+    SPEC_VERSION,
+    ID,
+    CREATED_BY_REF,
+    CREATED,
+    MODIFIED,
+    REVOKED,
+    LABELS,
+    CONFIDENCE,
+    LANG,
+    EXTERNAL_REFERENCE,
+    OBJECT_MARKING_REFS,
+    GRANULAR_MARKINGS,
     "name",
     "description",
     "identity_class",

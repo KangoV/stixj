@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.function.Function;
 
 @Validated
 @Singleton
@@ -44,9 +45,11 @@ public class Parser {
     public  <T> @Valid T readObject(String str, Class<T> bundleable) {
         try {
             log.debug("Deserializing {} to: {}", bundleable.getSimpleName(), str);
-            var obj = objectMapper.readValue(str, bundleable);
+            var node = objectMapper.readTree(str);
+            var cache = addToCache(node, new ObjectCache());
+            var obj = processNode((ObjectNode) node, cache);
             log.debug("Deserialized {} to: {}", bundleable.getSimpleName(),  obj);
-            return obj;
+            return (T) obj;
         } catch (Exception e) {
             throw new ParseException("Failed to deserialize a " + bundleable.getSimpleName(), e);
         }
@@ -73,18 +76,14 @@ public class Parser {
 
             if (obj instanceof ObjectNode bundleNode) {
 
-                // prime the cache
-                var cache = new ObjectCache();
-                if (bundleNode.get(OBJECTS) instanceof ArrayNode objectsNode) {
-                    for (JsonNode objectNode : objectsNode) {
-                        cache.put(ObjectCache.Entry.create((ObjectNode) objectNode));
-                    }
-                }
+                // create and prime a cache
+                var cache = addToCache(bundleNode.get(OBJECTS), new ObjectCache());
 
                 // now process the objects and created the bundle
                 var builder = Bundle.builder()
                     .id(bundleNode.get(ID).asText())
                     .type(bundleNode.get(TYPE).asText());
+
                 if (bundleNode.get(OBJECTS) instanceof ArrayNode objectsNode) {
                     for (JsonNode objectNode : objectsNode) {
                         builder.addObject(processNode((ObjectNode) objectNode, cache));
@@ -182,53 +181,97 @@ public class Parser {
         // the pojo when de-serialising which is awesome!
         var createByRefNode = objectNode.get(CREATED_BY_REF);
         if (createByRefNode != null) {
-            var identity = (Identity) processReference(createByRefNode.asText(), cache);
+            var refId = createByRefNode.asText();
+            var identity = (Identity) processReference(refId, cache);
+            IdentityRef identityRef = null;
             if (identity != null) {
-                // we could create a JsonNode here. This may give a more transparent de-serialising process
-                // to a developer looking at the CreatedByRef interface
-                objectNode.putPOJO(CREATED_BY_REF, new IdentityRef(identity.getId(), identity));
+                identityRef = IdentityRef.create(identity);
+            } else {
+                identityRef = IdentityRef.create(id);
             }
+            objectNode.putPOJO(CREATED_BY_REF, identityRef);
         }
 
         // Now we can start looking for relationships
         if (type.equals("relationship")) {
 
-            log.debug("processing relationship {}", id);
+            log.debug("processing standard relationship {}", id);
 
-            var sourceRefNode = objectNode.get("source_ref");
-            if (sourceRefNode == null) {
-                throw new ParseException("Missing attribute for ["+ type + ":(" + id + ")]: source_ref");
-            }
-            var sdo = (SdoObject) processReference(sourceRefNode.asText(), cache);
-            if (sdo != null) {
-                // we could create a JsonNode here. This may give a more transparent de-serialising process
-                // to a developer looking at the CreatedByRef interface
-                objectNode.putPOJO("source_ref", new SdoObjectRef(sdo.getId(), sdo));
+            var sdo = (SdoObject) createReference(objectNode, "source_ref", cache);
+            objectNode.putPOJO("source_ref", new SdoObjectRef(sdo.getId(), sdo));
+
+            sdo = (SdoObject) createReference(objectNode, "target_node", cache);
+            objectNode.putPOJO("target_ref", new SdoObjectRef(sdo.getId(), sdo));
+
+        }
+
+        if (type.equals("sighting")) {
+
+            log.debug("processing sighting {}", id);
+
+            var sdo = (SdoObject) createReference(objectNode, "sighting_of_ref", cache);
+            objectNode.putPOJO("sighting_of_ref", new SdoObjectRef(sdo.getId(), sdo));
+
+            // Process the where sighted ref identifiers
+            // - get the array node
+            // - for each array entry
+            //   - process the reference to return an object
+            var refs = (ArrayNode) objectNode.get("where_sighted_refs");
+            if (refs != null) {
+                var list = new ArrayList<SdoObjectRef>();
+                for (var iterator = refs.elements(); iterator.hasNext();) {
+                    var refNode = iterator.next();
+                    var obj = processReference(refNode.asText(), cache);
+                    if (obj != null) {
+                        list.add(new SdoObjectRef(obj.getId(), (SdoObject) obj));
+                    } else {
+                        list.add(new SdoObjectRef(refNode.asText(), null));
+                    }
+                    iterator.remove();
+                }
+                list.forEach(refs::addPOJO);
             }
 
-            var targetRefNode = objectNode.get("target_ref");
-            if (targetRefNode == null) {
-                throw new ParseException("Missing attribute for ["+ type + ":(" + id + ")]: target_ref");
-            }
-            sdo = (SdoObject) processReference(targetRefNode.asText(), cache);
-            if (sdo != null) {
-                // we could create a JsonNode here. This may give a more transparent de-serialising process
-                // to a developer looking at the CreatedByRef interface
-                objectNode.putPOJO("target_ref", new SdoObjectRef(sdo.getId(), sdo));
+            refs = (ArrayNode) objectNode.get("observed_data_refs");
+            if (refs != null) {
+                var list = new ArrayList<SdoObjectRef>();
+                for (var iterator = refs.elements(); iterator.hasNext();) {
+                    var refNode = iterator.next();
+                    var obj = processReference(refNode.asText(), cache);
+                    if (obj != null) {
+                        list.add(new SdoObjectRef(obj.getId(), (SdoObject) obj));
+                    } else {
+                        list.add(new SdoObjectRef(refNode.asText(), null));
+                    }
+                    iterator.remove();
+                }
+                list.forEach(refs::addPOJO);
             }
 
         }
 
-        try {
 
+
+        try {
             var object = objectMapper.treeToValue(objectNode, Bundleable.class);
             cache.put(ObjectCache.Entry.create(object));
             return object;
-
         } catch (Exception e) {
             log.error("De-serialisation of {} failed", id);
             throw new ParseException(e);
         }
+    }
+
+    private Bundleable createReference(ObjectNode containingNode, String refNodeName, ObjectCache cache) throws Exception {
+        Bundleable obj = null;
+        var refNode = containingNode.get(refNodeName);
+        if (refNode == null) {
+            var type = containingNode.get(TYPE).asText();
+            var id = containingNode.get(ID).asText();
+            throw new ParseException("Missing attribute for ["+ type + ":(" + id + ")]: target_ref");
+        }
+        obj = processReference(refNode.asText(), cache);
+        return obj;
     }
 
     private Bundleable processReference(String id, ObjectCache cache) throws Exception {
@@ -244,6 +287,17 @@ public class Parser {
             }
         }
         return target;
+    }
+
+    private static ObjectCache addToCache(JsonNode jsonNode, ObjectCache cache) {
+        if (jsonNode instanceof ArrayNode objectsNode) {
+            for (JsonNode objectNode : objectsNode) {
+                cache.put(ObjectCache.Entry.create((ObjectNode) objectNode));
+            }
+        } else {
+            cache.put(ObjectCache.Entry.create((ObjectNode) jsonNode));
+        }
+        return cache;
     }
 
 }

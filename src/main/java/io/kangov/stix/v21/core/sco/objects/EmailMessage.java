@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.function.UnaryOperator;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static io.kangov.stix.v21.bundle.Bundleable.*;
 
 /**
  * The Email Message Object represents an instance of an email message.
@@ -28,8 +29,9 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 @JsonSerialize(as = EmailMessage.class)
 @JsonDeserialize(builder = EmailMessage.Builder.class)
 @JsonPropertyOrder({
-    "id",
-    "type",
+    TYPE,
+    SPEC_VERSION,
+    ID,
     "extensions",
     "is_multipart",
     "date",

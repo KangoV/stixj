@@ -6,41 +6,42 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.util.ImmutableStyle;
 import io.kangov.stix.v21.core.sco.ScoObject;
 import io.micronaut.core.annotation.Introspected;
-import jakarta.validation.constraints.NotBlank;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 
-import java.util.Set;
+import java.util.*;
 import java.util.function.UnaryOperator;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static io.kangov.stix.v21.bundle.Bundleable.*;
 
 /**
- * ipv6-addr
+ * directory
  * <p>
- * The IPv6 Address Object represents one or more IPv6 addresses expressed using CIDR notation.
- *
+ * The Directory Object represents the properties common to a file system directory.
+ * 
  */
+
 @Value.Immutable
 @Serial.Version(1L)
-//@DefaultTypeValue(value = "ipv6-addr", groups = {DefaultValuesProcessor.class})
+//@DefaultTypeValue( value = "directory", groups = { DefaultValuesProcessor.class })
 @ImmutableStyle
-@JsonInclude(value = NON_EMPTY, content= NON_EMPTY)
-@JsonTypeName("ipv6-addr")
-@JsonSerialize(as = Ipv6Address.class) @JsonDeserialize(builder = Ipv6Address.Builder.class)
+@JsonTypeName("x-nominet-threat-feed-source")
+@JsonSerialize(as = XNominetThreatFeedSource.class)
+@JsonDeserialize(builder = XNominetThreatFeedSource.Builder.class)
 @JsonPropertyOrder({
     TYPE,
     SPEC_VERSION,
     ID,
-    "extensions",
-    "value",
-    "resolves_to_refs",
-    "belongs_to_refs"})
+    "name",
+    "meta_data" })
+@JsonInclude( value = NON_EMPTY, content= NON_EMPTY )
 @SuppressWarnings("unused")
 @Introspected
 
-public interface Ipv6Address extends ScoObject {
+public interface XNominetThreatFeedSource extends ScoObject {
+
+    record MetadataEntry(String key, String value) {}
 
     /**
      * Exposes the generated builder outside this package
@@ -49,29 +50,29 @@ public interface Ipv6Address extends ScoObject {
      * visible outside this package, this builder inherits and exposes all public
      * methods defined on the generated implementation's Builder class.
      */
-    class Builder extends Ipv6AddressImpl.Builder {
+    class Builder extends XNominetThreatFeedSourceImpl.Builder {
     }
 
-    static Ipv6Address create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
-    static Ipv6Address createIpv6Address(UnaryOperator<Builder> spec) { return create(spec); }
+    static XNominetThreatFeedSource create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
+    static XNominetThreatFeedSource createXNominetBlock(UnaryOperator<Builder> spec) { return create(spec); }
     static Builder builder(UnaryOperator<Builder> spec) { return spec.apply(builder()); }
     static Builder builder() { return new Builder(); }
 
-    default Ipv6Address update(UnaryOperator<Builder> builder) {
+    default XNominetThreatFeedSource update(UnaryOperator<Builder> builder) {
         return builder.apply(builder()).build();
     }
 
-    // TODO  Consider using regexp to validate:
-    // http://blog.markhatton.co.uk/2011/03/15/regular-expressions-for-ip-addresses-cidr-ranges-and-hostnames/
+    @JsonProperty("name")
+    String getName();
 
-    @JsonProperty("value")
-    @NotBlank
-    String getValue();
+    // TODO: Will need a deser to get it into the wacky format that we need:
+    // {
+    //   "key": "threat_type"
+    //   "value": "threat"
+    // }
+    // why the didn't just do "threat_type": "threat" is beyond me!
+    @JsonProperty("meta_data")
+    List<MetadataEntry> getMetadata();
 
-    @JsonProperty("resolves_to_refs")
-    Set<String> getResolvesToRefs();
-
-    @JsonProperty("belongs_to_refs")
-    Set<String> getBelongsToRefs();
 
 }

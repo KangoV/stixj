@@ -17,6 +17,5 @@ public interface SroObject
         Labels,
         Confidence,
         Lang,
-        ExternalReferences,
-        StixCustomProperties {
+        ExternalReferences {
 }

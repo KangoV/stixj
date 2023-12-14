@@ -128,7 +128,7 @@ public class BundleTest {
         var bundle = parser.readBundle(BUNDLE_STRING);
         assertThat(bundle).isNotNull();
         var actual = bundle.stream(Identity.class).findFirst().get();
-        var expected = bundle.stream(Indicator.class).findFirst().get().getCreatedByRef().identity();
+        var expected = bundle.stream(Indicator.class).findFirst().get().getCreatedByRef().object();
         assertThat(actual).isSameAs(expected);
     }
 

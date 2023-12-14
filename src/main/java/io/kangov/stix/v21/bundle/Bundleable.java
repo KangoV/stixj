@@ -3,12 +3,11 @@ package io.kangov.stix.v21.bundle;
 
 import com.fasterxml.jackson.annotation.*;
 import io.kangov.stix.v21.common.property.*;
+import io.kangov.stix.v21.StixObject;
 import io.kangov.stix.v21.custom.CustomObject;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.NotNull;
 import org.immutables.value.Value;
-
-import java.io.Serializable;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
@@ -28,11 +27,11 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
 public interface Bundleable
     extends
-    Serializable,
-    Id,
-    Type,
-    ObjectMarkingRefs,
-    GranularMarkings {
+        StixObject,
+        ObjectMarkingRefs,
+        GranularMarkings {
+
+    String SPEC_VERSION = "spec_version";
 
     /**
      * Dictates if the object is hydrated.

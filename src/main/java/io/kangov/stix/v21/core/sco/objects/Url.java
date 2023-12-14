@@ -14,6 +14,7 @@ import org.immutables.value.Value;
 import java.util.function.UnaryOperator;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static io.kangov.stix.v21.bundle.Bundleable.*;
 
 /**
  * url
@@ -30,8 +31,9 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 @JsonSerialize(as = Url.class)
 @JsonDeserialize(builder = Url.Builder.class)
 @JsonPropertyOrder({
-    "id",
-    "type",
+    TYPE,
+    SPEC_VERSION,
+    ID,
     "extensions",
     "value"})
 @SuppressWarnings("unused")

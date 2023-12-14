@@ -7,6 +7,7 @@ import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.util.ImmutableStyle;
 import io.kangov.stix.v21.bundle.Bundleable;
 import io.kangov.stix.v21.common.type.ExternalReference;
+import io.kangov.stix.v21.common.type.IdentityRef;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.NotBlank;
@@ -18,30 +19,36 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.UnaryOperator;
 
+import static io.kangov.stix.v21.bundle.Bundleable.*;
+import static io.kangov.stix.v21.core.sdo.SdoObject.*;
+
 /**
- * identity
+ * object
  * <p>
  * Identities can represent actual individuals, organizations, or groups (e.g., ACME, Inc.) as well as classes of individuals, organizations, or groups.
  * 
  */
 @Value.Immutable
 @Serial.Version(1L)
-//@DefaultTypeValue(value = "identity", groups = { DefaultValuesProcessor.class })
+//@DefaultTypeValue(value = "object", groups = { DefaultValuesProcessor.class })
 @ImmutableStyle
 @JsonTypeName("note")
 @JsonSerialize(as = Note.class)
 @JsonDeserialize(builder = Note.Builder.class)
 @JsonPropertyOrder({
-    "type",
-    "id",
-    "created_by_ref",
-    "created",
-    "modified",
-    "revoked",
-    "labels",
-    "external_references",
-    "object_marking_refs",
-    "granular_markings",
+    TYPE,
+    SPEC_VERSION,
+    ID,
+    CREATED_BY_REF,
+    CREATED,
+    MODIFIED,
+    REVOKED,
+    LABELS,
+    CONFIDENCE,
+    LANG,
+    EXTERNAL_REFERENCE,
+    OBJECT_MARKING_REFS,
+    GRANULAR_MARKINGS,
     "abstract",
     "content",
     "authors",
@@ -63,6 +70,8 @@ public interface Note extends SdoObject {
         public Builder addExternalReference(UnaryOperator<ExternalReference.Builder> func) {
             return addExternalReference(func.apply(ExternalReference.builder()).build());
         }
+        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); };
+        public Builder createdByRef(Identity identity) { return createdByRef(IdentityRef.create(identity)); }
     }
 
     static Note create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
@@ -79,7 +88,7 @@ public interface Note extends SdoObject {
 
     @JsonProperty("abstract")
     @Redactable(useMask = true)
-    Optional<String> getAbstract();
+    Optional<String> getSummary();
 
     @NotBlank
     @JsonProperty("content")

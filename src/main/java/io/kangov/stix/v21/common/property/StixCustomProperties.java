@@ -20,8 +20,10 @@ import java.util.Map;
  * order to extend STIX in an interoperable manner.
  * </p>
  *
- * Deprecated as of 2.1. Use the STIX Extension mechanism
+ * @deprecated as of 2.1. Use the STIX Extension mechanism
+ * Deprecated
  */
+@Deprecated(since = "2.1")
 public interface StixCustomProperties {
 
     /**

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.redaction.Redactable;
+import io.kangov.stix.util.ImmutableStyle;
+import io.kangov.stix.v21.common.type.IdentityRef;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.v21.core.sdo.types.KillChainPhase;
 import io.kangov.stix.validation.constraints.Vocab;
@@ -16,6 +18,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.UnaryOperator;
 
+import static io.kangov.stix.v21.bundle.Bundleable.*;
+import static io.kangov.stix.v21.core.sdo.SdoObject.*;
 import static io.kangov.stix.v21.enums.Vocabs.Vocab.TOOL_TYPE;
 
 /**
@@ -30,27 +34,23 @@ import static io.kangov.stix.v21.enums.Vocabs.Vocab.TOOL_TYPE;
 @Serial.Version(1L)
 @JsonTypeName("tool")
 //@DefaultTypeValue(value = "tool", groups = { DefaultValuesProcessor.class })
-@Value.Style(
-    optionalAcceptNullable = true,
-    visibility = Value.Style.ImplementationVisibility.PACKAGE,
-    overshadowImplementation = true,
-    typeAbstract="",
-    typeImmutable="*Impl",
-    validationMethod = Value.Style.ValidationMethod.NONE, // let bean validation do it
-    additionalJsonAnnotations = { JsonTypeName.class },
-    depluralize = true)
+@ImmutableStyle
 @JsonSerialize(as = Tool.class)
 @JsonDeserialize(builder = Tool.Builder.class)
 @JsonPropertyOrder({
-    "type",
-    "id",
-    "created_by_ref",
-    "created",
-    "modified",
-    "revoked", "labels",
-    "external_references",
-    "object_marking_refs",
-    "granular_markings",
+    TYPE,
+    SPEC_VERSION,
+    ID,
+    CREATED_BY_REF,
+    CREATED,
+    MODIFIED,
+    REVOKED,
+    LABELS,
+    CONFIDENCE,
+    LANG,
+    EXTERNAL_REFERENCE,
+    OBJECT_MARKING_REFS,
+    GRANULAR_MARKINGS,
     "name",
     "description",
     "kill_chain_phases",
@@ -73,7 +73,8 @@ public interface Tool extends SdoObject {
             this.addKillChainPhase(func.apply(KillChainPhase.builder()).build());
             return this;
         }
-
+        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); };
+        public Builder createdByRef(Identity identity) { return createdByRef(IdentityRef.create(identity)); }
     }
 
     static Tool create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }

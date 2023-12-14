@@ -7,8 +7,8 @@ import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.util.ImmutableStyle;
 import io.kangov.stix.v21.bundle.Bundleable;
 import io.kangov.stix.v21.common.type.ExternalReference;
+import io.kangov.stix.v21.common.type.IdentityRef;
 import io.kangov.stix.v21.core.sdo.SdoObject;
-import io.kangov.stix.validation.constraints.Vocab;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -18,33 +18,36 @@ import org.immutables.value.Value;
 import java.util.*;
 import java.util.function.UnaryOperator;
 
-import static io.kangov.stix.v21.enums.Vocabs.Vocab.IDENTITY_CLASS;
-import static io.kangov.stix.v21.enums.Vocabs.Vocab.INDUSTRY_SECTORS;
+import static io.kangov.stix.v21.bundle.Bundleable.*;
+import static io.kangov.stix.v21.core.sdo.SdoObject.*;
 
 /**
- * identity
+ * object
  * <p>
  * Identities can represent actual individuals, organizations, or groups (e.g., ACME, Inc.) as well as classes of individuals, organizations, or groups.
  * 
  */
 @Value.Immutable
 @Serial.Version(1L)
-//@DefaultTypeValue(value = "identity", groups = { DefaultValuesProcessor.class })
+//@DefaultTypeValue(value = "object", groups = { DefaultValuesProcessor.class })
 @ImmutableStyle
 @JsonTypeName("opinion")
 @JsonSerialize(as = Opinion.class)
 @JsonDeserialize(builder = Opinion.Builder.class)
 @JsonPropertyOrder({
-    "type",
-    "id",
-    "created_by_ref",
-    "created",
-    "modified",
-    "revoked",
-    "labels",
-    "external_references",
-    "object_marking_refs",
-    "granular_markings",
+    TYPE,
+    SPEC_VERSION,
+    ID,
+    CREATED_BY_REF,
+    CREATED,
+    MODIFIED,
+    REVOKED,
+    LABELS,
+    CONFIDENCE,
+    LANG,
+    EXTERNAL_REFERENCE,
+    OBJECT_MARKING_REFS,
+    GRANULAR_MARKINGS,
     "explanation",
     "authors",
     "opinion",
@@ -66,6 +69,9 @@ public interface Opinion extends SdoObject {
         public Builder addExternalReference(UnaryOperator<ExternalReference.Builder> func) {
             return addExternalReference(func.apply(ExternalReference.builder()).build());
         }
+        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); };
+        public Builder createdByRef(Identity identity) { return createdByRef(IdentityRef.create(identity)); }
+
     }
 
     static Opinion create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }

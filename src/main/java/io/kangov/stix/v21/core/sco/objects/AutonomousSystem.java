@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static io.kangov.stix.v21.bundle.Bundleable.*;
 
 /**
  * autonomous-system
@@ -28,8 +29,9 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 @JsonSerialize(as = AutonomousSystem.class)
 @JsonDeserialize(builder = AutonomousSystem.Builder.class)
 @JsonPropertyOrder({
-    "id",
-    "type",
+    TYPE,
+    SPEC_VERSION,
+    ID,
     "extensions",
     "number",
     "name",

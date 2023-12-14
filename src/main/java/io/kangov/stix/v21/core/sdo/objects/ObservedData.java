@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.redaction.Redactable;
+import io.kangov.stix.util.ImmutableStyle;
+import io.kangov.stix.v21.common.type.IdentityRef;
 import io.kangov.stix.v21.core.sco.ScoObject;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.validation.constraints.Range;
@@ -14,10 +16,13 @@ import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 
 import java.time.Instant;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.UnaryOperator;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static io.kangov.stix.v21.bundle.Bundleable.*;
+import static io.kangov.stix.v21.core.sdo.SdoObject.*;
 
 /**
  * observed-data
@@ -29,29 +34,24 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 @Serial.Version(1L)
 @JsonTypeName("observed-data")
 //@DefaultTypeValue(value = "observed-data", groups = {DefaultValuesProcessor.class})
-@Value.Style(
-    optionalAcceptNullable = true,
-    visibility = Value.Style.ImplementationVisibility.PACKAGE,
-    overshadowImplementation = true,
-    typeAbstract="",
-    typeImmutable="*Impl",
-    validationMethod = Value.Style.ValidationMethod.NONE, // let bean validation do it
-    additionalJsonAnnotations = { JsonTypeName.class },
-    depluralize = true)
+@ImmutableStyle
 @JsonSerialize(as = ObservedData.class)
 @JsonDeserialize(builder = ObservedData.Builder.class)
 @JsonInclude(value = NON_EMPTY, content= NON_EMPTY)
 @JsonPropertyOrder({
-    "type",
-    "id",
-    "created_by_ref",
-    "created",
-    "modified",
-    "revoked",
-    "labels",
-    "external_references",
-    "object_marking_refs",
-    "granular_markings",
+    TYPE,
+    SPEC_VERSION,
+    ID,
+    CREATED_BY_REF,
+    CREATED,
+    MODIFIED,
+    REVOKED,
+    LABELS,
+    CONFIDENCE,
+    LANG,
+    EXTERNAL_REFERENCE,
+    OBJECT_MARKING_REFS,
+    GRANULAR_MARKINGS,
     "first_observed",
     "last_observed",
     "number_observed",
@@ -69,7 +69,10 @@ public interface ObservedData extends SdoObject {
      * visible outside this package, this builder inherits and exposes all public
      * methods defined on the generated implementation's Builder class.
      */
-    class Builder extends ObservedDataImpl.Builder {}
+    class Builder extends ObservedDataImpl.Builder {
+        public Builder createdByRef(String id)         { return createdByRef(IdentityRef.create(id)); };
+        public Builder createdByRef(Identity identity) { return createdByRef(IdentityRef.create(identity)); }
+    }
 
     static ObservedData create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
     static ObservedData createObservedData(UnaryOperator<Builder> spec) { return create(spec); }
@@ -100,16 +103,11 @@ public interface ObservedData extends SdoObject {
 
     @JsonProperty("objects")
     @Redactable(useMask = true)
-//    @JsonSerialize(using = CyberObservableSetFieldSerializer.class)
-//    @JsonDeserialize(using = CyberObservableSetFieldDeserializer.class)
-//    @Deprecated
-    Set<ScoObject> getObjects();
+    @Deprecated
+    Map<String, ScoObject> getObjects();
 
     @JsonProperty("object_refs")
     @Redactable(useMask = true)
-//    @JsonSerialize(using = CyberObservableSetFieldSerializer.class)
-//    @JsonDeserialize(using = CyberObservableSetFieldDeserializer.class)
-//    @Deprecated
     Set<ScoObject> getObjectRefs();
 
 }

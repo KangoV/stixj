@@ -25,7 +25,7 @@ public class Vocabs {
         EXTENSION_TYPES               ( EXTENSION_TYPE_ENUM,                "extension-type-enum",                CLOSED ),
         GROUPING_CONTEXT              ( GROUPING_CONTEXT_OV,                "grouping-context-ov"                        ),
         HASHING_ALGORITHM             ( HASH_ALGORITHM_OV,                  "hash-algorithm-ov"                          ),
-        IDENTITY_CLASS                ( IDENTITY_CLASS_OV,                  "identity-class-ov"                          ),
+        IDENTITY_CLASS                ( IDENTITY_CLASS_OV,                  "object-class-ov"                          ),
         IMPLEMENTATION_LANGUAGES      ( IMPLEMENTATION_LANGUAGES_OV,        "implementation-language-ov"                 ),
         INDICATOR_TYPE                ( INDICATOR_TYPE_OV,                  "indicator-type-ov"                          ),
         INDUSTRY_SECTORS              ( INDUSTRY_SECTOR_OV,                 "industry-sector-ov"                         ),
@@ -108,6 +108,9 @@ public class Vocabs {
         }
 
         public boolean contains(String entry) {
+            if (entry == null) {
+                throw new IllegalArgumentException("Must supply a value when checking [" + this.name() + "](" + this.vocabName() + ")");
+            }
             return entries.contains(entry);
         }
 
@@ -440,7 +443,7 @@ public class Vocabs {
         "threat-report",
         "attack-pattern",
         "campaign",
-        "identity",
+        "object",
         "indicator",
         "intrusion-set",
         "malware",

@@ -1,12 +1,12 @@
 plugins {
-    id 'io.micronaut.library' version '4.2.0'
+    id 'io.micronaut.library' version '4.2.1'
     id('maven-publish')
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id('pl.allegro.tech.build.axion-release') version "1.13.6"
 }
 
 micronaut {
-    version("4.2.0")
+    version("4.2.1")
 }
 
 scmVersion {
@@ -42,7 +42,7 @@ dependencies {
     implementation "io.micronaut:micronaut-runtime"
     implementation "io.micronaut.validation:micronaut-validation"
 
-    implementation("io.micronaut.beanvalidation:micronaut-hibernate-validator")
+//    implementation("io.micronaut.beanvalidation:micronaut-hibernate-validator")
 
     implementation platform("com.fasterxml.jackson:jackson-bom:2.15.2")
     implementation "com.fasterxml.jackson.core:jackson-annotations"
@@ -50,8 +50,6 @@ dependencies {
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
     implementation "com.fasterxml.jackson.module:jackson-module-parameter-names"
-
-
 
     implementation "org.immutables:value:2.10.0"
     implementation "org.immutables:annotate:2.10.0"

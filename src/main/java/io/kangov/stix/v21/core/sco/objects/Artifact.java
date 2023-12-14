@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static io.kangov.stix.v21.bundle.Bundleable.*;
 
 /**
  * The Artifact Object permits capturing an array of bytes (8-bits), as a base64-encoded string, or linking to a
@@ -29,8 +30,9 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 @JsonSerialize(as = Artifact.class)
 @JsonDeserialize(builder = Artifact.Builder.class)
 @JsonPropertyOrder({
-    "id",
-    "type",
+    TYPE,
+    SPEC_VERSION,
+    ID,
     "extensions",
     "mime_type",
     "payload_bin",

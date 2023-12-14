@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.function.UnaryOperator;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
+import static io.kangov.stix.v21.bundle.Bundleable.*;
 
 /**
  * windows-registry-key
@@ -33,8 +34,9 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 @JsonSerialize(as = WindowsRegistryKey.class)
 @JsonDeserialize(builder = WindowsRegistryKey.Builder.class)
 @JsonPropertyOrder({
-    "id",
-    "type",
+    TYPE,
+    SPEC_VERSION,
+    ID,
     "key",
     "values",
     "modified",

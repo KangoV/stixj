@@ -18,6 +18,7 @@ import java.util.function.UnaryOperator;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static io.kangov.stix.v21.enums.Vocabs.Vocab.ACCOUNT_TYPE;
+import static io.kangov.stix.v21.bundle.Bundleable.*;
 
 /**
  * user-account
@@ -36,8 +37,9 @@ import static io.kangov.stix.v21.enums.Vocabs.Vocab.ACCOUNT_TYPE;
 @JsonInclude(value = NON_EMPTY, content= NON_EMPTY)
 @JsonTypeName("user-account")
 @JsonPropertyOrder({
-    "id",
-    "type",
+    TYPE,
+    SPEC_VERSION,
+    ID,
     "extensions",
     "user_id",
     "account_login",
