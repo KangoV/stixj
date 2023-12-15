@@ -3,8 +3,6 @@ package io.kangov.stix.v21.core.sdo.objects;
 import io.kangov.stix.Parser;
 import io.kangov.stix.common.mock.Mocks;
 import io.kangov.stix.v21.bundle.Bundle;
-import io.kangov.stix.v21.common.type.IdentityRef;
-import io.kangov.stix.v21.common.type.SdoObjectRef;
 import io.kangov.stix.v21.core.sco.objects.XNominetBlock;
 import io.kangov.stix.v21.core.sco.objects.XNominetThreatFeedSource;
 import io.kangov.stix.v21.core.sro.objects.Sighting;
@@ -19,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import java.time.Instant;
 import java.util.Map;
 
-import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @MicronautTest

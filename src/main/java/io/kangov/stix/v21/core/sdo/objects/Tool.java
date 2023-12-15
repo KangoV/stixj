@@ -73,7 +73,7 @@ public interface Tool extends SdoObject {
             this.addKillChainPhase(func.apply(KillChainPhase.builder()).build());
             return this;
         }
-        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); };
+        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); }
         public Builder createdByRef(Identity identity) { return createdByRef(IdentityRef.create(identity)); }
     }
 

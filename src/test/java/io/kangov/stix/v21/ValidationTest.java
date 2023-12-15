@@ -1,17 +1,12 @@
 package io.kangov.stix.v21;
 
-import io.micronaut.core.annotation.*;
+import io.micronaut.core.annotation.Introspected;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.micronaut.validation.validator.Validator;
-import io.micronaut.validation.validator.constraints.ConstraintValidator;
-import io.micronaut.validation.validator.constraints.ConstraintValidatorContext;
 import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
 import jakarta.validation.constraints.Min;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 

@@ -7,8 +7,6 @@ import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.util.ImmutableStyle;
 import io.kangov.stix.v21.common.type.IdentityRef;
 import io.kangov.stix.v21.core.sdo.SdoObject;
-import io.kangov.stix.v21.enums.Vocabs;
-import io.kangov.stix.validation.constraints.Vocab;
 import io.micronaut.core.annotation.Introspected;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
@@ -18,7 +16,6 @@ import java.util.function.UnaryOperator;
 
 import static io.kangov.stix.v21.bundle.Bundleable.*;
 import static io.kangov.stix.v21.core.sdo.SdoObject.*;
-import static io.kangov.stix.v21.enums.Vocabs.Vocab.REGION;
 
 /**
  * location
@@ -72,7 +69,7 @@ public interface Location extends SdoObject {
      * methods defined on the generated implementation's Builder class.
      */
     class Builder extends LocationImpl.Builder {
-        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); };
+        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); }
         public Builder createdByRef(Identity identity) { return createdByRef(IdentityRef.create(identity)); }
     }
 

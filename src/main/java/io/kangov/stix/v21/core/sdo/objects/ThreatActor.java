@@ -76,7 +76,7 @@ public interface ThreatActor extends SdoObject {
      * methods defined on the generated implementation's Builder class.
      */
     class Builder extends ThreatActorImpl.Builder {
-        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); };
+        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); }
         public Builder createdByRef(Identity identity) { return createdByRef(IdentityRef.create(identity)); }
     }
 

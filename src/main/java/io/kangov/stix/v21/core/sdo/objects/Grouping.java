@@ -7,7 +7,6 @@ import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.util.ImmutableStyle;
 import io.kangov.stix.v21.common.type.IdentityRef;
 import io.kangov.stix.v21.core.sdo.SdoObject;
-import io.kangov.stix.v21.enums.Vocabs;
 import io.kangov.stix.validation.constraints.Vocab;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.NotBlank;
@@ -81,7 +80,7 @@ public interface Grouping extends SdoObject {
      * methods defined on the generated implementation's Builder class.
      */
     class Builder extends GroupingImpl.Builder {
-        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); };
+        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); }
         public Builder createdByRef(Identity identity) { return createdByRef(IdentityRef.create(identity)); }
     }
 

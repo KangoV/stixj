@@ -1,21 +1,15 @@
 package io.kangov.stix.v21.core.sdo.objects;
 
 import io.kangov.stix.Parser;
-import io.kangov.stix.v21.bundle.Bundleable;
 import io.kangov.stix.common.mock.Mocks;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.micronaut.validation.validator.Validator;
 import jakarta.inject.Inject;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.util.List;
 import java.util.Map;
 
 import static java.util.stream.IntStream.range;

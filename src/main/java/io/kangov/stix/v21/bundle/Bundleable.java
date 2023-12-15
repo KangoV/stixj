@@ -2,9 +2,9 @@ package io.kangov.stix.v21.bundle;
 
 
 import com.fasterxml.jackson.annotation.*;
-import io.kangov.stix.v21.common.property.*;
 import io.kangov.stix.v21.StixObject;
-import io.kangov.stix.v21.custom.CustomObject;
+import io.kangov.stix.v21.common.property.GranularMarkings;
+import io.kangov.stix.v21.common.property.ObjectMarkingRefs;
 import io.kangov.stix.v21.custom.GenericCustomObject;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.NotNull;

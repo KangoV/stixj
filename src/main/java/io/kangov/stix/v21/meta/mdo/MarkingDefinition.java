@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.util.ImmutableStyle;
 import io.kangov.stix.v21.common.type.IdentityRef;
-import io.kangov.stix.v21.core.sdo.objects.*;
+import io.kangov.stix.v21.core.sdo.objects.Identity;
 import io.kangov.stix.v21.meta.mdo.objects.Tlp;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -57,7 +57,7 @@ public interface MarkingDefinition extends MdoObject {
      * methods defined on the generated implementation's Builder class.
      */
     class Builder extends MarkingDefinitionImpl.Builder {
-        public Builder createdByRef(String id) { return createdByRef(IdentityRef.createIdentityRef(id)); };
+        public Builder createdByRef(String id) { return createdByRef(IdentityRef.createIdentityRef(id)); }
         public Builder createdByRef(Identity identity) { return createdByRef(createIdentityRef(identity)); }
     }
 

@@ -17,8 +17,8 @@ import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static io.kangov.stix.v21.enums.Vocabs.Vocab.ACCOUNT_TYPE;
 import static io.kangov.stix.v21.bundle.Bundleable.*;
+import static io.kangov.stix.v21.enums.Vocabs.Vocab.ACCOUNT_TYPE;
 
 /**
  * user-account

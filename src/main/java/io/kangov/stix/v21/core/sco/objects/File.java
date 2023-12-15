@@ -16,8 +16,8 @@ import java.util.*;
 import java.util.function.UnaryOperator;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static io.kangov.stix.v21.enums.Vocabs.Vocab.ENCRYPTION_ALGORITHM;
 import static io.kangov.stix.v21.bundle.Bundleable.*;
+import static io.kangov.stix.v21.enums.Vocabs.Vocab.ENCRYPTION_ALGORITHM;
 
 /**
  * file

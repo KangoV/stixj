@@ -78,7 +78,7 @@ public interface Infrastructure extends SdoObject {
         public Builder killChainPhase(UnaryOperator<KillChainPhase.Builder> func) {
             return addKillChainPhase(func.apply(KillChainPhase.builder()).build());
         }
-        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); };
+        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); }
         public Builder createdByRef(Identity identity) { return createdByRef(IdentityRef.create(identity)); }
     }
 

@@ -6,14 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.util.ImmutableStyle;
 import io.kangov.stix.v21.core.sco.ScoObject;
 import io.micronaut.core.annotation.Introspected;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 
-import java.time.Instant;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.UnaryOperator;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;

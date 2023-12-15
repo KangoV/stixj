@@ -6,15 +6,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.util.ImmutableStyle;
-import io.kangov.stix.v21.core.sdo.objects.*;
 import io.kangov.stix.v21.meta.mdo.MarkingObject;
 import jakarta.validation.constraints.NotBlank;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 
 import java.util.function.UnaryOperator;
-
-import static io.kangov.stix.v21.common.type.IdentityRef.createIdentityRef;
 
 @Value.Immutable @Serial.Version(1L)
 @ImmutableStyle

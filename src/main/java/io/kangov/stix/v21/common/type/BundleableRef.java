@@ -16,7 +16,7 @@ public record BundleableRef(String id, Bundleable object) implements ObjectRef<B
         public Serializer() { this(null); }
         public Serializer(Class<BundleableRef> t) { super(t); }
         @Override
-        public void serialize(BundleableRef value, JsonGenerator jgen, SerializerProvider _p) throws IOException, JsonProcessingException {
+        public void serialize(BundleableRef value, JsonGenerator jgen, SerializerProvider _p) throws IOException {
             if (value != null) {
                 jgen.writeString(value.id());
             }

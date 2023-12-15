@@ -65,7 +65,7 @@ public interface Campaign extends SdoObject {
      * methods defined on the generated implementation's Builder class.
      */
     class Builder extends CampaignImpl.Builder {
-        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); };
+        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); }
         public Builder createdByRef(Identity identity) { return createdByRef(IdentityRef.create(identity)); }
     }
 

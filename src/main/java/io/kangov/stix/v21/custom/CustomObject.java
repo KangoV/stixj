@@ -1,13 +1,9 @@
 package io.kangov.stix.v21.custom;
 
-import com.fasterxml.jackson.annotation.*;
 import io.kangov.stix.v21.bundle.Bundleable;
 import io.kangov.stix.v21.common.property.*;
 import io.kangov.stix.v21.core.Relateable;
 import io.kangov.stix.validation.constraints.StartsWith;
-import org.immutables.value.Value;
-
-import java.util.Map;
 
 public interface CustomObject extends
     Bundleable,

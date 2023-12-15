@@ -7,7 +7,6 @@ import io.kangov.stix.util.ImmutableStyle;
 import io.kangov.stix.v21.core.sco.ScoObject;
 import io.kangov.stix.v21.core.sco.types.WindowsRegistryValueType;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 

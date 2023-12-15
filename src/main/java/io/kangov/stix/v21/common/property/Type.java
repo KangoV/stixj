@@ -23,8 +23,7 @@ public interface Type {
 
     default String getType() {
         var ann = this.getClass().getAnnotation(JsonTypeName.class);
-        var type = ann.value();
-        return type;
+        return ann.value();
     }
 
 }

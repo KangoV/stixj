@@ -70,7 +70,7 @@ public interface Note extends SdoObject {
         public Builder addExternalReference(UnaryOperator<ExternalReference.Builder> func) {
             return addExternalReference(func.apply(ExternalReference.builder()).build());
         }
-        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); };
+        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); }
         public Builder createdByRef(Identity identity) { return createdByRef(IdentityRef.create(identity)); }
     }
 

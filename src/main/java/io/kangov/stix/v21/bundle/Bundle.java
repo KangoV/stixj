@@ -11,7 +11,6 @@ import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 
 import java.io.Serializable;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
@@ -75,14 +74,14 @@ public interface Bundle
     Set<Bundleable> getObjects();
 
     default <T extends Bundleable> Set<T> find(Class<T> type) {
-        return (Set<T>) stream(type).collect(Collectors.toUnmodifiableSet());
+        return stream(type).collect(Collectors.toUnmodifiableSet());
     }
 
     /**
      * Returns a stream that emits objects from this bundle matching the provided predicate
      *
      * @param filter the predicate to match objects in this bundle against
-     * @return
+     * @return a stream that emits objects from this bundle matching the provided predicate
      */
     default Stream<Bundleable> stream(Predicate<Bundleable> filter) {
         return getObjects().stream().filter(filter);

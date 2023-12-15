@@ -9,7 +9,8 @@ import io.kangov.stix.v21.common.type.ExternalReference;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.validation.constraints.Vocab;
 import io.micronaut.core.annotation.Introspected;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 

@@ -2,7 +2,8 @@ package io.kangov.stix;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.*;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.kangov.stix.v21.bundle.Bundle;
 import io.kangov.stix.v21.bundle.Bundleable;
 import io.kangov.stix.v21.common.type.*;
@@ -18,12 +19,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.function.*;
+import java.util.function.BiFunction;
 
 @Validated
 @Singleton
 @SuppressWarnings("unused")
 public class Parser {
+
+    public static final String OBSERVED_DATA = "observed-data";
+    public static final String OBJECT_REFS = "object_refs";
+    public static final String REPORT = "report";
+    public static final String RELATIONSHIP = "relationship";
+    public static final String SOURCE_REF = "source_ref";
+    public static final String TARGET_REF = "target_ref";
+    public static final String SIGHTING = "sighting";
+    public static final String WHERE_SIGHTED_REFS = "where_sighted_refs";
+    public static final String OBSERVED_DATA_REFS = "observed_data_refs";
+    public static final String SIGHTING_OF_REF = "sighting_of_ref";
 
     private static class ObjectCache implements Iterable<ObjectCache.Entry> {
 
@@ -74,6 +86,23 @@ public class Parser {
         this.validator = validator;
     }
 
+    public String writeBundle(@Valid Bundle bundle) {
+        return write(bundle);
+    }
+
+    public String writeObject(@Valid Bundleable bundleable) {
+        return write(bundleable);
+    }
+
+    public void validate(@Valid Bundleable bundleable) {
+        validator.validate(bundleable);
+    }
+
+    public ObjectMapper objectMapper() {
+        return this.objectMapper;
+    }
+
+    @SuppressWarnings("unchecked")
     public <T> @Valid T readObject(String str, Class<T> bundleable) {
         try {
             log.debug("Deserializing {} to: {}", bundleable.getSimpleName(), str);
@@ -84,17 +113,6 @@ public class Parser {
             return (T) obj;
         } catch (Exception e) {
             throw new ParseException("Failed to deserialize a " + bundleable.getSimpleName(), e);
-        }
-    }
-
-    public String writeObject(@Valid Bundleable bundleable) {
-        try {
-            log.debug("Serializing {}", bundleable);
-            var str = objectMapper.writeValueAsString(bundleable);
-            log.debug("Serialized {} to: {}", bundleable.getClass().getSimpleName(), str);
-            return str;
-        } catch (Exception e) {
-            throw new ParseException("Failed to serialize a " + bundleable.getClass().getSimpleName(), e);
         }
     }
 
@@ -135,26 +153,16 @@ public class Parser {
         }
     }
 
-    public String writeBundle(@Valid Bundle bundle) {
+    private String write(Object object) {
         try {
-            log.debug("Serializing {}", bundle);
-            var str = objectMapper.writeValueAsString(bundle);
-            log.debug("Serialized {} to: {}", bundle.getClass().getSimpleName(), str);
+            log.debug("Serializing {}", object);
+            var str = objectMapper.writeValueAsString(object);
+            log.debug("Serialized {} to: {}", object.getClass().getSimpleName(), str);
             return str;
         } catch (Exception e) {
-            throw new ParseException("Failed to serialize a " + bundle.getClass().getSimpleName(), e);
+            throw new ParseException("Failed to serialize a " + object.getClass().getSimpleName(), e);
         }
     }
-
-    public void validate(@Valid Bundleable bundleable) {
-        validator.validate(bundleable);
-    }
-
-    public ObjectMapper objectMapper() {
-        return this.objectMapper;
-    }
-
-
 
     @Valid Bundleable processNode(ObjectNode objectNode, ObjectCache cache) throws Exception {
 
@@ -176,22 +184,34 @@ public class Parser {
             }
         }
 
+        /*
+         * The following reference processing is needed as Jackson cannot seem to handle these. It can handle
+         * forward and back references for parent and child relationships (many to one), but when it comes
+         * to kind that stix has
+         *
+         * This has to be handled in code. This is the reason for the object cache.
+         */
+
         processOptionalReference(CREATED_BY_REF, objectNode, cache, (i, b) -> new IdentityRef(i, (Identity) b));
 
-        if (type.equals("observed-data")) {
-            processReferences("object_refs", objectNode, cache, BundleableRef::new);
+
+        if (type.equals(REPORT)) {
+            processReferences(OBJECT_REFS, objectNode, cache, BundleableRef::new);
         }
-        if (type.equals("report")) {
-            processReferences("object_refs", objectNode, cache, BundleableRef::new);
+
+        if (type.equals(OBSERVED_DATA)) {
+            processReferences(OBJECT_REFS, objectNode, cache, BundleableRef::new);
         }
-        if (type.equals("relationship")) {
-            processRequiredReference("source_ref", objectNode, cache, BundleableRef::new);
-            processRequiredReference("target_ref", objectNode, cache, BundleableRef::new);
+
+        if (type.equals(RELATIONSHIP)) {
+            processRequiredReference(SOURCE_REF, objectNode, cache, BundleableRef::new);
+            processRequiredReference(TARGET_REF, objectNode, cache, BundleableRef::new);
         }
-        if (type.equals("sighting")) {
-            processReferences("where_sighted_refs", objectNode, cache, (i, b) -> new SdoObjectRef(i, (SdoObject) b));
-            processReferences("observed_data_refs", objectNode, cache, (i, b) -> new SdoObjectRef(i, (SdoObject) b));
-            processRequiredReference("sighting_of_ref", objectNode, cache, (i, b) -> new SdoObjectRef(i, (SdoObject) b));
+
+        if (type.equals(SIGHTING)) {
+            processReferences(WHERE_SIGHTED_REFS,     objectNode, cache, (i, b) -> new SdoObjectRef(i, (SdoObject) b));
+            processReferences(OBSERVED_DATA_REFS,     objectNode, cache, (i, b) -> new SdoObjectRef(i, (SdoObject) b));
+            processRequiredReference(SIGHTING_OF_REF, objectNode, cache, (i, b) -> new SdoObjectRef(i, (SdoObject) b));
         }
 
         try {
@@ -203,16 +223,22 @@ public class Parser {
         }
     }
 
+    /**
+     * @see #processReference(String, ObjectNode, ObjectCache, boolean, BiFunction)
+     */
     private <T extends Bundleable> void processRequiredReference(String fieldName, ObjectNode containerNode, ObjectCache cache, BiFunction<String,Bundleable,ObjectRef<T>> refFactory) throws Exception {
         processReference(fieldName, containerNode, cache, true, refFactory);
     }
 
+    /**
+     * @see #processReference(String, ObjectNode, ObjectCache, boolean, BiFunction)
+     */
     private <T extends Bundleable> void processOptionalReference(String fieldName, ObjectNode containerNode, ObjectCache cache, BiFunction<String,Bundleable,ObjectRef<T>> refFactory) throws Exception {
         processReference(fieldName, containerNode, cache, false, refFactory);
     }
 
     /**
-     * Process a node named {@code fieldname} which is a child of the {@code containerNode}. The cache is first checked
+     * Process a node named {@code fieldName} which is a child of the {@code containerNode}. The cache is first checked
      * and an object is created and cached if necessary.
      *
      * @param fieldName The name of the child node
@@ -274,7 +300,7 @@ public class Parser {
      * itself. This provides for the situation where a reference ID points to an object that is not included.
      *
      * @param fieldName The fieldname of the array node
-     * @param containerNode The node that containes the fieldname
+     * @param containerNode The node that contains the fieldname
      * @param cache The cache to be used to search for previously deserialized objects.
      * @param refFactory The bi-function used to generate the correct reference object
      * @param <T> The type of object being referenced
@@ -302,7 +328,7 @@ public class Parser {
     }
 
     /**
-     * Adds the provided {@code jsonNode} into the provided {@code cache}. If the jsonnode is an {@code Arraynode},
+     * Adds the provided {@code jsonNode} into the provided {@code cache}. If the jsonnode is an {@code ArrayNode},
      * then it's elements are added instead.
      *
      * @param jsonNode The json node to add or the container of the nodes to add

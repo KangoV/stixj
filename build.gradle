@@ -3,6 +3,7 @@ plugins {
     id('maven-publish')
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id('pl.allegro.tech.build.axion-release') version "1.13.6"
+    id("com.adarshr.test-logger") version "2.0.0"
 }
 
 micronaut {
@@ -88,6 +89,27 @@ publishing {
         library(MavenPublication) {
             from components.java
         }
+    }
+}
+
+test {
+    useJUnitPlatform()
+    testlogger {
+        theme 'mocha'
+        showExceptions true
+        showStackTraces true
+        showFullStackTraces false
+        showCauses true
+        slowThreshold 2000
+        showSummary true
+        showSimpleNames false
+        showPassed true
+        showSkipped true
+        showFailed true
+        showStandardStreams false
+        showPassedStandardStreams true
+        showSkippedStandardStreams true
+        showFailedStandardStreams true
     }
 }
 

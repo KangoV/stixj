@@ -18,8 +18,8 @@ import java.util.Set;
 import java.util.function.UnaryOperator;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-import static io.kangov.stix.v21.core.sdo.SdoObject.*;
 import static io.kangov.stix.v21.common.type.IdentityRef.createIdentityRef;
+import static io.kangov.stix.v21.core.sdo.SdoObject.*;
 
 @Value.Immutable
 @Serial.Version(1L)
@@ -63,7 +63,7 @@ public interface AttackPattern extends SdoObject {
         public Builder killChainPhase(UnaryOperator<KillChainPhase.Builder> func) {
             return addKillChainPhase(func.apply(KillChainPhase.builder()).build());
         }
-        public Builder createdByRef(String id) { return createdByRef(createIdentityRef(id)); };
+        public Builder createdByRef(String id) { return createdByRef(createIdentityRef(id)); }
         public Builder createdByRef(Identity identity) { return createdByRef(createIdentityRef(identity)); }
     }
 

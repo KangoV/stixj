@@ -17,7 +17,7 @@ public class CommonObjectIdResolver implements ObjectIdResolver {
 
     private static final Logger log = LoggerFactory.getLogger(CommonObjectIdResolver.class);
 
-    protected Map<IdKey, WeakReference<Object>> _items = new HashMap<>();
+    protected final Map<IdKey, WeakReference<Object>> _items = new HashMap<>();
 
     @Override
     public void bindItem(IdKey id, Object pojo) {

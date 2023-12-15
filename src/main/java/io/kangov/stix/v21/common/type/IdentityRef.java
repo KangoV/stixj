@@ -1,7 +1,5 @@
 package io.kangov.stix.v21.common.type;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -20,7 +18,7 @@ public record IdentityRef(
         public Serializer() { this(null); }
         public Serializer(Class<IdentityRef> t) { super(t); }
         @Override
-        public void serialize(IdentityRef value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
+        public void serialize(IdentityRef value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
             if (value != null) {
                 jgen.writeString(value.id());
             }

@@ -9,7 +9,7 @@ import io.micronaut.core.annotation.Introspected;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 
-import java.util.*;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;

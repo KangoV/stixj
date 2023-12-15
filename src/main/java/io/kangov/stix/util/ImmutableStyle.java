@@ -2,8 +2,6 @@ package io.kangov.stix.util;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.micronaut.core.annotation.Introspected;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import org.immutables.value.Value;
 
 import java.lang.annotation.*;

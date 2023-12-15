@@ -15,7 +15,8 @@ import jakarta.validation.constraints.Size;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 
-import java.util.*;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.UnaryOperator;
 
 import static io.kangov.stix.v21.bundle.Bundleable.*;
@@ -69,7 +70,7 @@ public interface Opinion extends SdoObject {
         public Builder addExternalReference(UnaryOperator<ExternalReference.Builder> func) {
             return addExternalReference(func.apply(ExternalReference.builder()).build());
         }
-        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); };
+        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); }
         public Builder createdByRef(Identity identity) { return createdByRef(IdentityRef.create(identity)); }
 
     }

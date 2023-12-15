@@ -16,7 +16,7 @@ public record SdoObjectRef(String id, SdoObject object) implements ObjectRef<Sdo
         public Serializer() { this(null); }
         public Serializer(Class<SdoObjectRef> t) { super(t); }
         @Override
-        public void serialize(SdoObjectRef value, JsonGenerator jgen, SerializerProvider _p) throws IOException, JsonProcessingException {
+        public void serialize(SdoObjectRef value, JsonGenerator jgen, SerializerProvider _p) throws IOException {
             if (value != null) {
                 jgen.writeString(value.id());
             }

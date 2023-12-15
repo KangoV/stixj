@@ -24,7 +24,7 @@ public interface Modified {
         If the created property is defined, then the value of the modified property for a given object version MUST be \
         later than or equal to the value of the created property.
         Object creators MUST set the modified property when creating a new version of an object if the created \
-        property was set.                                                                                              
+        property was set.
         """)
     @Value.Default
     @Redactable

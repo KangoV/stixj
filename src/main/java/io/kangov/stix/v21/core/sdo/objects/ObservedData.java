@@ -5,7 +5,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.util.ImmutableStyle;
-import io.kangov.stix.v21.common.type.*;
+import io.kangov.stix.v21.common.type.BundleableRef;
+import io.kangov.stix.v21.common.type.IdentityRef;
 import io.kangov.stix.v21.core.sco.ScoObject;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.validation.constraints.Range;
@@ -70,7 +71,7 @@ public interface ObservedData extends SdoObject {
      * methods defined on the generated implementation's Builder class.
      */
     class Builder extends ObservedDataImpl.Builder {
-        public Builder createdByRef(String id)         { return createdByRef(IdentityRef.create(id)); };
+        public Builder createdByRef(String id)         { return createdByRef(IdentityRef.create(id)); }
         public Builder createdByRef(Identity identity) { return createdByRef(IdentityRef.create(identity)); }
     }
 

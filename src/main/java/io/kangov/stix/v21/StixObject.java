@@ -1,12 +1,9 @@
 package io.kangov.stix.v21;
 
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.kangov.stix.v21.common.property.*;
-import io.kangov.stix.v21.custom.CustomObject;
 import io.micronaut.core.annotation.Introspected;
-import jakarta.validation.constraints.NotNull;
-import org.immutables.value.Value;
 
 import java.io.Serializable;
 

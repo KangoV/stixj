@@ -16,7 +16,7 @@ public record ScoObjectRef(String id, ScoObject object) implements ObjectRef<Sco
         public Serializer() { this(null); }
         public Serializer(Class<ScoObjectRef> t) { super(t); }
         @Override
-        public void serialize(ScoObjectRef value, JsonGenerator jgen, SerializerProvider _p) throws IOException, JsonProcessingException {
+        public void serialize(ScoObjectRef value, JsonGenerator jgen, SerializerProvider _p) throws IOException {
             if (value != null) {
                 jgen.writeString(value.id());
             }

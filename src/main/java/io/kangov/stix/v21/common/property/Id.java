@@ -23,7 +23,7 @@ public interface Id {
     default String getId() {
         var ann = this.getClass().getAnnotation(JsonTypeName.class);
         var type = ann.value();
-        return type + "--" + UUID.randomUUID().toString();
+        return type + "--" + UUID.randomUUID();
     }
 
 

@@ -16,7 +16,7 @@ public record SoftwareRef(String id, Software object) {
         public Serializer() { this(null); }
         public Serializer(Class<SoftwareRef> t) { super(t); }
         @Override
-        public void serialize(SoftwareRef value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
+        public void serialize(SoftwareRef value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
             if (value != null) {
                 jgen.writeString(value.id());
             }

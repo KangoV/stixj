@@ -1,5 +1,7 @@
 package io.kangov.stix.v21.enums;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.util.*;
 
 import static io.kangov.stix.v21.enums.Vocabs.Type.CLOSED;
@@ -18,38 +20,38 @@ public class Vocabs {
 
         // VOCABS
 
-        ACCOUNT_TYPE                  ( ACCOUNT_TYPE_OV,                    "account-type-ov"                            ),
-        ATTACK_MOTIVATION             ( ATTACK_MOTIVATION_OV,               "attack-motivation-ov"                       ),
-        ATTACK_RESOURCE_LEVEL         ( ATTACK_RESOURCE_LEVEL_OV,           "attack-resource-level-ov"                   ),
-        ENCRYPTION_ALGORITHM          ( ENCRYPTION_ALGORITHM_ENUM,          "encryption-algorithm-enum",          CLOSED ),
-        EXTENSION_TYPES               ( EXTENSION_TYPE_ENUM,                "extension-type-enum",                CLOSED ),
-        GROUPING_CONTEXT              ( GROUPING_CONTEXT_OV,                "grouping-context-ov"                        ),
-        HASHING_ALGORITHM             ( HASH_ALGORITHM_OV,                  "hash-algorithm-ov"                          ),
-        IDENTITY_CLASS                ( IDENTITY_CLASS_OV,                  "object-class-ov"                          ),
-        IMPLEMENTATION_LANGUAGES      ( IMPLEMENTATION_LANGUAGES_OV,        "implementation-language-ov"                 ),
-        INDICATOR_TYPE                ( INDICATOR_TYPE_OV,                  "indicator-type-ov"                          ),
-        INDUSTRY_SECTORS              ( INDUSTRY_SECTOR_OV,                 "industry-sector-ov"                         ),
-        INFRASTRUCTURE_TYPE           ( INFRASTRUCTURE_TYPE_OV,             "infrastructure-type-ov"                     ),
-        MALWARE_CAPABILITIES          ( MALWARE_CAPABILITIES_OV,            "malware-capabilities-ov"                    ),
-        MALWARE_RESULT                ( MALWARE_RESULT_OV,                  "malware-result-ov"                          ),
-        MALWARE_TYPE                  ( MALWARE_TYPE_OV,                    "malware-type-ov"                            ),
-        NETWORK_SOCKET_ADDRESS_FAMILY ( NETWORK_SOCKET_ADDRESS_FAMILY_ENUM, "network-socket-address-family-enum", CLOSED ),
-        NETWORK_SOCKET_TYPE           ( NETWORK_SOCKET_TYPE_ENUM,           "network-socket-type-enum",           CLOSED ),
-        OPINION                       ( OPINION_ENUM,                       "opinion-enum",                       CLOSED ),
-        PATTERN_TYPE                  ( PATTERN_TYPE_OV,                    "pattern-type-ov"                            ),
-        PROCESSOR_ARCHITECTURE        ( PROCESSOR_ARCHITECTURE_OV,          "processor-architecture-ov"                  ),
-        REGION                        ( REGION_OV,                          "region-ov"                                  ),
-        REPORT_TYPE                   ( REPORT_TYPE_OV,                     "report-type-ov"                             ),
-        THREAT_ACTOR_ROLE             ( THREAT_ACTOR_ROLE_OV,               "threat-actor-role-ov"                       ),
-        THREAT_ACTOR_SOPHISTICATION   ( THREAT_ACTOR_SOPHISTICATION_OV,     "threat-actor-sophistication-ov"             ),
-        THREAT_ACTOR_TYPE             ( THREAT_ACTOR_TYPE_OV,               "threat-actor-type-ov"                       ),
-        TOOL_TYPE                     ( TOOL_TYPE_OV,                       "tool-type-ov"                               ),
-        WINDOWS_INTEGRITY_LEVEL       ( WINDOWS_INTEGRITY_LEVEL_ENUM,       "windows-integrity-level-enum",       CLOSED ),
-        WINDOWS_PEBINARY_TYPE         ( WINDOWS_PEBINARY_TYPE_OV,           "windows-pebinary-type-ov"                   ),
-        WINDOWS_REGISTRY_DATATYPE     ( WINDOWS_REGISTRY_DATATYPE_ENUM,     "windows-registry-datatype-enum",     CLOSED ),
-        WINDOWS_SERVICE_START_TYPE    ( WINDOWS_SERVICE_START_TYPE_ENUM,    "windows-service-start-type-enum",    CLOSED ),
-        WINDOWS_SERVICE_STATUS        ( WINDOWS_SERVICE_STATUS_ENUM,        "windows-service-status-enum",        CLOSED ),
-        WINDOWS_SERVICE_TYPE          ( WINDOWS_SERVICE_TYPE_ENUM,          "windows-service-type-enum",          CLOSED ),
+        ACCOUNT_TYPE                   ( ACCOUNT_TYPE_OV,                     "account-type-ov"                            ),
+        ATTACK_MOTIVATION              ( ATTACK_MOTIVATION_OV,                "attack-motivation-ov"                       ),
+        ATTACK_RESOURCE_LEVEL          ( ATTACK_RESOURCE_LEVEL_OV,            "attack-resource-level-ov"                   ),
+        ENCRYPTION_ALGORITHM           ( ENCRYPTION_ALGORITHM_ENUM,           "encryption-algorithm-enum",          CLOSED ),
+        EXTENSION_TYPES                ( EXTENSION_TYPE_ENUM,                 "extension-type-enum",                CLOSED ),
+        GROUPING_CONTEXT               ( GROUPING_CONTEXT_OV,                 "grouping-context-ov"                        ),
+        HASHING_ALGORITHM              ( HASH_ALGORITHM_OV,                   "hash-algorithm-ov"                          ),
+        IDENTITY_CLASS                 ( IDENTITY_CLASS_OV,                   "object-class-ov"                          ),
+        IMPLEMENTATION_LANGUAGES       ( IMPLEMENTATION_LANGUAGES_OV,         "implementation-language-ov"                 ),
+        INDICATOR_TYPE                 ( INDICATOR_TYPE_OV,                   "indicator-type-ov"                          ),
+        INDUSTRY_SECTORS               ( INDUSTRY_SECTOR_OV,                  "industry-sector-ov"                         ),
+        INFRASTRUCTURE_TYPE            ( INFRASTRUCTURE_TYPE_OV,              "infrastructure-type-ov"                     ),
+        MALWARE_CAPABILITIES           ( MALWARE_CAPABILITIES_OV,             "malware-capabilities-ov"                    ),
+        MALWARE_RESULT                 ( MALWARE_RESULT_OV,                   "malware-result-ov"                          ),
+        MALWARE_TYPE                   ( MALWARE_TYPE_OV,                     "malware-type-ov"                            ),
+        NETWORK_SOCKET_ADDRESS_FAMILY  ( NETWORK_SOCKET_ADDRESS_FAMILY_ENUM,  "network-socket-address-family-enum", CLOSED ),
+        NETWORK_SOCKET_TYPE            ( NETWORK_SOCKET_TYPE_ENUM,            "network-socket-type-enum",           CLOSED ),
+        OPINION                        ( OPINION_ENUM,                        "opinion-enum",                       CLOSED ),
+        PATTERN_TYPE                   ( PATTERN_TYPE_OV,                     "pattern-type-ov"                            ),
+        PROCESSOR_ARCHITECTURE         ( PROCESSOR_ARCHITECTURE_OV,           "processor-architecture-ov"                  ),
+        REGION                         ( REGION_OV,                           "region-ov"                                  ),
+        REPORT_TYPE                    ( REPORT_TYPE_OV,                      "report-type-ov"                             ),
+        THREAT_ACTOR_ROLE              ( THREAT_ACTOR_ROLE_OV,                "threat-actor-role-ov"                       ),
+        THREAT_ACTOR_SOPHISTICATION    ( THREAT_ACTOR_SOPHISTICATION_OV,      "threat-actor-sophistication-ov"             ),
+        THREAT_ACTOR_TYPE              ( THREAT_ACTOR_TYPE_OV,                "threat-actor-type-ov"                       ),
+        TOOL_TYPE                      ( TOOL_TYPE_OV,                        "tool-type-ov"                               ),
+        WINDOWS_INTEGRITY_LEVEL        ( WINDOWS_INTEGRITY_LEVEL_ENUM,        "windows-integrity-level-enum",       CLOSED ),
+        WINDOWS_PEBINARY_TYPE          ( WINDOWS_PEBINARY_TYPE_OV,            "windows-pebinary-type-ov"                   ),
+        WINDOWS_REGISTRY_DATATYPE      ( WINDOWS_REGISTRY_DATATYPE_ENUM,      "windows-registry-datatype-enum",     CLOSED ),
+        WINDOWS_SERVICE_START_TYPE     ( WINDOWS_SERVICE_START_TYPE_ENUM,     "windows-service-start-type-enum",    CLOSED ),
+        WINDOWS_SERVICE_STATUS         ( WINDOWS_SERVICE_STATUS_ENUM,         "windows-service-status-enum",        CLOSED ),
+        WINDOWS_SERVICE_TYPE           ( WINDOWS_SERVICE_TYPE_ENUM,           "windows-service-type-enum",          CLOSED ),
 
         // LOOKUPS
 
@@ -115,6 +117,7 @@ public class Vocabs {
         }
 
         @Override
+        @NotNull
         public Iterator<String> iterator() {
             return entries().iterator();
         }
