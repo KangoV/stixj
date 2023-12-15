@@ -28,8 +28,4 @@ public record BundleableRef(String id, Bundleable object) implements ObjectRef<B
     public static BundleableRef createSdoObjectRef(String id)      { return create(id); }
     public static BundleableRef createSdoObjectRef(Bundleable obj) { return create(obj); }
 
-    public String id() {
-        return object() != null ? object().getId() : id();
-    }
-
 }

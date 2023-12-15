@@ -124,7 +124,6 @@ public class IdentityTest {
             var expected = mock.mockIdentity();
             var string = parser.writeObject(expected);
             var actual = parser.readObject(string, Identity.class);
-            log.info("testing {}", i);
             assertThat(actual).as("(%s) -- expected json: %s", i, string).isEqualTo(expected);
         });
     }

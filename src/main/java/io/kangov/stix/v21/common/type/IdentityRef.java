@@ -1,5 +1,7 @@
 package io.kangov.stix.v21.common.type;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -10,7 +12,9 @@ import io.kangov.stix.v21.core.sdo.objects.Identity;
 import java.io.IOException;
 
 @JsonSerialize(using = IdentityRef.Serializer.class)
-public record IdentityRef(String id, Identity object) implements ObjectRef<Identity> {
+public record IdentityRef(
+        String id,
+        Identity object) implements ObjectRef<Identity> {
 
     public static class Serializer extends StdSerializer<IdentityRef> {
         public Serializer() { this(null); }
@@ -27,9 +31,5 @@ public record IdentityRef(String id, Identity object) implements ObjectRef<Ident
     public static IdentityRef create(Identity identity)       { return new IdentityRef(identity.getId(), identity); }
     public static IdentityRef createIdentityRef(String id)    { return create(id); }
     public static IdentityRef createIdentityRef(Identity obj) { return create(obj); }
-
-    public String id() {
-        return object() != null ? object().getId() : id();
-    }
 
 }

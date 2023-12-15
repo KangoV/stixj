@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.node.*;
 import io.kangov.stix.v21.bundle.Bundle;
 import io.kangov.stix.v21.bundle.Bundleable;
 import io.kangov.stix.v21.common.type.*;
-import io.kangov.stix.v21.core.sco.ScoObject;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.v21.core.sdo.objects.Identity;
 import io.micronaut.validation.Validated;
@@ -25,6 +24,39 @@ import java.util.function.*;
 @Singleton
 @SuppressWarnings("unused")
 public class Parser {
+
+    private static class ObjectCache implements Iterable<ObjectCache.Entry> {
+
+        private record Entry(String id, ObjectNode objectNode, Bundleable bundleable) {
+            private static Entry create(ObjectNode objectNode) {
+                return new Entry(objectNode.get(ID).asText(), objectNode, null);
+            }
+
+            private static Entry create(Bundleable bundleable) {
+                return new Entry(bundleable.getId(), null, bundleable);
+            }
+        }
+
+        private final Map<String, Entry> entries = new HashMap<>();
+
+        @Nonnull
+        @Override
+        public Iterator<Entry> iterator() {
+            return entries.values().iterator();
+        }
+
+        public void put(Entry entry) {
+            entries.put(entry.id(), entry);
+        }
+
+        public boolean contains(String id) {
+            return entries.containsKey(id);
+        }
+
+        public Entry get(String id) {
+            return entries.get(id);
+        }
+    }
 
     private static final Logger log = LoggerFactory.getLogger(Parser.class);
     public static final String ID = "id";
@@ -122,38 +154,6 @@ public class Parser {
         return this.objectMapper;
     }
 
-    private static class ObjectCache implements Iterable<ObjectCache.Entry> {
-
-        private record Entry(String id, ObjectNode objectNode, Bundleable bundleable) {
-            private static Entry create(ObjectNode objectNode) {
-                return new Entry(objectNode.get(ID).asText(), objectNode, null);
-            }
-
-            private static Entry create(Bundleable bundleable) {
-                return new Entry(bundleable.getId(), null, bundleable);
-            }
-        }
-
-        private final Map<String, Entry> entries = new HashMap<>();
-
-        @Nonnull
-        @Override
-        public Iterator<Entry> iterator() {
-            return entries.values().iterator();
-        }
-
-        public void put(Entry entry) {
-            entries.put(entry.id(), entry);
-        }
-
-        public boolean contains(String id) {
-            return entries.containsKey(id);
-        }
-
-        public Entry get(String id) {
-            return entries.get(id);
-        }
-    }
 
 
     @Valid Bundleable processNode(ObjectNode objectNode, ObjectCache cache) throws Exception {
@@ -165,38 +165,33 @@ public class Parser {
 
         var cacheEntry = cache.get(id);
 
-        // if we have a cache entry, and it has been processed, then return it
         if (cacheEntry != null) {
             log.debug("Found cached entry for {}", id);
             var bundleable = cache.get(id).bundleable();
             if (bundleable != null) {
                 log.debug("Cached entry contains de-serialized object, so returning");
-                return cache.get(id).bundleable();
+                return bundleable;
             } else {
                 log.debug("Cache entry not deserialised yet, continuing to process");
             }
         }
 
-        // see if the node to process has a createdByRef node
-        // if so, then we should process it and set the generated POJO on the object node. Jackson will then use
-        // the pojo when de-serialising which is awesome!
-
         processOptionalReference(CREATED_BY_REF, objectNode, cache, (i, b) -> new IdentityRef(i, (Identity) b));
 
-        if (type.equals("relationship")) {
-            processRequiredReference("source_ref", objectNode, cache, BundleableRef::new);
-            processRequiredReference("target_ref", objectNode, cache, BundleableRef::new);
-        }
         if (type.equals("observed-data")) {
             processReferences("object_refs", objectNode, cache, BundleableRef::new);
         }
         if (type.equals("report")) {
             processReferences("object_refs", objectNode, cache, BundleableRef::new);
         }
+        if (type.equals("relationship")) {
+            processRequiredReference("source_ref", objectNode, cache, BundleableRef::new);
+            processRequiredReference("target_ref", objectNode, cache, BundleableRef::new);
+        }
         if (type.equals("sighting")) {
-            processRequiredReference("sighting_of_ref", objectNode, cache, (i, b) -> new SdoObjectRef(i, (SdoObject) b));
             processReferences("where_sighted_refs", objectNode, cache, (i, b) -> new SdoObjectRef(i, (SdoObject) b));
             processReferences("observed_data_refs", objectNode, cache, (i, b) -> new SdoObjectRef(i, (SdoObject) b));
+            processRequiredReference("sighting_of_ref", objectNode, cache, (i, b) -> new SdoObjectRef(i, (SdoObject) b));
         }
 
         try {
@@ -236,8 +231,9 @@ public class Parser {
             BiFunction<String,Bundleable,ObjectRef<T>> refFactory) throws Exception {
         var refNode = containerNode.get(fieldName);
         if (refNode != null) {
-            var obj = resolveReference(refNode.asText(), cache);
-            containerNode.putPOJO(fieldName, refFactory.apply(obj.getId(), obj));
+            var obj = resolveReference(refNode.asText(), cache); // can return null
+            var ref = refFactory.apply(refNode.asText(), obj);
+            containerNode.putPOJO(fieldName, ref);
         } else {
             if (required) {
                 var type = containerNode.get(TYPE).asText();
@@ -303,9 +299,16 @@ public class Parser {
             }
             list.forEach(refs::addPOJO);
         }
-
     }
 
+    /**
+     * Adds the provided {@code jsonNode} into the provided {@code cache}. If the jsonnode is an {@code Arraynode},
+     * then it's elements are added instead.
+     *
+     * @param jsonNode The json node to add or the container of the nodes to add
+     * @param cache the cache to add to
+     * @return the cache for chaining
+     */
     private static ObjectCache addToCache(JsonNode jsonNode, ObjectCache cache) {
         if (jsonNode instanceof ArrayNode objectsNode) {
             for (JsonNode objectNode : objectsNode) {

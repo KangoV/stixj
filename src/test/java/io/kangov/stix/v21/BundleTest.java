@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
+import java.util.concurrent.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -132,21 +133,43 @@ public class BundleTest {
         assertThat(actual).isSameAs(expected);
     }
 
-    @Disabled
     @Test
     void testPerformance() {
-        var count = 100_000;
+        var executor = Executors.newWorkStealingPool(6);
+        var count = 10_000;
         var start = Instant.now();
         for (int i=0; i< count; i++) {
-            parser.writeBundle(BUNDLE_OBJECT);
+            executor.execute(() -> parser.writeBundle(BUNDLE_OBJECT));
         }
+        shutdownAndAwaitTermination(executor);
         var finish = Instant.now();
-        log.info("Completed {} iterations in {} ms", count, Duration.between(start, finish).toMillis());
+        var duration = Duration.between(start, finish);
+        log.info("Completed {} iterations in {} ms (~{}/ms)", count, duration.toMillis(), count/duration.toMillis());
     }
 
     private <T extends SdoObject> IdentityRef getCreatedByRef(T t) {
         var opt = t.getCreatedByRef();
         //assertThat(opt).isPresent();
         return opt; //.get();
+    }
+
+    static void shutdownAndAwaitTermination(ExecutorService pool) {
+        // Disable new tasks from being submitted
+        pool.shutdown();
+        try {
+            // Wait a while for existing tasks to terminate
+            if (!pool.awaitTermination(60, TimeUnit.SECONDS)) {
+                // Cancel currently executing tasks forcefully
+                pool.shutdownNow();
+                // Wait a while for tasks to respond to being cancelled
+                if (!pool.awaitTermination(60, TimeUnit.SECONDS))
+                    System.err.println("Pool did not terminate");
+            }
+        } catch (InterruptedException ex) {
+            // (Re-)Cancel if current thread also interrupted
+            pool.shutdownNow();
+            // Preserve interrupt status
+            Thread.currentThread().interrupt();
+        }
     }
 }

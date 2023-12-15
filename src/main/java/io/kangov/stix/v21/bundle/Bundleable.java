@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.*;
 import io.kangov.stix.v21.common.property.*;
 import io.kangov.stix.v21.StixObject;
 import io.kangov.stix.v21.custom.CustomObject;
+import io.kangov.stix.v21.custom.GenericCustomObject;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.NotNull;
 import org.immutables.value.Value;
@@ -20,8 +21,8 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
     use = JsonTypeInfo.Id.NAME,
     include = JsonTypeInfo.As.EXISTING_PROPERTY,
     property = "type",
-    visible = true //,
-//    defaultImpl = CustomObject.class
+    visible = true,
+    defaultImpl = GenericCustomObject.class
 )
 @JsonInclude(value = NON_EMPTY, content= NON_EMPTY)
 @Introspected

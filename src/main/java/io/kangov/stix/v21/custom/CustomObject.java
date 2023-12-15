@@ -3,18 +3,36 @@ package io.kangov.stix.v21.custom;
 import com.fasterxml.jackson.annotation.*;
 import io.kangov.stix.v21.bundle.Bundleable;
 import io.kangov.stix.v21.common.property.*;
+import io.kangov.stix.v21.core.Relateable;
 import io.kangov.stix.validation.constraints.StartsWith;
+import org.immutables.value.Value;
 
 import java.util.Map;
 
 public interface CustomObject extends
     Bundleable,
+    Relateable,
     SpecVersion,
     CreatedByRef,
-    GranularMarkings,
-    ObjectMarkingRefs,
-    ExternalReferences,
-    Created {
+    Created,
+    Modified,
+    Revoked,
+    Labels,
+    Confidence,
+    Lang,
+    Defanged,
+    ExternalReferences {
+
+    String SPEC_VERSION = "spec_version";
+    String CREATED_BY_REF = "created_by_ref";
+    String CREATED = "created";
+    String MODIFIED = "modified";
+    String REVOKED = "revoked";
+    String LABELS = "labels";
+    String CONFIDENCE = "confidence";
+    String LANG = "lang";
+    String DEFANGED = "defanged";
+    String EXTERNAL_REFERENCE = "external_references";
 
     @Override
     @StartsWith("x-")
@@ -23,10 +41,5 @@ public interface CustomObject extends
     @Override
     @StartsWith("x-")
     String getId();
-
-    //@TODO Future enhancement to create a custom deserializer that will support the difference between x_ props and the CustomObjectProperties()
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @JsonUnwrapped @JsonAnyGetter
-    Map< /* @Length(lower = 3, upper = 250, message = "STIX Custom Properties must have a min key length of 3 and max of 250") */ String, Object> getCustomObjectProperties();
 
 }

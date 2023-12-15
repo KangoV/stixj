@@ -28,8 +28,4 @@ public record SdoObjectRef(String id, SdoObject object) implements ObjectRef<Sdo
     public static SdoObjectRef createSdoObjectRef(String id)     { return create(id); }
     public static SdoObjectRef createSdoObjectRef(SdoObject obj) { return create(obj); }
 
-    public String id() {
-        return object() != null ? object().getId() : id();
-    }
-
 }

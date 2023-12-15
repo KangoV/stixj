@@ -15,7 +15,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 public interface Defanged {
 
     @NonNull
-    @JsonProperty("revoked")
+    @JsonProperty("defanged")
     @JsonInclude(value = NON_EMPTY, content= NON_EMPTY)
     @JsonPropertyDescription("""
         This property defines whether or not the data contained within the object has been defanged.
@@ -24,7 +24,7 @@ public interface Defanged {
         """)
     @Value.Default
     @Redactable
-    default Boolean getRevoked(){
+    default Boolean getDefanged(){
         return Boolean.FALSE;
     }
 

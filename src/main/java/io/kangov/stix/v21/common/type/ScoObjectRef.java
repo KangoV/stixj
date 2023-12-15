@@ -28,8 +28,4 @@ public record ScoObjectRef(String id, ScoObject object) implements ObjectRef<Sco
     public static ScoObjectRef createScoObjectRef(String id)     { return create(id); }
     public static ScoObjectRef createScoObjectRef(ScoObject obj) { return create(obj); }
 
-    public String id() {
-        return object() != null ? object().getId() : id();
-    }
-
 }
