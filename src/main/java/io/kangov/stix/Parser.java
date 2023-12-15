@@ -164,7 +164,7 @@ public class Parser {
         log.debug("Processing {}", id);
 
         var cacheEntry = cache.get(id);
-
+f
         // if we have a cache entry, and it has been processed, then return it
         if (cacheEntry != null) {
             log.debug("Found cached entry for {}", id);
@@ -216,7 +216,24 @@ public class Parser {
         processReference(fieldName, containerNode, cache, false, refFactory);
     }
 
-    private <T extends Bundleable> void processReference(String fieldName, ObjectNode containerNode, ObjectCache cache, boolean required, BiFunction<String,Bundleable,ObjectRef<T>> refFactory) throws Exception {
+    /**
+     * Process a node named {@code fieldname} which is a child of the {@code containerNode}. The cache is first checked
+     * and an object is created and cached if necessary.
+     *
+     * @param fieldName The name of the child node
+     * @param containerNode The containing node
+     * @param cache to use to find a existing object
+     * @param required true if the {@code fieldName} MUST exist
+     * @param refFactory The factory to create the correct type of reference object
+     * @param <T> The type of reference
+     * @throws Exception is thrown if the {@code fieldName} node is not found and {@code required} is true
+     */
+    private <T extends Bundleable> void processReference(
+            String fieldName,
+            ObjectNode containerNode,
+            ObjectCache cache,
+            boolean required,
+            BiFunction<String,Bundleable,ObjectRef<T>> refFactory) throws Exception {
         var refNode = containerNode.get(fieldName);
         if (refNode != null) {
             var obj = resolveReference(refNode.asText(), cache);
@@ -230,6 +247,16 @@ public class Parser {
         }
     }
 
+    /**
+     * Returns a {@link Bundleable} instance retrieved from the provided {@code cache}. If the {@code JsonNode} within
+     * the found entry has not been processed, then it will be used to create the {@code Bundleable} object. The new
+     * object will then be added to the cache and returned.
+     *
+     * @param id The stix identifier of the entry to find in the cache
+     * @param cache The cache where pre and post JsonNodes are stored.
+     * @return a {@link Bundleable} instance retrieved from the provided {@code cache}
+     * @throws Exception if any exception occurs
+     */
     private Bundleable resolveReference(String id, ObjectCache cache) throws Exception {
         log.debug("processing forward reference: {}", id);
         Bundleable target = null;
@@ -245,7 +272,24 @@ public class Parser {
         return target;
     }
 
-    private <T extends Bundleable> void processReferences(String fieldName, JsonNode containerNode, ObjectCache cache, BiFunction<String,Bundleable,ObjectRef<T>> refFactory) throws Exception {
+    /**
+     * Processes an array of object references within the provided {@code containerNode} and {@code fieldname}.
+     * {@link ObjectRef} instances such as {@link SdoObjectRef} are used to store the object id and the actual object
+     * itself. This provides for the situation where a reference ID points to an object that is not included.
+     *
+     * @param fieldName The fieldname of the array node
+     * @param containerNode The node that containes the fieldname
+     * @param cache The cache to be used to search for previously deserialized objects.
+     * @param refFactory The bi-function used to generate the correct reference object
+     * @param <T> The type of object being referenced
+     * @throws Exception if an error occurs
+     * @see ObjectRef
+     */
+    private <T extends Bundleable> void processReferences(
+            String fieldName,
+            JsonNode containerNode,
+            ObjectCache cache,
+            BiFunction<String,Bundleable,ObjectRef<T>> refFactory) throws Exception {
         var refs = (ArrayNode) containerNode.get(fieldName);
         if (refs != null) {
             var list = new ArrayList<ObjectRef<T>>();
