@@ -1,5 +1,5 @@
 vocabs:
-  - name: identity-classes
+  - name: object-classes
     type: must
     values:
       - individual

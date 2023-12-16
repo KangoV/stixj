@@ -13,6 +13,6 @@
         <appender-ref ref="STDOUT" />
     </root>
 
-    <logger name="io.kangov.stix" level="debug" />
+    <logger name="io.kangov.stix" level="info" />
 
 </configuration>

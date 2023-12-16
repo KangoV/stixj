@@ -1,12 +1,13 @@
 plugins {
-    id 'io.micronaut.library' version '4.1.2'
+    id 'io.micronaut.library' version '4.2.1'
     id('maven-publish')
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id('pl.allegro.tech.build.axion-release') version "1.13.6"
+    id("com.adarshr.test-logger") version "2.0.0"
 }
 
 micronaut {
-    version("4.1.2")
+    version("4.2.1")
 }
 
 scmVersion {
@@ -34,48 +35,38 @@ repositories {
 
 dependencies {
 
-    // START -- Micronaut IOC minimum
+    annotationProcessor "org.immutables:value:2.10.0"
+    annotationProcessor "io.micronaut.validation:micronaut-validation-processor"
     annotationProcessor "io.micronaut:micronaut-inject-java"
+
     implementation "io.micronaut:micronaut-inject"
     implementation "io.micronaut:micronaut-runtime"
-    testImplementation "io.micronaut.test:micronaut-test-junit5"
-    testImplementation "org.junit.jupiter:junit-jupiter-engine:5.9.1"
-    // END
+    implementation "io.micronaut.validation:micronaut-validation"
 
-
-
-    annotationProcessor("org.immutables:value:2.9.2")
-    annotationProcessor("io.micronaut.validation:micronaut-validation-processor")
-    annotationProcessor("io.micronaut.serde:micronaut-serde-processor:2.4.0")
-
-    implementation("io.micronaut.validation:micronaut-validation")
-    implementation("io.micronaut.serde:micronaut-serde-jackson:2.4.0")
+//    implementation("io.micronaut.beanvalidation:micronaut-hibernate-validator")
 
     implementation platform("com.fasterxml.jackson:jackson-bom:2.15.2")
     implementation "com.fasterxml.jackson.core:jackson-annotations"
-    compileOnly "com.fasterxml.jackson.core:jackson-databind"
-//    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8"
-//    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
-//    implementation "com.fasterxml.jackson.module:jackson-module-parameter-names"
+    implementation "com.fasterxml.jackson.core:jackson-databind"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+    implementation "com.fasterxml.jackson.module:jackson-module-parameter-names"
 
-    implementation "org.immutables:value:2.9.2"
-    implementation "org.immutables:annotate:2.9.2"
-    implementation "org.immutables:serial:2.9.2"
-    implementation 'javax.validation:validation-api:2.0.1.Final'
-    implementation "jakarta.annotation:jakarta.annotation-api:2.1.0"
-//    implementation "org.hibernate.validator:hibernate-validator:6.0.13.Final"
-//    implementation "com.jayway.jsonpath:json-path:2.7.0"
-//    implementation "org.springframework:spring-expression:5.3.24"
-//    implementation "org.glassfish:javax.el:3.0.1-b09"
-//    implementation "am.ik.yavi:yavi:0.9.1"
-//    implementation("io.vertx:vertx-json-schema:4.4.0")
+    implementation "org.immutables:value:2.10.0"
+    implementation "org.immutables:annotate:2.10.0"
+    implementation "org.immutables:serial:2.10.0"
+
 //    implementation("com.networknt:json-schema-validator:1.0.76");
 
     runtimeOnly "ch.qos.logback:logback-classic:1.2.11"
+    runtimeOnly "org.yaml:snakeyaml"
 
 //    testImplementation "org.skyscreamer:jsonassert:1.5.1"
+    testImplementation "io.micronaut.test:micronaut-test-junit5"
     testImplementation "org.assertj:assertj-core:3.23.1"
     testImplementation 'net.andreinc:mockneat:0.4.8'
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:5.9.1"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:5.9.1"
 
 
 }
@@ -99,6 +90,27 @@ publishing {
         library(MavenPublication) {
             from components.java
         }
+    }
+}
+
+test {
+    useJUnitPlatform()
+    testlogger {
+        theme 'mocha'
+        showExceptions true
+        showStackTraces true
+        showFullStackTraces false
+        showCauses true
+        slowThreshold 2000
+        showSummary true
+        showSimpleNames false
+        showPassed true
+        showSkipped true
+        showFailed true
+        showStandardStreams false
+        showPassedStandardStreams true
+        showSkippedStandardStreams true
+        showFailedStandardStreams true
     }
 }
 
