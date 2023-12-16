@@ -50,17 +50,15 @@ public class MitreEnterpriseTest {
     }
 
     void assertDeser(URI uri) throws Exception {
+        log.info("Testing bundle: {}", uri);
         var json1 = load(uri);
-        log.info("Testing...");
         var obj1  = parser.readBundle(json1);
         var json2 = parser.writeBundle(obj1);
         var obj2  = parser.readBundle(json2);
         assertThat(obj1).isEqualTo(obj2);
-        log.info("Done");
     }
 
     static String load(URI uri) throws Exception {
-        log.info("Retrieving bundle from: {}", uri);
         var httpResponse = HTTP_CLIENT.send(newBuilder().uri(uri).GET().build(), ofInputStream());
         try (var body = httpResponse.body()) {
             return new String(body.readAllBytes());
