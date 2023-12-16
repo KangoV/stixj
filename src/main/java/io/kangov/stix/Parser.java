@@ -105,11 +105,11 @@ public class Parser {
     @SuppressWarnings("unchecked")
     public <T> @Valid T readObject(String str, Class<T> bundleable) {
         try {
-            log.debug("Deserializing {} to: {}", bundleable.getSimpleName(), str);
+            log.trace("Deserializing {} to: {}", bundleable.getSimpleName(), str);
             var node = objectMapper.readTree(str);
             var cache = addToCache(node, new ObjectCache());
             var obj = processNode((ObjectNode) node, cache);
-            log.debug("Deserialized {} to: {}", bundleable.getSimpleName(), obj);
+            log.trace("Deserialized {} to: {}", bundleable.getSimpleName(), obj);
             return (T) obj;
         } catch (Exception e) {
             throw new ParseException("Failed to deserialize a " + bundleable.getSimpleName(), e);
@@ -118,11 +118,11 @@ public class Parser {
 
     public @Valid Bundle readBundle(String str) {
         try {
-            log.debug("Deserializing {} from:\n{}", BUNDLE, str);
+            log.trace("Deserializing {} from:\n{}", BUNDLE, str);
 
             var obj = objectMapper.readTree(str);
 
-            log.debug("Read {} into JsonNode:\n{}", BUNDLE, obj);
+            log.trace("Read {} into JsonNode:\n{}", BUNDLE, obj);
 
             if (obj instanceof ObjectNode bundleNode) {
 
@@ -141,7 +141,7 @@ public class Parser {
                 }
                 var bundle = builder.build();
 
-                log.debug("Deserialized {} to:\n{}", BUNDLE, bundle);
+                log.trace("Deserialized {} to:\n{}", BUNDLE, bundle);
                 return bundle;
 
             } else {
@@ -155,9 +155,9 @@ public class Parser {
 
     private String write(Object object) {
         try {
-            log.debug("Serializing {}", object);
+            log.trace("Serializing {}", object);
             var str = objectMapper.writeValueAsString(object);
-            log.debug("Serialized {} to: {}", object.getClass().getSimpleName(), str);
+            log.trace("Serialized {} to: {}", object.getClass().getSimpleName(), str);
             return str;
         } catch (Exception e) {
             throw new ParseException("Failed to serialize a " + object.getClass().getSimpleName(), e);
@@ -255,17 +255,21 @@ public class Parser {
             ObjectCache cache,
             boolean required,
             BiFunction<String,Bundleable,ObjectRef<T>> refFactory) throws Exception {
+        var containerId = containerNode.get("id").asText();
+        log.debug("Processing {} in {}", fieldName, containerId);
         var refNode = containerNode.get(fieldName);
         if (refNode != null) {
+            log.debug("Property {} found in {}", fieldName, containerId);
             var obj = resolveReference(refNode.asText(), cache); // can return null
             var ref = refFactory.apply(refNode.asText(), obj);
+            log.debug("Replacing field {} in object {} with an ObjectRef instance", fieldName, containerId);
+            containerNode.remove(fieldName);
             containerNode.putPOJO(fieldName, ref);
         } else {
             if (required) {
-                var type = containerNode.get(TYPE).asText();
-                var id = containerNode.get(ID).asText();
-                throw new ParseException("Missing required attribute for [" + type + ":(" + id + ")]: " + fieldName);
+                throw new ParseException("Missing required attribute ["+fieldName+"] in "+containerId);
             }
+            log.debug("Property {} not found in {}, skipping", fieldName, containerId);
         }
     }
 
@@ -280,15 +284,18 @@ public class Parser {
      * @throws Exception if any exception occurs
      */
     private Bundleable resolveReference(String id, ObjectCache cache) throws Exception {
-        log.debug("processing forward reference: {}", id);
+        log.debug("Resolving reference: {}", id);
         Bundleable target = null;
         if (cache.contains(id)) {
             var entry = cache.get(id);
             target = entry.bundleable();
             if (target == null) {
+                log.debug("Cache entry {} found but not deserialised yet", id);
                 // cache entry not processed yet
                 target = processNode(entry.objectNode(), cache);
                 cache.put(ObjectCache.Entry.create(target));
+            } else {
+                log.debug("Cache entry {} found returning previously deserialised object", id);
             }
         }
         return target;
