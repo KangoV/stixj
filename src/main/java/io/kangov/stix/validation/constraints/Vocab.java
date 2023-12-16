@@ -1,0 +1,38 @@
+package io.kangov.stix.validation.constraints;
+
+import io.kangov.stix.v21.enums.Vocabs;
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
+
+import java.lang.annotation.*;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
+@Retention(RUNTIME)
+@Repeatable(Vocab.List.class)
+@Documented
+@Constraint(validatedBy = { /* VocabValidator.class */ })
+public @interface Vocab {
+
+    enum InclusionType {
+        MUST,
+        SHOULD
+    }
+
+    Vocabs.Vocab value();
+    InclusionType inclusion() default InclusionType.SHOULD;
+
+    String message() default "{io.kangov.stix.validation.constraints.Vocab.message})"; // (2)
+    Class<?>[] groups() default { };
+    Class<? extends Payload>[] payload() default { };
+
+    @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
+    @Retention(RUNTIME)
+    @Documented
+    @interface List {
+        Vocab[] value(); // (3)
+    }
+
+}

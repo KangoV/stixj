@@ -1,0 +1,3 @@
+# Fireeye's Poison Ivy Report
+
+Fireeye's threat report on Poison Ivy covers how this remote access tool (RAT) was used by different campaigns and threat actors. In this converted report, there are several variants of PIVY malware represented by the Malware SDO, as well as Campaign, Threat Actor, Attack Pattern, and Vulnerability objects. Relationship SROs help link the malware variants to the campaigns and threat actors and demonstrate the vulnerabilities PIVY exploits. The JSON representation is available for download.

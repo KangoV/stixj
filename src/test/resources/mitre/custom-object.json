@@ -1,0 +1,36 @@
+{
+  "type": "bundle",
+  "id": "bundle--372f553b-f787-414a-a7e1-f0239732dc11",
+  "spec_version": "2.1",
+  "objects": [
+    {
+      "type": "x-mitre-collection",
+      "id": "x-mitre-collection--1f5f1533-f617-4ca8-9ab4-6a02367fa019",
+      "spec_version": "2.1",
+      "x_mitre_attack_spec_version": "2.1.0",
+      "name": "Enterprise ATT&CK",
+      "x_mitre_version": "1.0",
+      "description": "ATT&CK for Enterprise provides a knowledge base of real-world adversary behavior targeting traditional enterprise networks. ATT&CK for Enterprise covers the following platforms: Windows, macOS, Linux, PRE, Office 365, Google Workspace, IaaS, Network, and Containers.",
+      "created_by_ref": "identity--c78cb6e5-0c4b-4611-8297-d1b8b55e40b5",
+      "created": "2018-01-17T12:56:55.080Z",
+      "modified": "2018-01-17T12:56:55.080Z",
+      "object_marking_refs": [
+        "marking-definition--fa42a846-8d90-4e51-bc29-71d5b4802168"
+      ],
+      "x_mitre_contents": [
+        {
+          "object_ref": "course-of-action--4f170666-7edb-4489-85c2-9affa28a72e0",
+          "object_modified": "2018-01-17T12:56:55.080Z"
+        },
+        {
+          "object_ref": "attack-pattern--01df3350-ce05-4bdf-bdf8-0a919a66d4a8",
+          "object_modified": "2018-01-17T12:56:55.080Z"
+        },
+        {
+          "object_ref": "course-of-action--c61fee9f-16fb-4f8c-bbf0-869093fcd4a6",
+          "object_modified": "2018-01-17T12:56:55.080Z"
+        }
+      ]
+    }
+  ]
+}
