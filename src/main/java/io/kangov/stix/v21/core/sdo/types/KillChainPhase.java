@@ -30,6 +30,10 @@ import java.util.function.UnaryOperator;
 @SuppressWarnings("unused")
 @Introspected
 
+/**
+ * The kill-chain-phase represents a phase in a kill chain, which describes the various phases an attacker may undertake
+ * in order to achieve their objectives.
+ */
 public interface KillChainPhase extends StixCustomProperties, Serializable {
 
     /**
@@ -50,10 +54,22 @@ public interface KillChainPhase extends StixCustomProperties, Serializable {
         return builder.apply(builder()).build();
     }
 
+    /**
+     * The name of the kill chain. The value of this property SHOULD be all lowercase and SHOULD use hyphens instead of
+     * spaces or underscores as word separators.
+     *
+     * @return the name of this kill chain phase
+     */
     @NotBlank
     @JsonProperty("kill_chain_name")
     String killChainName();
 
+    /**
+     * The name of the phase in the kill chain. The value of this property SHOULD be all lowercase and SHOULD use
+     * hyphens instead of spaces or underscores as word separators.
+     *
+     * @return the name of the phase in the kill chain
+     */
     @NotBlank
     @JsonProperty("phase_name")
     String phaseName();

@@ -16,12 +16,10 @@ import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 /**
- * external-reference
- * <p>
- * External references are used to describe pointers to information represented outside STIX.
- * 
+ * External references are used to describe pointers to information represented outside of STIX. For example, a Malware
+ * object could use an external reference to indicate an ID for that malware in an external database or a report could
+ * use references to represent source material.
  */
-
 @Value.Immutable
 @Serial.Version(1L)
 @JsonSerialize(as = ExternalReference.class)
