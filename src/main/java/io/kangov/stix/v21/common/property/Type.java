@@ -1,7 +1,6 @@
 package io.kangov.stix.v21.common.property;
 
 import com.fasterxml.jackson.annotation.*;
-import io.kangov.stix.validation.constraints.Range;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -17,7 +16,7 @@ public interface Type {
      * @return the type of this object
      */
     @JsonProperty("type")
-    @Pattern(regexp="^\\-?[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*\\-?$")
+    @Pattern(regexp="^-?[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*-?$")
     @Size(min=3, max=250)
     @NotBlank
     @Value.Default

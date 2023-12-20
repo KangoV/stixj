@@ -12,8 +12,8 @@ public interface MdoObject
             CreatedByRef,
             Created,
             ExternalReferences,
-            // TODO: object marking refs
-            // TODO: granular markings
+            ObjectMarkingRefs,
+            GranularMarkings,
             Extensions {
 
     String CREATED_BY_REF     = "created_by_ref";

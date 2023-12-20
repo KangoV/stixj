@@ -1,4 +1,4 @@
-package io.kangov.stix.v21;
+package io.kangov.stix.v21.core;
 
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;

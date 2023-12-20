@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.util.ImmutableStyle;
-import io.kangov.stix.v21.common.property.StixCustomProperties;
+import io.kangov.stix.v21.common.property.CustomProperties;
 import io.kangov.stix.validation.constraints.Vocab;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.NotBlank;
@@ -37,7 +37,7 @@ import static io.kangov.stix.v21.enums.Vocabs.Vocab.WINDOWS_REGISTRY_DATATYPE;
 @Introspected
 //@JsonTypeName("windows-registry-value-type")
 
-public interface WindowsRegistryValueType extends StixCustomProperties, Serializable {
+public interface WindowsRegistryValueType extends CustomProperties, Serializable {
 
     /**
      * Exposes the generated builder outside this package

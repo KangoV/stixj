@@ -1,7 +1,7 @@
 package io.kangov.stix.v21.core.sco.extension;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import io.kangov.stix.v21.common.property.StixCustomProperties;
+import io.kangov.stix.v21.common.property.CustomProperties;
 
 /**
  * Interface to tag Cyber Observable Extension classes
@@ -14,5 +14,5 @@ import io.kangov.stix.v21.common.property.StixCustomProperties;
 public interface CyberObservableExtension
         extends
             CyberObservableExtensionCommonProperties,
-            StixCustomProperties {
+    CustomProperties {
 }

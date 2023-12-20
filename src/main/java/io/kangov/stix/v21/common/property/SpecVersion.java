@@ -1,7 +1,6 @@
 package io.kangov.stix.v21.common.property;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import jakarta.validation.constraints.NotBlank;
 import org.immutables.value.Value;
 

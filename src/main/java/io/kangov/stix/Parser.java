@@ -9,6 +9,7 @@ import io.kangov.stix.v21.bundle.Bundleable;
 import io.kangov.stix.v21.common.type.*;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.v21.core.sdo.objects.Identity;
+import io.kangov.stix.v21.meta.mdo.MarkingDefinition;
 import io.micronaut.validation.Validated;
 import io.micronaut.validation.validator.Validator;
 import jakarta.annotation.Nonnull;
@@ -36,6 +37,7 @@ public class Parser {
     public static final String WHERE_SIGHTED_REFS = "where_sighted_refs";
     public static final String OBSERVED_DATA_REFS = "observed_data_refs";
     public static final String SIGHTING_OF_REF = "sighting_of_ref";
+    public static final String OBJECT_MARKING_REFS = "object_marking_refs";
 
     private static class ObjectCache implements Iterable<ObjectCache.Entry> {
 
@@ -193,7 +195,7 @@ public class Parser {
          */
 
         processOptionalReference(CREATED_BY_REF, objectNode, cache, (i, b) -> new IdentityRef(i, (Identity) b));
-
+        processReferences(OBJECT_MARKING_REFS, objectNode, cache, (i, b) -> new MarkingDefinitionRef(i, (MarkingDefinition) b));
 
         if (type.equals(REPORT)) {
             processReferences(OBJECT_REFS, objectNode, cache, BundleableRef::new);

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.util.ImmutableStyle;
-import io.kangov.stix.v21.common.property.StixCustomProperties;
+import io.kangov.stix.v21.common.property.CustomProperties;
 import io.micronaut.core.annotation.Introspected;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
@@ -38,7 +38,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 //    thenExp = "getBody().isPresent() == true || getBodyRawRef().isPresent() == true",
 //    errorMessage = "One of body OR body_raw_ref MUST be included.")
 
-public interface MimePart extends StixCustomProperties, Serializable {
+public interface MimePart extends CustomProperties, Serializable {
 
     /**
      * Exposes the generated builder outside this package

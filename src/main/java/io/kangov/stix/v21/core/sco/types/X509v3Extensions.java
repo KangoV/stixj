@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.util.ImmutableStyle;
-import io.kangov.stix.v21.common.property.StixCustomProperties;
+import io.kangov.stix.v21.common.property.CustomProperties;
 import io.micronaut.core.annotation.Introspected;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
@@ -61,7 +61,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 //        """,
 //    errorMessage = "At least 1 property must be provided")
 
-public interface X509v3Extensions extends StixCustomProperties, Serializable {
+public interface X509v3Extensions extends CustomProperties, Serializable {
 
     /**
      * Exposes the generated builder outside this package

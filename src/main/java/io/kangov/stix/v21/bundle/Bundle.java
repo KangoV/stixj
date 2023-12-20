@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.util.ImmutableStyle;
+import io.kangov.stix.v21.StixObject;
 import io.kangov.stix.v21.common.property.*;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.Size;
@@ -16,6 +17,9 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static io.kangov.stix.v21.StixObject.ID;
+import static io.kangov.stix.v21.StixObject.TYPE;
 
 /**
  * bundle
@@ -30,20 +34,14 @@ import java.util.stream.Stream;
 @JsonSerialize(as = Bundle.class)
 @JsonDeserialize(builder = Bundle.Builder.class)
 @JsonPropertyOrder({
-    "type",
-    "id",
+    TYPE,
+    ID,
     "spec_version",
     "objects"})
 @Introspected
 @SuppressWarnings({"unused", "unchecked"})
 
-public interface Bundle
-    extends
-        Serializable,
-        Id,
-        Type,
-        SpecVersion,
-        StixCustomProperties {
+public interface Bundle extends StixObject, SpecVersion {
 
     /**
      * Exposes the generated builder outside this package

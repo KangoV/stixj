@@ -1,9 +1,7 @@
-package io.kangov.stix.v21;
+package io.kangov.stix.v21.bundle;
 
 import io.kangov.stix.Parser;
 import io.kangov.stix.Stix;
-import io.kangov.stix.v21.bundle.Bundle;
-import io.kangov.stix.v21.bundle.Bundleable;
 import io.kangov.stix.v21.common.type.IdentityRef;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.v21.core.sdo.objects.Identity;

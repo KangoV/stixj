@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.util.ImmutableStyle;
-import io.kangov.stix.v21.common.property.StixCustomProperties;
+import io.kangov.stix.v21.common.property.CustomProperties;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.NotBlank;
 import org.immutables.serial.Serial;
@@ -34,7 +34,7 @@ import java.util.function.UnaryOperator;
  * The kill-chain-phase represents a phase in a kill chain, which describes the various phases an attacker may undertake
  * in order to achieve their objectives.
  */
-public interface KillChainPhase extends StixCustomProperties, Serializable {
+public interface KillChainPhase extends CustomProperties, Serializable {
 
     /**
      * Exposes the generated builder outside this package

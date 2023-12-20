@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.util.ImmutableStyle;
-import io.kangov.stix.v21.common.property.StixCustomProperties;
+import io.kangov.stix.v21.common.property.CustomProperties;
 import io.kangov.stix.validation.constraints.Range;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
@@ -33,7 +33,7 @@ import java.util.function.UnaryOperator;
 })
 @ImmutableStyle
 
-public interface ExternalReference extends StixCustomProperties, Serializable {
+public interface ExternalReference extends CustomProperties, Serializable {
 
     /**
      * Exposes the generated builder outside this package

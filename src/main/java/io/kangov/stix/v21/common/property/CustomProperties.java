@@ -24,7 +24,7 @@ import java.util.Map;
  * Deprecated
  */
 @Deprecated(since = "2.1")
-public interface StixCustomProperties {
+public interface CustomProperties {
 
     /**
      * Custom Properties for STIX Objects.

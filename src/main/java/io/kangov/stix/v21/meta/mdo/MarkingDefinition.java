@@ -18,13 +18,20 @@ import java.util.function.UnaryOperator;
 import static io.kangov.stix.v21.common.type.IdentityRef.createIdentityRef;
 
 /**
- * <p>Builder Required Fields:</p>
- * <ol>
- *     <li>{@link MarkingDefinition#getDefinitionType()} - (A helper is in-place for this field that will pre-populate
- *         the value based on the specific Marking Object, which makes this field essentially optional).</li>
- *     <li>{@link MarkingDefinition#getDefinition()}  - the Marking Object.  Two objects are currently supported:
- *         {@link Tlp} and {@link io.kangov.stix.v21.meta.mdo.objects.Statement}.</li>
- * </ol>
+ *
+ * The marking-definition object represents a specific marking. Data markings typically represent handling or sharing
+ * requirements for data and are applied in the object_marking_refs and granular_markings properties on STIX Objects,
+ * which reference a list of IDs for marking-definition objects.
+ * <p>
+ * Two marking definition types are defined in this specification: TLP, to capture TLP markings, and Statement, to
+ * capture text marking statements. In addition, it is expected that the FIRST Information Exchange Policy (IEP) will be
+ * included in a future version once a machine-usable specification for it has been defined.
+ * <p>
+ * Unlike other STIX Objects, Marking Definition objects cannot be versioned because it would allow for indirect changes
+ * to the markings on a STIX Object. For example, if a Statement marking is changed from "Reuse Allowed" to
+ * "Reuse Prohibited", all STIX Objects marked with that Statement marking would effectively have an updated marking
+ * without being updated themselves. Instead, a new Statement marking with the new text should be created and the marked
+ * objects updated to point to the new marking.
  */
 @Value.Immutable
 @Serial.Version(1L)
@@ -70,10 +77,22 @@ public interface MarkingDefinition extends MdoObject {
         return builder.apply(builder()).build();
     }
 
+    /**
+     * The definition_type property identifies the type of Marking Definition. The value of the definition_type property
+     * SHOULD be one of {@code statement} or {@code tlp}
+     *
+     * @return the definition type
+     */
     @NotBlank
     @JsonProperty("definition_type")
     String getDefinitionType();
 
+    /**
+     * The definition property contains the marking object itself (e.g., the TLP marking as defined in section 7.2.1.4,
+     * the Statement marking as defined in section 7.2.1.3, or some other marking definition defined elsewhere).
+     *
+     * @return the marking object
+     */
     @NotNull
     @JsonProperty("definition")
     @JsonTypeInfo(

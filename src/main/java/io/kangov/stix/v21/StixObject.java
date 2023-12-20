@@ -17,7 +17,7 @@ public interface StixObject
         Serializable,
         Id,
         Type,
-        StixCustomProperties {
+    CustomProperties {
 
     String TYPE = "type";
     String ID = "id";

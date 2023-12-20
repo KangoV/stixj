@@ -1,7 +1,6 @@
 package io.kangov.stix.v21.common.type;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
@@ -9,6 +8,7 @@ import io.kangov.stix.v21.bundle.Bundleable;
 
 import java.io.IOException;
 
+@SuppressWarnings("unused")
 @JsonSerialize(using = BundleableRef.Serializer.class)
 public record BundleableRef(String id, Bundleable object) implements ObjectRef<Bundleable> {
 

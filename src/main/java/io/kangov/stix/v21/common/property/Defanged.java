@@ -21,7 +21,7 @@ public interface Defanged {
      * <p>
      * This property MUST NOT be used on any STIX Objects other than SCOs.
      *
-     * @return
+     * @return true if the data contained within the object has been defanged.
      */
     @NonNull
     @JsonProperty("defanged")
