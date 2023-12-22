@@ -5,9 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.util.ImmutableStyle;
-import io.kangov.stix.v21.common.type.IdentityRef;
 import io.kangov.stix.v21.core.sdo.objects.Identity;
-import io.kangov.stix.v21.meta.mdo.objects.Tlp;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.immutables.serial.Serial;
@@ -15,7 +13,7 @@ import org.immutables.value.Value;
 
 import java.util.function.UnaryOperator;
 
-import static io.kangov.stix.v21.common.type.IdentityRef.createIdentityRef;
+import static io.kangov.stix.v21.common.type.ObjectRef.createObjectRef;
 
 /**
  *
@@ -64,8 +62,8 @@ public interface MarkingDefinition extends MdoObject {
      * methods defined on the generated implementation's Builder class.
      */
     class Builder extends MarkingDefinitionImpl.Builder {
-        public Builder createdByRef(String id) { return createdByRef(IdentityRef.createIdentityRef(id)); }
-        public Builder createdByRef(Identity identity) { return createdByRef(createIdentityRef(identity)); }
+        public Builder createdByRef(String id)         { return createdByRef(createObjectRef(id, Identity.class)); }
+        public Builder createdByRef(Identity identity) { return createdByRef(createObjectRef(identity)); }
     }
 
     static MarkingDefinition create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }

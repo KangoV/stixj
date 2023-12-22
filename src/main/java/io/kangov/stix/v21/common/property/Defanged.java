@@ -1,6 +1,7 @@
 package io.kangov.stix.v21.common.property;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kangov.stix.redaction.Redactable;
 import io.micronaut.core.annotation.NonNull;
 import org.immutables.value.Value;

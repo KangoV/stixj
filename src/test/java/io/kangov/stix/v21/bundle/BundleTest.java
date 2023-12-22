@@ -2,7 +2,7 @@ package io.kangov.stix.v21.bundle;
 
 import io.kangov.stix.Parser;
 import io.kangov.stix.Stix;
-import io.kangov.stix.v21.common.type.IdentityRef;
+import io.kangov.stix.v21.common.type.ObjectRef;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.v21.core.sdo.objects.Identity;
 import io.kangov.stix.v21.core.sdo.objects.Indicator;
@@ -93,7 +93,7 @@ public class BundleTest {
     );
 
     private static final Bundleable indicator = Indicator.create(i -> i
-        .createdByRef(new IdentityRef(identity.getId(), identity))
+        .createdByRef(ObjectRef.createObjectRef(identity))
         .addIndicatorType("malicious-activity")
         .name("Poison Ivy Malware")
         .description("This file is part of Poison Ivy")
@@ -128,7 +128,8 @@ public class BundleTest {
         var bundle = parser.readBundle(BUNDLE_STRING);
         assertThat(bundle).isNotNull();
         var actual = bundle.stream(Identity.class).findFirst().get();
-        var expected = bundle.stream(Indicator.class).findFirst().get().getCreatedByRef().object();
+        var indicator = bundle.stream(Indicator.class).findFirst().get();
+        var expected = indicator.getCreatedByRef().object().get();
         assertThat(actual).isSameAs(expected);
     }
 
@@ -146,11 +147,11 @@ public class BundleTest {
         log.info("Completed {} iterations in {} ms (~{}/ms)", count, duration.toMillis(), count/duration.toMillis());
     }
 
-    private <T extends SdoObject> IdentityRef getCreatedByRef(T t) {
-        var opt = t.getCreatedByRef();
-        //assertThat(opt).isPresent();
-        return opt; //.get();
-    }
+//    private <T extends Identity> ObjectRef<Identity> getCreatedByRef(T t) {
+//        var opt = t.getCreatedByRef();
+//        //assertThat(opt).isPresent();
+//        return opt; //.get();
+//    }
 
     static void shutdownAndAwaitTermination(ExecutorService pool) {
         // Disable new tasks from being submitted

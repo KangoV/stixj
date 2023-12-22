@@ -5,10 +5,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.util.ImmutableStyle;
-import io.kangov.stix.v21.common.type.IdentityRef;
-import io.kangov.stix.v21.common.type.SdoObjectRef;
+import io.kangov.stix.v21.common.type.ObjectRef;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.v21.core.sdo.objects.Identity;
+import io.kangov.stix.v21.core.sdo.objects.ObservedData;
 import io.kangov.stix.v21.core.sro.SroObject;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -63,12 +63,12 @@ public interface Sighting extends SroObject {
      * methods defined on the generated implementation's Builder class.
      */
     class Builder extends SightingImpl.Builder {
-        public Builder createdByRef(String id)           { return createdByRef(IdentityRef.create(id)); }
-        public Builder createdByRef(Identity identity)   { return createdByRef(IdentityRef.create(identity)); }
-        public Builder sightingOfRef(String id)          { return sightingOfRef(new SdoObjectRef(id, null)); }
-        public Builder sightingOfRef(SdoObject obj)      { return sightingOfRef(new SdoObjectRef(obj.getId(), obj)); }
-        public Builder addObservedDataRef(String id)     { return addObservedDataRef(new SdoObjectRef(id, null)); }
-        public Builder addObservedDataRef(SdoObject obj) { return addObservedDataRef(new SdoObjectRef(obj.getId(), obj)); }
+        public Builder createdByRef(String id)         { return createdByRef(ObjectRef.createObjectRef(id, Identity.class)); }
+        public Builder createdByRef(Identity identity) { return createdByRef(ObjectRef.createObjectRef(identity)); }
+        public Builder sightingOfRef(String id)          { return sightingOfRef(ObjectRef.createObjectRef(id, SdoObject.class)); }
+        public Builder sightingOfRef(SdoObject obj)      { return sightingOfRef(ObjectRef.createObjectRef(obj)); }
+        public Builder addObservedDataRef(String id)     { return addObservedDataRef(ObjectRef.createObjectRef(id, ObservedData.class)); }
+        public Builder addObservedDataRef(ObservedData obj) { return addObservedDataRef(ObjectRef.createObjectRef(obj)); }
     }
 
     static Sighting create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
@@ -94,15 +94,15 @@ public interface Sighting extends SroObject {
 
     @JsonProperty("sighting_of_ref")
     @Redactable(useMask = true)
-    SdoObjectRef getSightingOfRef();
+    ObjectRef<SdoObject> getSightingOfRef();
 
     @JsonProperty("observed_data_refs") @JsonInclude(NON_EMPTY)
     @Redactable
-    Set<SdoObjectRef> getObservedDataRefs();
+    Set<ObjectRef<ObservedData>> getObservedDataRefs();
 
     @JsonProperty("where_sighted_refs") @JsonInclude(NON_EMPTY)
     @Redactable
-    Set<SdoObjectRef> getWhereSightedRefs();
+    Set<ObjectRef<SdoObject>> getWhereSightedRefs();
 
     @NotNull
     @JsonProperty("summary")

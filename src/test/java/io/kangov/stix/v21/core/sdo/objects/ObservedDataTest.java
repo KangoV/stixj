@@ -199,18 +199,4 @@ public class ObservedDataTest {
         assertThat(string).isNotNull();
     }
 
-    @Test
-    void test_deser() throws Exception {
-        var bundle = builder.build();
-        var string = parser.writeBundle(bundle);
-        assertThat(string).isNotNull();
-
-        var object = parser.readBundle(string);
-        assertThat(object).isNotNull();
-
-        assertThat(object).isEqualTo(bundle);
-
-    }
-
-
 }

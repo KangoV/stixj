@@ -1,9 +1,8 @@
 package io.kangov.stix.v21.common.property;
 
-import com.fasterxml.jackson.annotation.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.validation.constraints.*;
 import org.immutables.value.Value;
 
 public interface Type {

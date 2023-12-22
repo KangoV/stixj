@@ -7,7 +7,7 @@ import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.util.ImmutableStyle;
 import io.kangov.stix.v21.bundle.Bundleable;
 import io.kangov.stix.v21.common.type.ExternalReference;
-import io.kangov.stix.v21.common.type.IdentityRef;
+import io.kangov.stix.v21.common.type.ObjectRef;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.NotBlank;
@@ -70,8 +70,8 @@ public interface Note extends SdoObject {
         public Builder addExternalReference(UnaryOperator<ExternalReference.Builder> func) {
             return addExternalReference(func.apply(ExternalReference.builder()).build());
         }
-        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); }
-        public Builder createdByRef(Identity identity) { return createdByRef(IdentityRef.create(identity)); }
+        public Builder createdByRef(String id)         { return createdByRef(ObjectRef.createObjectRef(id, Identity.class)); }
+        public Builder createdByRef(Identity identity) { return createdByRef(ObjectRef.createObjectRef(identity)); }
     }
 
     static Note create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }

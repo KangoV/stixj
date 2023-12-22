@@ -1,8 +1,10 @@
 package io.kangov.stix.v21.common.property;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kangov.stix.redaction.Redactable;
-import io.kangov.stix.v21.common.type.IdentityRef;
+import io.kangov.stix.v21.common.type.ObjectRef;
+import io.kangov.stix.v21.core.sdo.objects.Identity;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 
@@ -20,7 +22,6 @@ public interface CreatedByRef {
     @JsonProperty("created_by_ref")
     @JsonInclude(value = NON_EMPTY, content = NON_EMPTY)
     @Redactable(useMask = true, redactionMask = "object--__REDACTED__")
-
-    IdentityRef getCreatedByRef();
+    ObjectRef<Identity> getCreatedByRef();
 
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.util.ImmutableStyle;
+import io.kangov.stix.v21.common.type.ObjectRef;
 import io.kangov.stix.v21.core.sdo.objects.Identity;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -13,8 +14,6 @@ import org.immutables.value.Value;
 
 import java.util.Set;
 import java.util.function.UnaryOperator;
-
-import static io.kangov.stix.v21.common.type.IdentityRef.createIdentityRef;
 
 @Value.Immutable 
 @Serial.Version(1L)
@@ -32,8 +31,8 @@ public interface GranularMarking extends MdoObject {
      * methods defined on the generated implementation's Builder class.
      */
     class Builder extends GranularMarkingImpl.Builder {
-        public Builder createdByRef(String id) { return createdByRef(createIdentityRef(id)); }
-        public Builder createdByRef(Identity identity) { return createdByRef(createIdentityRef(identity)); }
+        public Builder createdByRef(String id)         { return createdByRef(ObjectRef.createObjectRef(id, Identity.class)); }
+        public Builder createdByRef(Identity identity) { return createdByRef(ObjectRef.createObjectRef(identity)); }
     }
 
 

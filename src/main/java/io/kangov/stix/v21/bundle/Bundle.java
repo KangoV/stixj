@@ -5,13 +5,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.util.ImmutableStyle;
 import io.kangov.stix.v21.StixObject;
-import io.kangov.stix.v21.common.property.*;
+import io.kangov.stix.v21.common.property.SpecVersion;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.Size;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 
-import java.io.Serializable;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;

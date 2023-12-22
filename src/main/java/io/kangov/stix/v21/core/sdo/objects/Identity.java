@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.util.ImmutableStyle;
 import io.kangov.stix.v21.common.type.ExternalReference;
+import io.kangov.stix.v21.common.type.ObjectRef;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.validation.constraints.Vocab;
 import io.micronaut.core.annotation.Introspected;
@@ -74,6 +75,8 @@ public interface Identity extends SdoObject {
         public Builder roles(String ... roles) {
             return roles(Arrays.asList(roles));
         }
+        public Builder createdByRef(String id)         { return createdByRef(ObjectRef.createObjectRef(id, Identity.class)); }
+        public Builder createdByRef(Identity identity) { return createdByRef(ObjectRef.createObjectRef(identity)); }
     }
 
     static Identity create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }

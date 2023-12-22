@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.util.ImmutableStyle;
-import io.kangov.stix.v21.common.type.IdentityRef;
+import io.kangov.stix.v21.common.type.ObjectRef;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.v21.core.sdo.types.KillChainPhase;
 import io.kangov.stix.validation.constraints.Vocab;
@@ -78,8 +78,8 @@ public interface Infrastructure extends SdoObject {
         public Builder killChainPhase(UnaryOperator<KillChainPhase.Builder> func) {
             return addKillChainPhase(func.apply(KillChainPhase.builder()).build());
         }
-        public Builder createdByRef(String id) { return createdByRef(IdentityRef.create(id)); }
-        public Builder createdByRef(Identity identity) { return createdByRef(IdentityRef.create(identity)); }
+        public Builder createdByRef(String id)         { return createdByRef(ObjectRef.createObjectRef(id, Identity.class)); }
+        public Builder createdByRef(Identity identity) { return createdByRef(ObjectRef.createObjectRef(identity)); }
     }
 
     static Infrastructure create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }

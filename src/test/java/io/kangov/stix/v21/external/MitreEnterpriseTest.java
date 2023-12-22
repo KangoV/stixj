@@ -22,12 +22,14 @@ public class MitreEnterpriseTest {
 
     private static final Logger log = LoggerFactory.getLogger(MitreEnterpriseTest.class);
     private static final String PATH_TEMPLATE = "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack-%s.json";
-    private static final List<String> files = List.of(
-        "2.0", "1.0", "3.0", "4.0", "5.0", "5.1", "5.2", "6.0", "6.1", "6.2",
-        "6.3", "7.0", "7.1", "7.2", "8.0", "8.1", "8.2", "9.0", "10.0", "10.1",
-        "11.0", "11.1", "11.2", "11.3", "12.0", "12.1", "13.0", "13.1", "14.0",
-        "14.1"
-    );
+//    private static final List<String> files = List.of(
+//        "2.0", "1.0", "3.0", "4.0", "5.0", "5.1", "5.2", "6.0", "6.1", "6.2",
+//        "6.3", "7.0", "7.1", "7.2", "8.0", "8.1", "8.2", "9.0", "10.0", "10.1",
+//        "11.0", "11.1", "11.2", "11.3", "12.0", "12.1", "13.0", "13.1", "14.0",
+//        "14.1"
+//    );
+
+    private static final List<String> files = List.of("2.0");
 
     @Inject
     Parser parser;
@@ -36,7 +38,7 @@ public class MitreEnterpriseTest {
         return TestUtils.reverse(files.stream()).stream();
     }
 
-    @Disabled
+//    @Disabled
     @ParameterizedTest
     @MethodSource
     void enterprise_attacks(String input) throws Exception {

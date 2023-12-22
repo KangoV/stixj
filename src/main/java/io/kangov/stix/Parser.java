@@ -7,9 +7,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.kangov.stix.v21.bundle.Bundle;
 import io.kangov.stix.v21.bundle.Bundleable;
 import io.kangov.stix.v21.common.type.*;
-import io.kangov.stix.v21.core.sdo.SdoObject;
-import io.kangov.stix.v21.core.sdo.objects.Identity;
-import io.kangov.stix.v21.meta.mdo.MarkingDefinition;
 import io.micronaut.validation.Validated;
 import io.micronaut.validation.validator.Validator;
 import jakarta.annotation.Nonnull;
@@ -20,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.function.BiFunction;
 
 @Validated
 @Singleton
@@ -39,9 +35,9 @@ public class Parser {
     public static final String SIGHTING_OF_REF = "sighting_of_ref";
     public static final String OBJECT_MARKING_REFS = "object_marking_refs";
 
-    private static class ObjectCache implements Iterable<ObjectCache.Entry> {
+    public static class ObjectCache implements Iterable<ObjectCache.Entry> {
 
-        private record Entry(String id, ObjectNode objectNode, Bundleable bundleable) {
+        public record Entry(String id, ObjectNode objectNode, Bundleable object) {
             private static Entry create(ObjectNode objectNode) {
                 return new Entry(objectNode.get(ID).asText(), objectNode, null);
             }
@@ -67,8 +63,12 @@ public class Parser {
             return entries.containsKey(id);
         }
 
-        public Entry get(String id) {
-            return entries.get(id);
+        public Optional<Entry> findEntry(String id) {
+            return Optional.ofNullable(entries.get(id));
+        }
+
+        public Optional<Bundleable> findObject(String id) {
+            return findEntry(id).map(Entry::object);
         }
     }
 
@@ -120,21 +120,20 @@ public class Parser {
 
     public @Valid Bundle readBundle(String str) {
         try {
-            log.trace("Deserializing {} from:\n{}", BUNDLE, str);
 
             var obj = objectMapper.readTree(str);
-
-            log.trace("Read {} into JsonNode:\n{}", BUNDLE, obj);
 
             if (obj instanceof ObjectNode bundleNode) {
 
                 // create and prime a cache
-                var cache = addToCache(bundleNode.get(OBJECTS), new ObjectCache());
+                var cache = new ObjectCache(); // addToCache(bundleNode.get(OBJECTS), new ObjectCache());
+                var id = bundleNode.get(ID).asText();
+                var type = bundleNode.get(TYPE).asText();
+
+                log.debug("START: ObjectNode: {}", id);
 
                 // now process the objects and created the bundle
-                var builder = Bundle.builder()
-                    .id(bundleNode.get(ID).asText())
-                    .type(bundleNode.get(TYPE).asText());
+                var builder = Bundle.builder().id(id).type(type);
 
                 if (bundleNode.get(OBJECTS) instanceof ArrayNode objectsNode) {
                     for (JsonNode objectNode : objectsNode) {
@@ -143,7 +142,7 @@ public class Parser {
                 }
                 var bundle = builder.build();
 
-                log.trace("Deserialized {} to:\n{}", BUNDLE, bundle);
+                log.debug("END: ObjectNode: {}", id);
                 return bundle;
 
             } else {
@@ -168,23 +167,24 @@ public class Parser {
 
     @Valid Bundleable processNode(ObjectNode objectNode, ObjectCache cache) throws Exception {
 
-        var id = objectNode.get(ID).asText();
-        var type = objectNode.get(TYPE).asText();
+//        var id = objectNode.get(ID).asText();
+//        var type = objectNode.get(TYPE).asText();
 
-        log.debug("Processing {}", id);
+//        log.debug(">>> ObjectNode: {}", id);
+        log.debug(">>> ObjectNode");
 
-        var cacheEntry = cache.get(id);
-
-        if (cacheEntry != null) {
-            log.debug("Found cached entry for {}", id);
-            var bundleable = cache.get(id).bundleable();
-            if (bundleable != null) {
-                log.debug("Cached entry contains de-serialized object, so returning");
-                return bundleable;
-            } else {
-                log.debug("Cache entry not deserialised yet, continuing to process");
-            }
-        }
+//        var cacheEntryOpt = cache.findEntry(id);
+//
+//        if (cacheEntryOpt.isPresent()) {
+//            log.debug("Found cached entry for {}", id);
+//            var bundleable = cacheEntryOpt.get().object();
+//            if (bundleable != null) {
+//                log.debug("Cached entry contains de-serialized object, so returning");
+//                return bundleable;
+//            } else {
+//                log.debug("Cache entry not deserialised yet, continuing to process");
+//            }
+//        }
 
         /*
          * The following reference processing is needed as Jackson cannot seem to handle these. It can handle
@@ -194,31 +194,37 @@ public class Parser {
          * This has to be handled in code. This is the reason for the object cache.
          */
 
-        processOptionalReference(CREATED_BY_REF, objectNode, cache, (i, b) -> new IdentityRef(i, (Identity) b));
-        processReferences(OBJECT_MARKING_REFS, objectNode, cache, (i, b) -> new MarkingDefinitionRef(i, (MarkingDefinition) b));
+        processOptionalReference(CREATED_BY_REF, objectNode, cache);
+        processReferences(OBJECT_MARKING_REFS, objectNode, cache);
+
+        var id = objectNode.get(ID).asText();
+        var type = objectNode.get(TYPE).asText();
 
         if (type.equals(REPORT)) {
-            processReferences(OBJECT_REFS, objectNode, cache, BundleableRef::new);
+            processReferences(OBJECT_REFS, objectNode, cache);
         }
 
         if (type.equals(OBSERVED_DATA)) {
-            processReferences(OBJECT_REFS, objectNode, cache, BundleableRef::new);
+            processReferences(OBJECT_REFS, objectNode, cache);
         }
 
         if (type.equals(RELATIONSHIP)) {
-            processRequiredReference(SOURCE_REF, objectNode, cache, BundleableRef::new);
-            processRequiredReference(TARGET_REF, objectNode, cache, BundleableRef::new);
+            processRequiredReference(SOURCE_REF, objectNode, cache);
+            processRequiredReference(TARGET_REF, objectNode, cache);
         }
 
         if (type.equals(SIGHTING)) {
-            processReferences(WHERE_SIGHTED_REFS,     objectNode, cache, (i, b) -> new SdoObjectRef(i, (SdoObject) b));
-            processReferences(OBSERVED_DATA_REFS,     objectNode, cache, (i, b) -> new SdoObjectRef(i, (SdoObject) b));
-            processRequiredReference(SIGHTING_OF_REF, objectNode, cache, (i, b) -> new SdoObjectRef(i, (SdoObject) b));
+            processReferences(WHERE_SIGHTED_REFS, objectNode, cache);
+            processReferences(OBSERVED_DATA_REFS, objectNode, cache);
+            processRequiredReference(SIGHTING_OF_REF, objectNode, cache);
         }
+
+        log.debug("<<< ObjectNode: {}", id);
 
         try {
             var object = objectMapper.treeToValue(objectNode, Bundleable.class);
             cache.put(ObjectCache.Entry.create(object));
+            log.debug("=== Bundleable added to bundle and cached");
             return object;
         } catch (Exception e) {
             throw new ParseException("De-serialisation of "+id+" failed", e);
@@ -226,17 +232,17 @@ public class Parser {
     }
 
     /**
-     * @see #processReference(String, ObjectNode, ObjectCache, boolean, BiFunction)
+     * @see #processReference(String, ObjectNode, ObjectCache, boolean)
      */
-    private <T extends Bundleable> void processRequiredReference(String fieldName, ObjectNode containerNode, ObjectCache cache, BiFunction<String,Bundleable,ObjectRef<T>> refFactory) throws Exception {
-        processReference(fieldName, containerNode, cache, true, refFactory);
+    private <T extends Bundleable> void processRequiredReference(String fieldName, ObjectNode containerNode, ObjectCache cache) throws Exception {
+        processReference(fieldName, containerNode, cache, true);
     }
 
     /**
-     * @see #processReference(String, ObjectNode, ObjectCache, boolean, BiFunction)
+     * @see #processReference(String, ObjectNode, ObjectCache, boolean)
      */
-    private <T extends Bundleable> void processOptionalReference(String fieldName, ObjectNode containerNode, ObjectCache cache, BiFunction<String,Bundleable,ObjectRef<T>> refFactory) throws Exception {
-        processReference(fieldName, containerNode, cache, false, refFactory);
+    private <T extends Bundleable> void processOptionalReference(String fieldName, ObjectNode containerNode, ObjectCache cache) throws Exception {
+        processReference(fieldName, containerNode, cache, false);
     }
 
     /**
@@ -247,7 +253,6 @@ public class Parser {
      * @param containerNode The containing node
      * @param cache to use to find a existing object
      * @param required true if the {@code fieldName} MUST exist
-     * @param refFactory The factory to create the correct type of reference object
      * @param <T> The type of reference
      * @throws Exception is thrown if the {@code fieldName} node is not found and {@code required} is true
      */
@@ -255,63 +260,60 @@ public class Parser {
             String fieldName,
             ObjectNode containerNode,
             ObjectCache cache,
-            boolean required,
-            BiFunction<String,Bundleable,ObjectRef<T>> refFactory) throws Exception {
-        var containerId = containerNode.get("id").asText();
-        log.debug("Processing {} in {}", fieldName, containerId);
+            boolean required) throws Exception {
+        var containerId = "/"; //containerNode.get("id").asText();
+        //log.debug("Processing {} in {}", fieldName, containerId);
         var refNode = containerNode.get(fieldName);
         if (refNode != null) {
-            log.debug("Property {} found in {}", fieldName, containerId);
-            var obj = resolveReference(refNode.asText(), cache); // can return null
-            var ref = refFactory.apply(refNode.asText(), obj);
-            log.debug("Replacing field {} in object {} with an ObjectRef instance", fieldName, containerId);
+            //log.debug("Property {} found in {}", fieldName, containerId);
+            var ref = new ObjectRef<T>(refNode.asText(), null, cache);  //refFactory.apply(refNode.asText(), obj);
             containerNode.remove(fieldName);
             containerNode.putPOJO(fieldName, ref);
+            log.debug("--- replaced field {} in object {} with an ObjectRef instance", fieldName, containerId);
         } else {
             if (required) {
                 throw new ParseException("Missing required attribute ["+fieldName+"] in "+containerId);
             }
-            log.debug("Property {} not found in {}, skipping", fieldName, containerId);
+            log.debug("--- property {} not found in {}, skipping", fieldName, containerId);
         }
     }
 
-    /**
-     * Returns a {@link Bundleable} instance retrieved from the provided {@code cache}. If the {@code JsonNode} within
-     * the found entry has not been processed, then it will be used to create the {@code Bundleable} object. The new
-     * object will then be added to the cache and returned.
-     *
-     * @param id The stix identifier of the entry to find in the cache
-     * @param cache The cache where pre and post JsonNodes are stored.
-     * @return a {@link Bundleable} instance retrieved from the provided {@code cache}
-     * @throws Exception if any exception occurs
-     */
-    private Bundleable resolveReference(String id, ObjectCache cache) throws Exception {
-        log.debug("Resolving reference: {}", id);
-        Bundleable target = null;
-        if (cache.contains(id)) {
-            var entry = cache.get(id);
-            target = entry.bundleable();
-            if (target == null) {
-                log.debug("Cache entry {} found but not deserialised yet", id);
-                // cache entry not processed yet
-                target = processNode(entry.objectNode(), cache);
-                cache.put(ObjectCache.Entry.create(target));
-            } else {
-                log.debug("Cache entry {} found returning previously deserialised object", id);
-            }
-        }
-        return target;
-    }
+//    /**
+//     * Returns a {@link Bundleable} instance retrieved from the provided {@code cache}. If the {@code JsonNode} within
+//     * the found entry has not been processed, then it will be used to create the {@code Bundleable} object. The new
+//     * object will then be added to the cache and returned.
+//     *
+//     * @param id The stix identifier of the entry to find in the cache
+//     * @param cache The cache where pre and post JsonNodes are stored.
+//     * @return a {@link Bundleable} instance retrieved from the provided {@code cache}
+//     * @throws Exception if any exception occurs
+//     */
+//    private Bundleable resolveReference(String id, ObjectCache cache) throws Exception {
+//        log.debug("Resolving reference: {}", id);
+//        Bundleable target = null;
+//        if (cache.contains(id)) {
+//            var entry = cache.get(id);
+//            target = entry.object();
+//            if (target == null) {
+//                log.debug("Cache entry {} found but not deserialised yet", id);
+//                // cache entry not processed yet
+//                target = processNode(entry.objectNode(), cache);
+//                cache.put(ObjectCache.Entry.create(target));
+//            } else {
+//                log.debug("Cache entry {} found returning previously deserialised object", id);
+//            }
+//        }
+//        return target;
+//    }
 
     /**
      * Processes an array of object references within the provided {@code containerNode} and {@code fieldname}.
-     * {@link ObjectRef} instances such as {@link SdoObjectRef} are used to store the object id and the actual object
+     * {@link ObjectRef} instances are used to store the object id and the actual object
      * itself. This provides for the situation where a reference ID points to an object that is not included.
      *
      * @param fieldName The fieldname of the array node
      * @param containerNode The node that contains the fieldname
      * @param cache The cache to be used to search for previously deserialized objects.
-     * @param refFactory The bi-function used to generate the correct reference object
      * @param <T> The type of object being referenced
      * @throws Exception if an error occurs
      * @see ObjectRef
@@ -319,20 +321,23 @@ public class Parser {
     private <T extends Bundleable> void processReferences(
             String fieldName,
             JsonNode containerNode,
-            ObjectCache cache,
-            BiFunction<String,Bundleable,ObjectRef<T>> refFactory) throws Exception {
-        var refs = (ArrayNode) containerNode.get(fieldName);
-        if (refs != null) {
+            ObjectCache cache) throws Exception {
+        var node = containerNode.get(fieldName);
+        if (node instanceof ArrayNode refs) {
+            log.debug(">>> ArrayNode: {}", refs.asText());
             var list = new ArrayList<ObjectRef<T>>();
-            for (var iterator = refs.elements(); iterator.hasNext();) {
-                var refNode = iterator.next();
+            for (int i = 0; i<refs.size(); i++) {
+                var refNode = refs.get(i);
                 var refId = refNode.asText();
-                var obj = resolveReference(refId, cache);
-                var ref = refFactory.apply(refId, obj);
+                var ref = new ObjectRef<T>(refId, null, cache);
                 list.add(ref);
-                iterator.remove();
             }
-            list.forEach(refs::addPOJO);
+            refs.removeAll();
+            list.forEach(ref -> {
+                refs.addPOJO(ref);
+                log.debug("--- added POJONode to Array: {}", ref);
+            });
+            log.debug("<<<: ArrayNode: {}", refs.asText());
         }
     }
 

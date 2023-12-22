@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.redaction.Redactable;
 import io.kangov.stix.util.ImmutableStyle;
-import io.kangov.stix.v21.common.type.BundleableRef;
+import io.kangov.stix.v21.bundle.Bundleable;
+import io.kangov.stix.v21.common.type.ObjectRef;
 import io.kangov.stix.v21.core.sdo.SdoObject;
+import io.kangov.stix.v21.core.sdo.objects.Identity;
 import io.kangov.stix.v21.core.sro.SroObject;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.NotBlank;
@@ -59,10 +61,12 @@ public interface Relationship extends SroObject {
      * methods defined on the generated implementation's Builder class.
      */
     class Builder extends RelationshipImpl.Builder {
-        Builder targetRef(String id)     { return targetRef(new BundleableRef(id, null)); }
-        Builder targetRef(SdoObject obj) { return targetRef(new BundleableRef(obj.getId(), obj)); }
-        Builder sourceRef(String id)     { return sourceRef(new BundleableRef(id, null)); }
-        Builder sourceRef(SdoObject obj) { return sourceRef(new BundleableRef(obj.getId(), obj)); }
+        Builder targetRef(String id)     { return targetRef(ObjectRef.createObjectRef(id, Bundleable.class)); }
+        Builder targetRef(SdoObject obj) { return targetRef(ObjectRef.createObjectRef(obj)); }
+        Builder sourceRef(String id)     { return sourceRef(ObjectRef.createObjectRef(id, Bundleable.class)); }
+        Builder sourceRef(SdoObject obj) { return sourceRef(ObjectRef.createObjectRef(obj)); }
+        public Builder createdByRef(String id)         { return createdByRef(ObjectRef.createObjectRef(id, Identity.class)); }
+        public Builder createdByRef(Identity identity) { return createdByRef(ObjectRef.createObjectRef(identity)); }
     }
 
     static Relationship create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }
@@ -86,12 +90,12 @@ public interface Relationship extends SroObject {
     @NotNull
     @JsonProperty("source_ref")
     @Redactable(useMask = true)
-    BundleableRef getSourceRef();
+    ObjectRef<Bundleable> getSourceRef();
 
     @NotNull
     @JsonProperty("target_ref")
     @Redactable(useMask = true)
-    BundleableRef getTargetRef();
+    ObjectRef<Bundleable> getTargetRef();
 
     @JsonProperty("start_time")
     @Redactable

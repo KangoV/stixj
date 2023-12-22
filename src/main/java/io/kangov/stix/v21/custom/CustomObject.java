@@ -4,7 +4,9 @@ import io.kangov.stix.v21.bundle.Bundleable;
 import io.kangov.stix.v21.common.property.*;
 import io.kangov.stix.v21.core.Relateable;
 import io.kangov.stix.validation.constraints.StartsWith;
+import io.micronaut.core.annotation.Introspected;
 
+@Introspected
 public interface CustomObject extends
     Bundleable,
     Relateable,
