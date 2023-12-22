@@ -126,7 +126,9 @@ public class Parser {
             if (obj instanceof ObjectNode bundleNode) {
 
                 // create and prime a cache
-                var cache = new ObjectCache(); // addToCache(bundleNode.get(OBJECTS), new ObjectCache());
+                var injectedValues = objectMapper.getInjectableValues();
+                var cache = (ObjectCache) injectedValues.findInjectableValue("stix_object_cache", null, null, null);
+
                 var id = bundleNode.get(ID).asText();
                 var type = bundleNode.get(TYPE).asText();
 
@@ -194,32 +196,32 @@ public class Parser {
          * This has to be handled in code. This is the reason for the object cache.
          */
 
-        processOptionalReference(CREATED_BY_REF, objectNode, cache);
-        processReferences(OBJECT_MARKING_REFS, objectNode, cache);
+//        processOptionalReference(CREATED_BY_REF, objectNode, cache);
+//        processReferences(OBJECT_MARKING_REFS, objectNode, cache);
+//
+//        var id = objectNode.get(ID).asText();
+//        var type = objectNode.get(TYPE).asText();
+//
+//        if (type.equals(REPORT)) {
+//            processReferences(OBJECT_REFS, objectNode, cache);
+//        }
+//
+//        if (type.equals(OBSERVED_DATA)) {
+//            processReferences(OBJECT_REFS, objectNode, cache);
+//        }
+//
+//        if (type.equals(RELATIONSHIP)) {
+//            processRequiredReference(SOURCE_REF, objectNode, cache);
+//            processRequiredReference(TARGET_REF, objectNode, cache);
+//        }
+//
+//        if (type.equals(SIGHTING)) {
+//            processReferences(WHERE_SIGHTED_REFS, objectNode, cache);
+//            processReferences(OBSERVED_DATA_REFS, objectNode, cache);
+//            processRequiredReference(SIGHTING_OF_REF, objectNode, cache);
+//        }
 
-        var id = objectNode.get(ID).asText();
-        var type = objectNode.get(TYPE).asText();
-
-        if (type.equals(REPORT)) {
-            processReferences(OBJECT_REFS, objectNode, cache);
-        }
-
-        if (type.equals(OBSERVED_DATA)) {
-            processReferences(OBJECT_REFS, objectNode, cache);
-        }
-
-        if (type.equals(RELATIONSHIP)) {
-            processRequiredReference(SOURCE_REF, objectNode, cache);
-            processRequiredReference(TARGET_REF, objectNode, cache);
-        }
-
-        if (type.equals(SIGHTING)) {
-            processReferences(WHERE_SIGHTED_REFS, objectNode, cache);
-            processReferences(OBSERVED_DATA_REFS, objectNode, cache);
-            processRequiredReference(SIGHTING_OF_REF, objectNode, cache);
-        }
-
-        log.debug("<<< ObjectNode: {}", id);
+//        log.debug("<<< ObjectNode: {}", id);
 
         try {
             var object = objectMapper.treeToValue(objectNode, Bundleable.class);
@@ -227,7 +229,7 @@ public class Parser {
             log.debug("=== Bundleable added to bundle and cached");
             return object;
         } catch (Exception e) {
-            throw new ParseException("De-serialisation of "+id+" failed", e);
+            throw new ParseException("De-serialisation failed", e);
         }
     }
 

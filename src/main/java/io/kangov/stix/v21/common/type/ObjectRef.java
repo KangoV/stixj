@@ -14,12 +14,14 @@ import java.io.IOException;
 import java.util.*;
 
 @JsonSerialize(using = ObjectRef.Serializer.class)
-//@JsonDeserialize(using = ObjectRef.Deserialiser.class)
+@JsonDeserialize(using = ObjectRef.Deserialiser.class)
 public class ObjectRef<T extends Bundleable> {
 
     public static class Serializer extends StdSerializer<ObjectRef<?>> {
+
         public Serializer() { this(null); }
         public Serializer(Class<ObjectRef<?>> t) { super(t); }
+
         @Override
         public void serialize(ObjectRef value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
             if (value != null) {
@@ -30,17 +32,14 @@ public class ObjectRef<T extends Bundleable> {
 
     public static class Deserialiser extends StdDeserializer<ObjectRef<?>> {
 
-        public Deserialiser() {
-            this(null);
-        }
-
-        public Deserialiser(Class<ObjectRef<?>> vc) {
-            super(vc);
-        }
+        public Deserialiser() { this(null); }
+        public Deserialiser(Class<ObjectRef<?>> vc) { super(vc); }
 
         @Override
         public ObjectRef<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
-            return null;
+            var id = p.getText();
+            var cache =  ctxt.findInjectableValue("stix_object_cache", null, null);
+            return new ObjectRef<Bundleable>(id, null, (Parser.ObjectCache) cache);
         }
     }
 

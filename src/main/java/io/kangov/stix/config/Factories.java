@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import io.kangov.stix.Parser;
 import io.kangov.stix.v21.bundle.Bundle;
 import io.kangov.stix.v21.core.sco.objects.*;
 import io.kangov.stix.v21.core.sdo.objects.*;
@@ -17,6 +18,7 @@ import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 
 import java.lang.Process;
+import java.util.Map;
 
 @Factory
 public class Factories {
@@ -31,6 +33,7 @@ public class Factories {
             .registerModule(generateStixSubTypesModule())
             .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
             .enable(SerializationFeature.INDENT_OUTPUT)
+            .setInjectableValues(new InjectableValues.Std.Std(Map.of("stix_object_cache", new Parser.ObjectCache())))
             ;
     }
 
