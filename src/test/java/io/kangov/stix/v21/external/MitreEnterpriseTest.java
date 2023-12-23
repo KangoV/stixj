@@ -1,6 +1,6 @@
 package io.kangov.stix.v21.external;
 
-import io.kangov.stix.Parser;
+import io.kangov.stix.parser.Parser;
 import io.kangov.stix.TestUtils;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;

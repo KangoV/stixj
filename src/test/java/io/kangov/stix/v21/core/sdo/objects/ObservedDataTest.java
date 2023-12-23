@@ -1,6 +1,6 @@
 package io.kangov.stix.v21.core.sdo.objects;
 
-import io.kangov.stix.Parser;
+import io.kangov.stix.parser.Parser;
 import io.kangov.stix.common.mock.Mocks;
 import io.kangov.stix.v21.bundle.Bundle;
 import io.kangov.stix.v21.core.sco.objects.XNominetBlock;

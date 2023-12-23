@@ -1,5 +1,6 @@
 package io.kangov.stix;
 
+import io.kangov.stix.parser.Parser;
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.runtime.Micronaut;
 import jakarta.inject.Inject;

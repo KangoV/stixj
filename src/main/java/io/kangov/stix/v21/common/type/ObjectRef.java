@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import io.kangov.stix.Parser;
+import io.kangov.stix.parser.ObjectCache;
 import io.kangov.stix.v21.bundle.Bundleable;
 
 import java.io.IOException;
@@ -39,7 +39,7 @@ public class ObjectRef<T extends Bundleable> {
         public ObjectRef<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
             var id = p.getText();
             var cache =  ctxt.findInjectableValue("stix_object_cache", null, null);
-            return new ObjectRef<Bundleable>(id, null, (Parser.ObjectCache) cache);
+            return new ObjectRef<Bundleable>(id, null, (ObjectCache) cache);
         }
     }
 
@@ -60,10 +60,10 @@ public class ObjectRef<T extends Bundleable> {
     }
 
     private final String id;
-    private final Parser.ObjectCache cache;
+    private final ObjectCache cache;
     private final T object;
 
-    public ObjectRef(String id, T object, Parser.ObjectCache cache) {
+    public ObjectRef(String id, T object, ObjectCache cache) {
         assert id != null : "An object reference MUST contain an id";
         assert (cache != null && object == null) || (cache == null && object != null)
             : "An object reference must have one of: cache or object";

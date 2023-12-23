@@ -1,10 +1,11 @@
 package io.kangov.stix.v21.core;
 
-import io.kangov.stix.Parser;
+import io.kangov.stix.parser.Parser;
 import io.kangov.stix.v21.TestBundle;
 import io.kangov.stix.v21.bundle.Bundle;
 import io.kangov.stix.v21.bundle.Bundleable;
 import io.kangov.stix.v21.common.type.ObjectRef;
+import io.kangov.stix.v21.meta.mdo.GranularMarking;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
@@ -62,6 +63,21 @@ public class ReferencesTest {
             .map(Optional::get)
             .toList();
         assertThat(markings).containsExactlyInAnyOrder(marking1,marking2);
+    }
+
+    @Test
+    void testGranularMarkings() {
+        var marking1 = getObject(bundle, MARKING_DEFINITION_TLP_WHITE);
+        var indicator = getObject(bundle, INDICATOR);
+        var markings = indicator.getGranularMarkings().stream()
+            .map(GranularMarking::getMarkingRef)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(ObjectRef::object)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .toList();
+        assertThat(markings).containsExactlyInAnyOrder(marking1);
     }
 
 

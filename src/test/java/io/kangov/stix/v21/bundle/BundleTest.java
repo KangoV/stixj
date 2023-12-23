@@ -1,9 +1,8 @@
 package io.kangov.stix.v21.bundle;
 
-import io.kangov.stix.Parser;
+import io.kangov.stix.parser.Parser;
 import io.kangov.stix.Stix;
 import io.kangov.stix.v21.common.type.ObjectRef;
-import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.v21.core.sdo.objects.Identity;
 import io.kangov.stix.v21.core.sdo.objects.Indicator;
 import org.junit.jupiter.api.BeforeEach;

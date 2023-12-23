@@ -1,6 +1,6 @@
 package io.kangov.stix.v21.core.sro.objects;
 
-import io.kangov.stix.Parser;
+import io.kangov.stix.parser.Parser;
 import io.kangov.stix.Stix;
 import io.kangov.stix.v21.TestBundle;
 import org.junit.jupiter.api.BeforeEach;

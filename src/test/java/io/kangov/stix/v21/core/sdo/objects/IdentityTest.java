@@ -1,6 +1,6 @@
 package io.kangov.stix.v21.core.sdo.objects;
 
-import io.kangov.stix.Parser;
+import io.kangov.stix.parser.Parser;
 import io.kangov.stix.common.mock.Mocks;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.micronaut.validation.validator.Validator;
