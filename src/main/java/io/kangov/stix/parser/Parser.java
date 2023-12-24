@@ -1,8 +1,6 @@
 package io.kangov.stix.parser;
 
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.kangov.stix.ParseException;
 import io.kangov.stix.v21.bundle.Bundle;
 import io.kangov.stix.v21.bundle.Bundleable;
@@ -21,9 +19,6 @@ public class Parser {
 
     private static final Logger log = LoggerFactory.getLogger(Parser.class);
 
-    private static final String ID = "id";
-    private static final String TYPE = "type";
-    private static final String OBJECTS = "objects";
     private static final String STIX_OBJECT_CACHE = "stix_object_cache";
 
     private final Validator validator;
@@ -42,78 +37,40 @@ public class Parser {
         }
     }
 
-    public String writeBundle(@Valid Bundle bundle) {
-        return write(bundle);
+    public @Valid Bundle read(String str) {
+        var reader = new Reader(objectMapper(), objectCache());
+        var bundle = reader.read(str);
+        return bundle;
     }
 
-    public String writeObject(@Valid Bundleable bundleable) {
-        return write(bundleable);
+    public @Valid <T extends Bundleable> T read(String str, Class<T> type) {
+        var reader = new Reader(objectMapper(), objectCache());
+        var bundle = reader.read(str);
+        var objectOpt = bundle.stream(type).findFirst();
+        return objectOpt.orElse(null);
+    }
+
+    public String write(@Valid Bundle bundle) {
+        return new Writer(objectMapper()).write(bundle);
+    }
+
+    public String write(@Valid Bundleable bundleable) {
+        return new Writer(objectMapper()).write(bundleable);
     }
 
     public void validate(@Valid Bundleable bundleable) {
-        validator.validate(bundleable);
+        validator().validate(bundleable);
     }
 
-    public ObjectMapper objectMapper() {
+    private ObjectMapper objectMapper() {
         return this.objectMapper;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> @Valid T readObject(String str, Class<T> bundleable) {
-        try {
-            log.trace("Deserializing {} to: {}", bundleable.getSimpleName(), str);
-            var node = objectMapper.readTree(str);
-            var obj = processNode((ObjectNode) node, objectCache);
-            log.trace("Deserialized {} to: {}", bundleable.getSimpleName(), obj);
-            return (T) obj;
-        } catch (Exception e) {
-            throw new ParseException("Failed to deserialize a " + bundleable.getSimpleName(), e);
-        }
+    private ObjectCache objectCache() {
+        return this.objectCache;
     }
 
-    public @Valid Bundle readBundle(String str) {
-        try {
-            var obj = objectMapper.readTree(str);
-            if (obj instanceof ObjectNode bundleNode) {
-                var builder = Bundle
-                    .builder()
-                    .id(bundleNode.get(ID).asText())
-                    .type(bundleNode.get(TYPE).asText());
-                if (bundleNode.get(OBJECTS) instanceof ArrayNode objectsNode) {
-                    for (JsonNode objectNode : objectsNode) {
-                        builder.addObject(processNode((ObjectNode) objectNode, objectCache));
-                    }
-                }
-                return builder.build();
-            } else {
-                throw new IllegalArgumentException("Not a valid Bundle");
-            }
-        } catch (Exception e) {
-            throw new ParseException("Failed to deserialize a bundle", e);
-        }
+    private Validator validator() {
+        return this.validator;
     }
-
-    private String write(Object object) {
-        try {
-            log.trace("Serializing {}", object);
-            var str = objectMapper.writeValueAsString(object);
-            log.trace("Serialized {} to: {}", object.getClass().getSimpleName(), str);
-            return str;
-        } catch (Exception e) {
-            throw new ParseException("Failed to serialize a " + object.getClass().getSimpleName(), e);
-        }
-    }
-
-    @Valid Bundleable processNode(ObjectNode objectNode, ObjectCache cache) throws Exception {
-        try {
-            log.debug("Deserialising: {}", objectNode.get(ID).asText());
-            var object = objectMapper.treeToValue(objectNode, Bundleable.class);
-            cache.put(ObjectCache.Entry.create(object));
-            return object;
-        } catch (Exception e) {
-            throw new ParseException("De-serialisation failed", e);
-        }
-    }
-
-
 }

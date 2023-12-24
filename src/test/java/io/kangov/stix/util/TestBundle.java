@@ -1,10 +1,10 @@
-package io.kangov.stix.v21;
+package io.kangov.stix.util;
 
 import io.kangov.stix.v21.bundle.Bundleable;
 import io.kangov.stix.v21.core.sdo.objects.*;
 import io.kangov.stix.v21.core.sro.objects.Relationship;
 import io.kangov.stix.v21.core.sro.objects.Sighting;
-import io.kangov.stix.v21.external.OasisExamplesTest;
+import io.kangov.stix.v0.OasisTest;
 import io.kangov.stix.v21.meta.mdo.MarkingDefinition;
 
 import java.nio.file.Files;
@@ -25,11 +25,11 @@ public class TestBundle {
     public static final Ref<MarkingDefinition> MARKING_DEFINITION_STATEMENT = new Ref<>(MarkingDefinition.class, "marking-definition--4a0042fe-8b88-40fe-9600-dfa128ce6fbd");
 
 
-    public static final String BUNDLE = load("/v21/bundle.json");
+    public static final String BUNDLE_JSON = load("/v21/bundle.json");
 
     public static String load(String filename) {
         try {
-            return Files.readString(Paths.get(OasisExamplesTest.class.getResource(filename).toURI()));
+            return Files.readString(Paths.get(OasisTest.class.getResource(filename).toURI()));
         } catch (Exception e) {
             throw new IllegalStateException("Failed to read "+filename, e);
         }

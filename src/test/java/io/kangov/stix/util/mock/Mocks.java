@@ -1,4 +1,4 @@
-package io.kangov.stix.common.mock;
+package io.kangov.stix.util.mock;
 
 import io.kangov.stix.v21.common.type.ExternalReference;
 import io.kangov.stix.v21.core.sdo.objects.*;

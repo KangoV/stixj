@@ -16,7 +16,11 @@ public class Stix {
         static final ApplicationContext INSTANCE = Micronaut.run(Stix.class);
     }
 
-    public static Stix get() {
+    public static Parser parser() {
+        return get().context().getBean(Parser.class);
+    }
+
+    private static Stix get() {
         return LazyHolder.INSTANCE.getBean(Stix.class);
     }
 
@@ -27,8 +31,7 @@ public class Stix {
         this.context = context;
     }
 
-    public Parser parser() {
-        return context.getBean(Parser.class);
+    private ApplicationContext context() {
+        return this.context;
     }
-
 }

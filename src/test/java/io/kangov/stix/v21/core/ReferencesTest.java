@@ -1,7 +1,7 @@
 package io.kangov.stix.v21.core;
 
 import io.kangov.stix.parser.Parser;
-import io.kangov.stix.v21.TestBundle;
+import io.kangov.stix.util.TestBundle;
 import io.kangov.stix.v21.bundle.Bundle;
 import io.kangov.stix.v21.bundle.Bundleable;
 import io.kangov.stix.v21.common.type.ObjectRef;
@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
-import static io.kangov.stix.v21.TestBundle.*;
+import static io.kangov.stix.util.TestBundle.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -31,7 +31,7 @@ public class ReferencesTest {
 
     @BeforeEach
     void setup() {
-        bundle = parser.readBundle(TestBundle.BUNDLE);
+        bundle = parser.read(TestBundle.BUNDLE_JSON);
     }
 
     @Test

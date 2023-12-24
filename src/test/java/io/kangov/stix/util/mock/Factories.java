@@ -1,4 +1,4 @@
-package io.kangov.stix.common.mock;
+package io.kangov.stix.util.mock;
 
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;

@@ -1,4 +1,4 @@
-package io.kangov.stix.common.mock;
+package io.kangov.stix.util.mock;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;

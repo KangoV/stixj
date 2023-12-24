@@ -1,6 +1,6 @@
-package io.kangov.stix.common.mock;
+package io.kangov.stix.util.mock;
 
-import io.kangov.stix.common.mock.Randoms.Range;
+import io.kangov.stix.util.mock.Randoms.Range;
 import jakarta.inject.Singleton;
 
 @Singleton

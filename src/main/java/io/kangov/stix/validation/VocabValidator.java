@@ -24,7 +24,7 @@ public class VocabValidator implements ConstraintValidator<Vocab, String> {
         var vocab = annotationMetadata.get("value", Vocabs.Vocab.class)
             .orElseThrow(() -> new IllegalStateException("Need a vocabulary supplied"));
 
-        log.debug("Validating [{}] against vocab [{}]", value, vocab.vocabName());
+//        log.debug("Validating [{}] against vocab [{}]", value, vocab.vocabName());
 
         return vocab.contains(value);
 

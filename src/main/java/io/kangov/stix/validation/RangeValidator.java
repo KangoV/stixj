@@ -22,8 +22,6 @@ public class RangeValidator implements ConstraintValidator<Range, Object> {
             @NonNull AnnotationValue<Range> annotationMetadata,
             @NonNull ConstraintValidatorContext context) {
 
-        log.debug("validating " + context.getRootBean());
-
         Object val = value;
         if (value instanceof Optional<?> o) {
             if (o.isEmpty()) return true;
