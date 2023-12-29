@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import org.immutables.value.Value;
 
 @Value.Style(validationMethod = Value.Style.ValidationMethod.NONE)
-public interface CyberObservableExtensionCommonProperties {
+public interface ScoExtensionCommonProperties {
 
     /**
      * This property is used for generation of the dictionary during serialization, and used as the "Type" mapping value for polymorphic when deserializing.

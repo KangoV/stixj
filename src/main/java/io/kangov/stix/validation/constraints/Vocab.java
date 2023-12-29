@@ -1,6 +1,7 @@
 package io.kangov.stix.validation.constraints;
 
 import io.kangov.stix.v21.enums.Vocabs;
+import io.kangov.stix.validation.VocabValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -13,7 +14,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Repeatable(Vocab.List.class)
 @Documented
-@Constraint(validatedBy = { /* VocabValidator.class */ })
+@Constraint(validatedBy = { VocabValidator.class })
 public @interface Vocab {
 
     enum InclusionType {

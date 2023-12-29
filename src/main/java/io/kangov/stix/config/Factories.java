@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import io.kangov.stix.parser.ObjectCache;
 import io.kangov.stix.v21.bundle.Bundle;
+import io.kangov.stix.v21.core.sco.extension.types.*;
 import io.kangov.stix.v21.core.sco.objects.*;
 import io.kangov.stix.v21.core.sdo.objects.*;
 import io.kangov.stix.v21.core.sro.objects.Relationship;
@@ -100,18 +101,18 @@ public class Factories {
         };
 
         Class<?>[] cyberObservableExtensionClasses = {
-//            ArchiveFileExtension.class,
-//            HttpRequestExtension.class,
-//            IcmpExtension.class,
-//            NetworkSocketExtension.class,
-//            NtfsFileExtenstion.class,
-//            PdfFileExtension.class,
-//            RasterImageFileExtension.class,
-//            TcpExtension.class,
-//            UnixAccountExtension.class,
-//            WindowsPeBinaryFileExtension.class,
-//            WindowsProcessExtension.class,
-//            WindowsServiceExtension.class
+            ArchiveFileExtension.class,
+            HttpRequestExtension.class,
+            IcmpExtension.class,
+            NetworkSocketExtension.class,
+            NtfsFileExtenstion.class,
+            PdfFileExtension.class,
+            RasterImageFileExtension.class,
+            TcpExtension.class,
+            UnixAccountExtension.class,
+            WindowsPeBinaryFileExtension.class,
+            WindowsProcessExtension.class,
+            WindowsServiceExtension.class
         };
 
         return module

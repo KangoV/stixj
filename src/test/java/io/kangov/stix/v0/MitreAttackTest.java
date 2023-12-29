@@ -27,10 +27,7 @@ public class MitreAttackTest extends TestBases {
         "mobile-attack"
     );
 
-//    private static final List<String> files = List.of("2.0");
-
-    @Inject
-    Parser parser;
+    @Inject Parser parser;
 
     private static Stream<String> types() {
         return types.stream();

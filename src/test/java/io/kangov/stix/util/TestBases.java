@@ -8,6 +8,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestBases {
 
+    protected static final int MOCK_COUNT = 200;
+
+    protected static final String RESOURCES_ROOT        = "/v21/stix/";
+    protected static final String SDO_RESOURCES_ROOT    = RESOURCES_ROOT + "sdo/";
+    protected static final String SCO_RESOURCES_ROOT    = RESOURCES_ROOT + "sco/";
+    protected static final String BUNDLE_RESOURCES_ROOT = RESOURCES_ROOT + "bundle/";
+
     private static final Logger log = LoggerFactory.getLogger(TestBases.class);
 
     protected void checkBundle(Parser parser, String bundle) {

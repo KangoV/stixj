@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.util.ImmutableStyle;
+import io.kangov.stix.v21.common.type.ObjectRef;
 import io.kangov.stix.v21.core.sco.ScoObject;
+import io.kangov.stix.v21.core.sco.extension.ScoExtension;
+import io.kangov.stix.v21.enums.Vocabs;
 import io.kangov.stix.validation.constraints.Vocab;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.*;
@@ -18,6 +21,8 @@ import java.util.function.UnaryOperator;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static io.kangov.stix.v21.bundle.Bundleable.*;
 import static io.kangov.stix.v21.enums.Vocabs.Vocab.ENCRYPTION_ALGORITHM;
+import static io.kangov.stix.v21.enums.Vocabs.Vocab.HASHING_ALGORITHM;
+import static io.kangov.stix.validation.constraints.Vocab.InclusionType.MUST;
 
 /**
  * file
@@ -51,7 +56,7 @@ import static io.kangov.stix.v21.enums.Vocabs.Vocab.ENCRYPTION_ALGORITHM;
     "parent_directory_ref",
     "is_encrypted",
     "encryption_algorithm",
-    "decryption_key" ,
+    "decryption_key",
     "contains_refs",
     "content_ref" })
 @SuppressWarnings("unused")
@@ -83,11 +88,14 @@ public interface File extends ScoObject {
         return builder.apply(builder()).build();
     }
 
+    @JsonProperty("extensions")
+    Map<String, Map<String, Object>> getExtensions();
+
     @JsonProperty("hashes")
-    Map< /* @Length(min = 3, max = 256) */ /* @HashingVocab(HashingAlgorithms.class) */ String, String> getHashes();
+    Map<@Size(min = 3, max = 256) @Vocab(value = HASHING_ALGORITHM, inclusion = MUST) String, String> getHashes();
 
     @JsonProperty("size")
-    Optional<@Positive Long> getSize();
+    Optional<@Size(min=1) Long> getSize();
 
     @JsonProperty("name")
     Optional<String> getName();
@@ -103,31 +111,21 @@ public interface File extends ScoObject {
     Optional<@Pattern(regexp = "^(application|audio|font|image|message|model|multipart|text|video)/[a-zA-Z0-9.+_-]+") String> getMimeType();
 
     @JsonProperty("created")
-    Optional<Instant> getCreated();
+    Optional<Instant> getCTime();
 
     @JsonProperty("modified")
-    Optional<Instant> getModified();
+    Optional<Instant> getMTime();
 
     @JsonProperty("accessed")
-    Optional<Instant> getAccessed();
+    Optional<Instant> getATime();
 
     @JsonProperty("parent_directory_ref")
-    Optional<String> getParentDirectoryRef();
-
-    @JsonProperty("is_encrypted")
-    @NotNull
-    Optional<Boolean> isEncrypted();
-
-    @JsonProperty("encryption_algorithm")
-    Optional<@Vocab(ENCRYPTION_ALGORITHM) String> getEncryptionAlgorithm();
-
-    @JsonProperty("decryption_key")
-    Optional<String> getDecryptionKey();
+    Optional<ObjectRef<Directory>> getParentDirectoryRef();
 
     @JsonProperty("contains_refs")
-    Set<String> getContainsRefs();
+    Set<ObjectRef<ScoObject>> getContainsRefs();
 
     @JsonProperty("content_ref")
-    Optional<String> getContentRef();
+    Optional<ObjectRef<Artifact>> getContentRef();
 
 }

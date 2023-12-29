@@ -11,8 +11,6 @@ import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
-
 import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,14 +27,13 @@ public class IdentityTest extends TestBases {
 
     @BeforeAll
     static void beforeAll() {
-        json = TestUtils.loadResource("/v21/identity.json");
+        json = TestUtils.loadResource(SDO_RESOURCES_ROOT + "identity.json");
         assertThat(json).isNotNull();
     }
 
     @Test
     void testRead() {
-        var json0 = TestUtils.loadResource("/v21/identity.json");
-        var object = parser.read(json0, Identity.class);
+        var object = parser.read(json, Identity.class);
         assertThat(object).isNotNull();
     }
 
@@ -60,7 +57,6 @@ public class IdentityTest extends TestBases {
 
     @Test
     void test_negative_confidence() {
-
         // container constraint, "Set<@Min(2) String>, so should generate a violation
         var object = Identity.builder()
             .from(parser.read(json, Identity.class))
@@ -75,7 +71,6 @@ public class IdentityTest extends TestBases {
             log.debug("{} -> {}", v.getPropertyPath(), v.getMessage());
         });
         assertThat(violations).hasSize(1);
-
     }
 
     @Test

@@ -2,8 +2,7 @@ package io.kangov.stix.v21.bundle;
 
 import io.kangov.stix.parser.Parser;
 import io.kangov.stix.Stix;
-import io.kangov.stix.util.TestBundle;
-import io.kangov.stix.util.TestUtils;
+import io.kangov.stix.util.*;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +12,7 @@ import java.time.Instant;
 import java.util.concurrent.*;
 
 
-public class BundleTest {
+public class BundleTest extends TestBases {
 
     private static final Logger log = LoggerFactory.getLogger(BundleTest.class);
     private static Parser parser;

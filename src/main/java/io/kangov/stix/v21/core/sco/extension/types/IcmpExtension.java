@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.util.ImmutableStyle;
-import io.kangov.stix.v21.core.sco.extension.CyberObservableExtension;
+import io.kangov.stix.v21.core.sco.extension.ScoExtension;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -32,7 +32,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 @SuppressWarnings("unused")
 @Introspected
 
-public interface IcmpExtension extends CyberObservableExtension {
+public interface IcmpExtension extends ScoExtension {
 
     /**
      * Exposes the generated builder outside this package

@@ -25,7 +25,7 @@ public class TestBundle {
     public static final Ref<MarkingDefinition> MARKING_DEFINITION_STATEMENT = new Ref<>(MarkingDefinition.class, "marking-definition--4a0042fe-8b88-40fe-9600-dfa128ce6fbd");
 
 
-    public static final String BUNDLE_JSON = load("/v21/bundle.json");
+    public static final String BUNDLE_JSON = load("/v21/stix/bundle/bundle.json");
 
     public static String load(String filename) {
         try {

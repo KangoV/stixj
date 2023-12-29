@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.util.ImmutableStyle;
-import io.kangov.stix.v21.core.sco.extension.CyberObservableExtension;
+import io.kangov.stix.v21.core.sco.extension.ScoExtension;
 import io.kangov.stix.v21.enums.Vocabs;
 import io.kangov.stix.validation.constraints.Vocab;
 import io.micronaut.core.annotation.Introspected;
@@ -48,7 +48,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 @SuppressWarnings("unused")
 @Introspected
 
-public interface WindowsPeBinaryFileExtension extends CyberObservableExtension {
+public interface WindowsPeBinaryFileExtension extends ScoExtension {
 
     /**
      * Exposes the generated builder outside this package
