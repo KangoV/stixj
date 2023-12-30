@@ -6,8 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.util.ImmutableStyle;
 import io.kangov.stix.v21.common.type.ObjectRef;
 import io.kangov.stix.v21.core.sco.ScoObject;
-import io.kangov.stix.v21.core.sco.extension.ScoExtension;
-import io.kangov.stix.v21.enums.Vocabs;
+import io.kangov.stix.v21.core.sco.extension.*;
 import io.kangov.stix.validation.constraints.Vocab;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.*;
@@ -20,7 +19,6 @@ import java.util.function.UnaryOperator;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static io.kangov.stix.v21.bundle.Bundleable.*;
-import static io.kangov.stix.v21.enums.Vocabs.Vocab.ENCRYPTION_ALGORITHM;
 import static io.kangov.stix.v21.enums.Vocabs.Vocab.HASHING_ALGORITHM;
 import static io.kangov.stix.validation.constraints.Vocab.InclusionType.MUST;
 
@@ -88,8 +86,10 @@ public interface File extends ScoObject {
         return builder.apply(builder()).build();
     }
 
+    @JsonSerialize(using = ScoExtensionsSerializer.class)
+    @JsonDeserialize(using = ScoExtensionsDeserializer.class)
     @JsonProperty("extensions")
-    Map<String, Map<String, Object>> getExtensions();
+    ScoExtensions getExtensions();
 
     @JsonProperty("hashes")
     Map<@Size(min = 3, max = 256) @Vocab(value = HASHING_ALGORITHM, inclusion = MUST) String, String> getHashes();

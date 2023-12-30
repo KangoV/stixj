@@ -33,7 +33,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 @JsonTypeName("archive-ext")
 // @AllowedParents({FileCoo.class})
 @SuppressWarnings("unused")
-@Introspected
+@Introspected()
 
 public interface ArchiveFileExtension extends ScoExtension {
 
