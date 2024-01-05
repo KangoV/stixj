@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.kangov.stix.util.ImmutableStyle;
+import io.kangov.stix.v21.common.type.ObjectRef;
+import io.kangov.stix.v21.core.sco.ScoObject;
 import io.kangov.stix.v21.core.sco.extension.ScoExtension;
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.NotNull;
@@ -56,7 +58,7 @@ public interface ArchiveFileExtension extends ScoExtension {
 
     @JsonProperty("contains_refs")
     @NotNull
-    Set<String> getContainsRefs();
+    Set<ObjectRef<ScoObject>> getContainsRefs();
 
     @JsonProperty("version")
     Optional<String> getVersion();

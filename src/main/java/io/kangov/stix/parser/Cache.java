@@ -5,7 +5,7 @@ import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
-public class ObjectCache implements Iterable<ObjectCache.Entry> {
+public class Cache implements Iterable<Cache.Entry> {
 
     public record Entry(String id, Bundleable object) {
         public static Entry create(Bundleable bundleable) {

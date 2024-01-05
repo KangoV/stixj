@@ -70,7 +70,7 @@ public interface Opinion extends SdoObject {
         public Builder addExternalReference(UnaryOperator<ExternalReference.Builder> func) {
             return addExternalReference(func.apply(ExternalReference.builder()).build());
         }
-        public Builder createdByRef(String id)         { return createdByRef(ObjectRef.createObjectRef(id, Identity.class)); }
+        public Builder createdByRef(String id)         { return createdByRef(ObjectRef.createObjectRef(id)); }
         public Builder createdByRef(Identity identity) { return createdByRef(ObjectRef.createObjectRef(identity)); }
 
     }

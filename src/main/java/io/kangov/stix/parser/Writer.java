@@ -18,9 +18,11 @@ public class Writer {
 
     private static final Logger log = LoggerFactory.getLogger(Writer.class);
     private final ObjectMapper objectMapper;
+    private final Parser parser;
 
-    Writer(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
+    Writer(Parser parser) {
+        this.parser = parser;
+        this.objectMapper = parser.objectMapper();
     }
 
     String write(Object object) {

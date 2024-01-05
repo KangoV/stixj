@@ -61,11 +61,11 @@ public interface Relationship extends SroObject {
      * methods defined on the generated implementation's Builder class.
      */
     class Builder extends RelationshipImpl.Builder {
-        Builder targetRef(String id)     { return targetRef(ObjectRef.createObjectRef(id, Bundleable.class)); }
+        Builder targetRef(String id)     { return targetRef(ObjectRef.createObjectRef(id)); }
         Builder targetRef(SdoObject obj) { return targetRef(ObjectRef.createObjectRef(obj)); }
-        Builder sourceRef(String id)     { return sourceRef(ObjectRef.createObjectRef(id, Bundleable.class)); }
+        Builder sourceRef(String id)     { return sourceRef(ObjectRef.createObjectRef(id)); }
         Builder sourceRef(SdoObject obj) { return sourceRef(ObjectRef.createObjectRef(obj)); }
-        public Builder createdByRef(String id)         { return createdByRef(ObjectRef.createObjectRef(id, Identity.class)); }
+        public Builder createdByRef(String id)         { return createdByRef(ObjectRef.createObjectRef(id)); }
         public Builder createdByRef(Identity identity) { return createdByRef(ObjectRef.createObjectRef(identity)); }
     }
 

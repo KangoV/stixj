@@ -63,7 +63,7 @@ public interface AttackPattern extends SdoObject {
         public Builder killChainPhase(UnaryOperator<KillChainPhase.Builder> func) {
             return addKillChainPhase(func.apply(KillChainPhase.builder()).build());
         }
-        public Builder createdByRef(String id)         { return createdByRef(ObjectRef.createObjectRef(id, Identity.class)); }
+        public Builder createdByRef(String id)         { return createdByRef(ObjectRef.createObjectRef(id)); }
         public Builder createdByRef(Identity identity) { return createdByRef(ObjectRef.createObjectRef(identity)); }
     }
 

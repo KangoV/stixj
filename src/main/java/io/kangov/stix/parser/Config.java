@@ -1,11 +1,10 @@
-package io.kangov.stix.config;
+package io.kangov.stix.parser;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
-import io.kangov.stix.parser.ObjectCache;
 import io.kangov.stix.v21.bundle.Bundle;
 import io.kangov.stix.v21.core.sco.extension.types.*;
 import io.kangov.stix.v21.core.sco.objects.*;
@@ -22,10 +21,10 @@ import java.lang.Process;
 import java.util.Map;
 
 @Factory
-public class Factories {
+public class Config {
 
     @Bean
-    ObjectMapper objectMapper() {
+    ObjectMapper newObjectMapper(Cache objectCache) {
         return new ObjectMapper()
             .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
             .registerModule(new ParameterNamesModule())
@@ -34,8 +33,13 @@ public class Factories {
             .registerModule(generateStixSubTypesModule())
             .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
             .enable(SerializationFeature.INDENT_OUTPUT)
-            .setInjectableValues(new InjectableValues.Std.Std(Map.of("stix_object_cache", new ObjectCache())))
+            .setInjectableValues(new InjectableValues.Std.Std(Map.of("stix_object_cache", objectCache)))
             ;
+    }
+
+    @Bean
+    Cache newObjectCache() {
+        return new Cache();
     }
 
     private static SimpleModule generateStixSubTypesModule() {

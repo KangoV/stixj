@@ -5,6 +5,7 @@ import io.kangov.stix.util.TestBases;
 import io.kangov.stix.util.mock.Mocks;
 import io.kangov.stix.v21.bundle.Bundle;
 import io.kangov.stix.v21.bundle.Bundleable;
+import io.kangov.stix.v21.common.type.ObjectRef;
 import io.kangov.stix.v21.core.sco.extension.ScoExtensions;
 import io.kangov.stix.v21.core.sco.extension.types.ArchiveFileExtension;
 import io.kangov.stix.v21.core.sco.objects.File;
@@ -41,13 +42,15 @@ public class FileTest extends TestBases {
             .name("foo.zip")
             .putHash("SHA-256", "35a01331e9ad96f751278b891b6ea09699806faedfa237d40513d92ad1b7100f")
             .mimeType("application/zip")
-            .extensions(ScoExtensions.create(createArchiveFileExtension(a -> a
-                .addContainsRefs(
-                    "file--019fde1c-94ca-5967-8b3c-a906a51d87ac",
-                    "file--94fc2163-dec3-5715-b824-6e689c4de865",
-                    "file--d07ff290-d7e0-545b-a2ff-04602a9e0b73"
+            .extensions(ScoExtensions.create(
+                createArchiveFileExtension(a -> a
+                    .addContainsRefs(
+                        ObjectRef.create("file--019fde1c-94ca-5967-8b3c-a906a51d87ac"),
+                        ObjectRef.create("file--94fc2163-dec3-5715-b824-6e689c4de865"),
+                        ObjectRef.create("file--d07ff290-d7e0-545b-a2ff-04602a9e0b73")
+                    )
                 )
-            )))
+            ))
         ))
     );
 

@@ -75,7 +75,7 @@ public interface Identity extends SdoObject {
         public Builder roles(String ... roles) {
             return roles(Arrays.asList(roles));
         }
-        public Builder createdByRef(String id)         { return createdByRef(ObjectRef.createObjectRef(id, Identity.class)); }
+        public Builder createdByRef(String id)         { return createdByRef(ObjectRef.createObjectRef(id)); }
         public Builder createdByRef(Identity identity) { return createdByRef(ObjectRef.createObjectRef(identity)); }
     }
 

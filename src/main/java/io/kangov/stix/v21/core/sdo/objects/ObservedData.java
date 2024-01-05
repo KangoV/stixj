@@ -71,7 +71,7 @@ public interface ObservedData extends SdoObject {
      * methods defined on the generated implementation's Builder class.
      */
     class Builder extends ObservedDataImpl.Builder {
-        public Builder createdByRef(String id)         { return createdByRef(ObjectRef.createObjectRef(id, Identity.class)); }
+        public Builder createdByRef(String id)         { return createdByRef(ObjectRef.createObjectRef(id)); }
         public Builder createdByRef(Identity identity) { return createdByRef(ObjectRef.createObjectRef(identity)); }
     }
 

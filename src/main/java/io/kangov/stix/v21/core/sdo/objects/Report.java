@@ -67,10 +67,10 @@ public interface Report extends SdoObject {
      * methods defined on the generated implementation's Builder class.
      */
     class Builder extends ReportImpl.Builder {
-        public Builder createdByRef(String id)         { return createdByRef(ObjectRef.createObjectRef(id, Identity.class)); }
+        public Builder createdByRef(String id)         { return createdByRef(ObjectRef.createObjectRef(id)); }
         public Builder createdByRef(Identity identity) { return createdByRef(ObjectRef.createObjectRef(identity)); }
         public Builder addObjectRef(Bundleable obj) { return addObjectRef(ObjectRef.create(obj)); }
-        public Builder addObjectRef(String str) { return addObjectRef(ObjectRef.create(str, Bundleable.class)); }
+        public Builder addObjectRef(String str) { return addObjectRef(ObjectRef.create(str)); }
     }
 
     static Report create(UnaryOperator<Builder> spec) { return spec.apply(builder()).build(); }

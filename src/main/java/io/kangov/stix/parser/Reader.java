@@ -22,12 +22,14 @@ public class Reader {
     private static final String TYPE = "type";
     private static final String OBJECTS = "objects";
 
-    private final ObjectCache objectCache;
+    private final Cache objectCache;
     private final ObjectMapper objectMapper;
+    private final Parser parser;
 
-    public Reader(ObjectMapper objectMapper, ObjectCache objectCache) {
-        this.objectMapper = objectMapper;
-        this.objectCache = objectCache;
+    public Reader(Parser parser) {
+        this.parser = parser;
+        this.objectMapper = parser.objectMapper();
+        this.objectCache = parser.objectCache();
     }
 
     public @Valid Bundle read(String str) {
@@ -78,11 +80,11 @@ public class Reader {
 
     }
 
-    @Valid Bundleable processNode(ObjectNode objectNode, ObjectCache cache) {
+    @Valid Bundleable processNode(ObjectNode objectNode, Cache cache) {
         try {
             log.trace("Deserialising: {}", objectNode.get(ID).asText());
             var object = objectMapper.treeToValue(objectNode, Bundleable.class);
-            cache.put(ObjectCache.Entry.create(object));
+            cache.put(Cache.Entry.create(object));
             return object;
         } catch (Exception e) {
             throw new ParseException("De-serialisation failed", e);

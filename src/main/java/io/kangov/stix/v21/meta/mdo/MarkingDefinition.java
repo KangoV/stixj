@@ -62,7 +62,7 @@ public interface MarkingDefinition extends MdoObject {
      * methods defined on the generated implementation's Builder class.
      */
     class Builder extends MarkingDefinitionImpl.Builder {
-        public Builder createdByRef(String id)         { return createdByRef(createObjectRef(id, Identity.class)); }
+        public Builder createdByRef(String id)         { return createdByRef(createObjectRef(id)); }
         public Builder createdByRef(Identity identity) { return createdByRef(createObjectRef(identity)); }
     }
 

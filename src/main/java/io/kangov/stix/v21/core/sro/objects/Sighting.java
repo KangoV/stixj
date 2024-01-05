@@ -63,11 +63,11 @@ public interface Sighting extends SroObject {
      * methods defined on the generated implementation's Builder class.
      */
     class Builder extends SightingImpl.Builder {
-        public Builder createdByRef(String id)         { return createdByRef(ObjectRef.createObjectRef(id, Identity.class)); }
+        public Builder createdByRef(String id)         { return createdByRef(ObjectRef.createObjectRef(id)); }
         public Builder createdByRef(Identity identity) { return createdByRef(ObjectRef.createObjectRef(identity)); }
-        public Builder sightingOfRef(String id)          { return sightingOfRef(ObjectRef.createObjectRef(id, SdoObject.class)); }
+        public Builder sightingOfRef(String id)          { return sightingOfRef(ObjectRef.createObjectRef(id)); }
         public Builder sightingOfRef(SdoObject obj)      { return sightingOfRef(ObjectRef.createObjectRef(obj)); }
-        public Builder addObservedDataRef(String id)     { return addObservedDataRef(ObjectRef.createObjectRef(id, ObservedData.class)); }
+        public Builder addObservedDataRef(String id)     { return addObservedDataRef(ObjectRef.createObjectRef(id)); }
         public Builder addObservedDataRef(ObservedData obj) { return addObservedDataRef(ObjectRef.createObjectRef(obj)); }
     }
 
