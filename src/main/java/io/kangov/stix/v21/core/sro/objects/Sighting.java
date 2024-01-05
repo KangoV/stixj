@@ -10,6 +10,8 @@ import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.v21.core.sdo.objects.Identity;
 import io.kangov.stix.v21.core.sdo.objects.ObservedData;
 import io.kangov.stix.v21.core.sro.SroObject;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.immutables.serial.Serial;
@@ -90,7 +92,7 @@ public interface Sighting extends SroObject {
 
     @JsonProperty("count") @JsonInclude(value = NON_EMPTY, content= NON_EMPTY)
     @Redactable
-    Optional<@Size(max = 999999999) Integer> getCount();
+    Optional<@Max(999999999) @Min(0) Integer> getCount();
 
     @JsonProperty("sighting_of_ref")
     @Redactable(useMask = true)

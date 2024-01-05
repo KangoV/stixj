@@ -92,10 +92,10 @@ public interface File extends ScoObject {
     ScoExtensions getExtensions();
 
     @JsonProperty("hashes")
-    Map<@Size(min = 3, max = 256) @Vocab(value = HASHING_ALGORITHM, inclusion = MUST) String, String> getHashes();
+    Map<@Size(min=3, max=256) @Vocab(value = HASHING_ALGORITHM, inclusion = MUST) String, String> getHashes();
 
     @JsonProperty("size")
-    Optional<@Size(min=1) Long> getSize();
+    Optional<@Min(1) Long> getSize();
 
     @JsonProperty("name")
     Optional<String> getName();

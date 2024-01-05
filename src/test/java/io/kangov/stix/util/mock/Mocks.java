@@ -36,7 +36,7 @@ public class Mocks {
 //        fake.coinFlip(() -> builder.createdByRef(mockIdentity()));
         fake.coinFlip(() -> builder.revoked(true));
         fake.coinFlip(() -> builder.labels(generateRandomLabels()));
-        fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
+        fake.coinFlip(() -> builder.confidence(random.integer(0, 100)));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
         fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
@@ -64,7 +64,7 @@ public class Mocks {
 //        fake.coinFlip(() -> builder.createdByRef(mockIdentity()));
         fake.coinFlip(() -> builder.revoked(true));
         fake.coinFlip(() -> builder.labels(generateRandomLabels()));
-        fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
+        fake.coinFlip(() -> builder.confidence(random.integer(0, 100)));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
         fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
@@ -99,7 +99,7 @@ public class Mocks {
 //        fake.coinFlip(() -> builder.createdByRef(mockIdentity()));
         fake.coinFlip(() -> builder.revoked(true));
         fake.coinFlip(() -> builder.labels(generateRandomLabels()));
-        fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
+        fake.coinFlip(() -> builder.confidence(random.integer(0, 100)));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
         fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
@@ -127,7 +127,7 @@ public class Mocks {
 //        fake.coinFlip(() -> builder.createdByRef(mockIdentity()));
         fake.coinFlip(() -> builder.revoked(true));
         fake.coinFlip(() -> builder.labels(generateRandomLabels()));
-        fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
+        fake.coinFlip(() -> builder.confidence(random.integer(0, 100)));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
         fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
@@ -156,7 +156,7 @@ public class Mocks {
 //        fake.coinFlip(() -> builder.createdByRef(mockIdentity()));
         fake.coinFlip(() -> builder.revoked(true));
         fake.coinFlip(() -> builder.labels(generateRandomLabels()));
-        fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
+        fake.coinFlip(() -> builder.confidence(random.integer(0, 100)));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
         fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
@@ -188,7 +188,7 @@ public class Mocks {
 //        fake.coinFlip(() -> builder.createdByRef(mockIdentity()));
         fake.coinFlip(() -> builder.revoked(true));
         fake.coinFlip(() -> builder.labels(generateRandomLabels()));
-        fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
+        fake.coinFlip(() -> builder.confidence(random.integer(0, 100)));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
         fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
@@ -222,7 +222,7 @@ public class Mocks {
         });
         fake.coinFlip(() -> builder.revoked(true));
         fake.coinFlip(() -> builder.labels(generateRandomLabels()));
-        fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
+        fake.coinFlip(() -> builder.confidence(random.integer(0, 100)));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
         fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
@@ -262,7 +262,7 @@ public class Mocks {
 //        fake.coinFlip(() -> builder.createdByRef(mockIdentity()));
         fake.coinFlip(() -> builder.revoked(true));
         fake.coinFlip(() -> builder.labels(generateRandomLabels()));
-        fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
+        fake.coinFlip(() -> builder.confidence(random.integer(0, 100)));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
         fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
@@ -302,7 +302,7 @@ public class Mocks {
 //        fake.coinFlip(() -> builder.createdByRef(mockIdentity()));
         fake.coinFlip(() -> builder.revoked(true));
         fake.coinFlip(() -> builder.labels(generateRandomLabels()));
-        fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
+        fake.coinFlip(() -> builder.confidence(random.integer(0, 100)));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
         fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
@@ -341,7 +341,7 @@ public class Mocks {
 //        fake.coinFlip(() -> builder.createdByRef(mockIdentity()));
         fake.coinFlip(() -> builder.revoked(true));
         fake.coinFlip(() -> builder.labels(generateRandomLabels()));
-        fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
+        fake.coinFlip(() -> builder.confidence(random.integer(0, 100)));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
         fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
@@ -384,7 +384,7 @@ public class Mocks {
 //        fake.coinFlip(() -> builder.createdByRef(mockIdentity()));
         fake.coinFlip(() -> builder.revoked(true));
         fake.coinFlip(() -> builder.labels(generateRandomLabels()));
-        fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
+        fake.coinFlip(() -> builder.confidence(random.integer(0, 100)));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
         fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
@@ -427,7 +427,7 @@ public class Mocks {
         fake.coinFlip(() -> builder.createdByRef(mockIdentity()));
         fake.coinFlip(() -> builder.revoked(true));
         fake.coinFlip(() -> builder.labels(generateRandomLabels()));
-        fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
+        fake.coinFlip(() -> builder.confidence(random.integer(0, 100)));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
         fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
@@ -457,7 +457,7 @@ public class Mocks {
 //        fake.coinFlip(() -> builder.createdByRef(mockIdentity()));
         fake.coinFlip(() -> builder.revoked(true));
         fake.coinFlip(() -> builder.labels(generateRandomLabels()));
-        fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
+        fake.coinFlip(() -> builder.confidence(random.integer(0, 100)));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
         fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
@@ -504,7 +504,7 @@ public class Mocks {
         fake.coinFlip(() -> builder.createdByRef(mockIdentity()));
         fake.coinFlip(() -> builder.revoked(true));
         fake.coinFlip(() -> builder.labels(generateRandomLabels()));
-        fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
+        fake.coinFlip(() -> builder.confidence(random.integer(0, 100)));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
         fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
@@ -534,7 +534,7 @@ public class Mocks {
 //        fake.coinFlip(() -> builder.createdByRef(mockIdentity()));
         fake.coinFlip(() -> builder.revoked(true));
         fake.coinFlip(() -> builder.labels(generateRandomLabels()));
-        fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
+        fake.coinFlip(() -> builder.confidence(random.integer(0, 100)));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
         fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
@@ -582,7 +582,7 @@ public class Mocks {
 //        fake.coinFlip(() -> builder.createdByRef(mockIdentity()));
         fake.coinFlip(() -> builder.revoked(true));
         fake.coinFlip(() -> builder.labels(generateRandomLabels()));
-        fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
+        fake.coinFlip(() -> builder.confidence(random.integer(0, 100)));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
         fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
@@ -625,7 +625,7 @@ public class Mocks {
 //        fake.coinFlip(() -> builder.createdByRef(mockIdentity()));
         fake.coinFlip(() -> builder.revoked(true));
         fake.coinFlip(() -> builder.labels(generateRandomLabels()));
-        fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
+        fake.coinFlip(() -> builder.confidence(random.integer(0, 100)));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
         fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));
@@ -659,7 +659,7 @@ public class Mocks {
 //        fake.coinFlip(() -> builder.createdByRef(mockIdentity()));
         fake.coinFlip(() -> builder.revoked(true));
         fake.coinFlip(() -> builder.labels(generateRandomLabels()));
-        fake.coinFlip(() -> builder.confidence(random.positiveInteger()));
+        fake.coinFlip(() -> builder.confidence(random.integer(0, 100)));
         fake.coinFlip(() -> builder.lang(random.word()));
         fake.coinFlip(() -> builder.customProperties(generateCustomProperties()));
         fake.coinFlip(() -> fake.repeatUpTo(10, () -> builder.addExternalReferences(mockExternalReference())));

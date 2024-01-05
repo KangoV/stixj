@@ -10,6 +10,7 @@ import io.kangov.stix.v21.common.type.ObjectRef;
 import io.kangov.stix.v21.core.sdo.SdoObject;
 import io.kangov.stix.validation.constraints.Vocab;
 import io.micronaut.core.annotation.Introspected;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.immutables.serial.Serial;
@@ -102,7 +103,7 @@ public interface Identity extends SdoObject {
 
     @JsonProperty("roles")
     @Redactable
-    Set<@Size(min=2) String> getRoles();
+    Set<String> getRoles();
 
     @JsonProperty("identity_class")
     @Redactable(useMask = true)

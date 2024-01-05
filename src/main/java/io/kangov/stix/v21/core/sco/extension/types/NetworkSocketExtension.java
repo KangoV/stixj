@@ -8,6 +8,7 @@ import io.kangov.stix.v21.core.sco.extension.ScoExtension;
 import io.kangov.stix.v21.enums.Vocabs;
 import io.kangov.stix.validation.constraints.Vocab;
 import io.micronaut.core.annotation.Introspected;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.immutables.serial.Serial;
@@ -86,7 +87,7 @@ public interface NetworkSocketExtension extends ScoExtension {
     Optional<@Vocab(Vocabs.Vocab.NETWORK_SOCKET_TYPE) String> getSocketType();
 
     @JsonProperty("socket_descriptor")
-    Optional<@Size(min=0) Long> getSocketDescriptor();
+    Optional<@Min(0) Long> getSocketDescriptor();
 
     @JsonProperty("socket_handle")
     Optional<Long> getSocketHandle();

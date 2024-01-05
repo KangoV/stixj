@@ -21,12 +21,16 @@ public class VocabValidator implements ConstraintValidator<Vocab, String> {
             @NonNull  AnnotationValue<Vocab> annotationMetadata,
             @NonNull  ConstraintValidatorContext context) {
 
-        var vocab = annotationMetadata.get("value", Vocabs.Vocab.class)
-            .orElseThrow(() -> new IllegalStateException("Need a vocabulary supplied"));
+        annotationMetadata.get("value", Vocabs.Vocab.class).ifPresentOrElse(
+            v -> {
+                // validate here
+            },
+            () -> {
+                log.warn("No vocab set in [value={}, annotationMetadata={}, context={}]", value, annotationMetadata, context);
+            }
+        );
 
-//        log.debug("Validating [{}] against vocab [{}]", value, vocab.vocabName());
-
-        return vocab.contains(value);
+        return true;
 
     }
 

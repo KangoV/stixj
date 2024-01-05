@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.kangov.stix.redaction.Redactable;
 import io.micronaut.core.annotation.NonNull;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 
@@ -28,6 +29,6 @@ public interface Confidence {
     @JsonProperty("confidence")
     @JsonInclude(NON_EMPTY)
     @Redactable(useMask = true)
-    Optional<@Size(max=100) Integer> getConfidence();
+    Optional<@Max(100) @Min(0) Integer> getConfidence();
 
 }

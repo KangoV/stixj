@@ -82,10 +82,10 @@ public class ObjectRef<T extends Bundleable> {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", ObjectRef.class.getSimpleName() + "[", "]")
-            .add("id='" + id + "'")
-            .add("object=" + object)
-            .toString();
+        var joiner =  new StringJoiner(", ", ObjectRef.class.getSimpleName() + "[", "]");
+        if (id!=null) joiner.add("id='" + id + "'");
+        if (object!=null) joiner.add("object=" + object);
+        return joiner.toString();
     }
 
     @Override

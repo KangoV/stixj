@@ -61,7 +61,6 @@ public class IdentityTest extends TestBases {
         var object = Identity.builder()
             .from(parser.read(json, Identity.class))
             .confidence(-2)
-            .name(null)
             .build();
         var violations = validator.validate(object);
         assertThat(violations).isNotNull();
@@ -75,7 +74,6 @@ public class IdentityTest extends TestBases {
 
     @Test
     void testRandom() {
-        var object = mock.mockIdentity();
         range(0, MOCK_COUNT).forEach(i -> {
             var expected = mock.mockIdentity();
             var string = parser.write(expected);
