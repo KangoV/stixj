@@ -1,10 +1,8 @@
 package io.kangov.stix.parser;
 
 import com.fasterxml.jackson.databind.*;
-import io.kangov.stix.ParseException;
 import io.kangov.stix.v21.bundle.Bundle;
 import io.kangov.stix.v21.bundle.Bundleable;
-import io.kangov.stix.v21.common.type.ObjectRef;
 import io.micronaut.context.annotation.Prototype;
 import io.micronaut.validation.Validated;
 import io.micronaut.validation.validator.Validator;
@@ -67,14 +65,6 @@ public class Parser {
         validator().validate(bundleable);
     }
 
-    public <T extends Bundleable> ObjectRef<T> createRef(String id) {
-        return new ObjectRef<>(id, null, objectCache());
-    }
-
-    public <T extends Bundleable> ObjectRef<T> createRef(T t) {
-        return new ObjectRef<>(t.getId(), t, objectCache());
-    }
-
     ObjectMapper objectMapper() {
         return this.objectMapper;
     }
@@ -86,6 +76,5 @@ public class Parser {
     Validator validator() {
         return this.validator;
     }
-
 
 }

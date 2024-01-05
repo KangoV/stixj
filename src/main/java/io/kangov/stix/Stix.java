@@ -17,17 +17,17 @@ public class Stix {
     }
 
     public static Parser parser() {
-        return get().context().getBean(Parser.class);
+        return stix().context().getBean(Parser.class);
     }
 
-    private static Stix get() {
+    private static Stix stix() {
         return LazyHolder.INSTANCE.getBean(Stix.class);
     }
 
     private final ApplicationContext context;
 
     @Inject
-    public Stix(ApplicationContext context) {
+    Stix(ApplicationContext context) {
         this.context = context;
     }
 

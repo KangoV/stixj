@@ -39,7 +39,7 @@ public class ObjectRef<T extends Bundleable> {
         public ObjectRef<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
             var id = p.getText();
             var cache =  ctxt.findInjectableValue("stix_object_cache", null, null);
-            return new ObjectRef<Bundleable>(id, null, (Cache) cache);
+            return new ObjectRef<>(id, null, (Cache) cache);
         }
     }
 
@@ -63,10 +63,9 @@ public class ObjectRef<T extends Bundleable> {
     private final Cache cache;
     private final T object;
 
-    public ObjectRef(String id, T object, Cache cache) {
-        assert id != null : "An object reference MUST contain an id";
-        assert (cache != null && object == null) || (cache == null && object != null)
-            : "An object reference must have one of: cache or object";
+    private ObjectRef(String id, T object, Cache cache) {
+        // If passing in an id without an object cache, then object() will always return empty Optional
+        assert (id != null || object != null) : "Must supply the id explicitly or via an object";
         this.id = id;
         this.cache = cache;
         this.object = object;
