@@ -79,7 +79,7 @@ public interface Report extends SdoObject {
     static Builder builder() { return new Builder(); }
 
     default Report update(UnaryOperator<Builder> builder) {
-        return builder.apply(builder()).build();
+        return builder.apply(builder().from(this)).build();
     }
 
     @NotBlank

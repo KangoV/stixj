@@ -65,7 +65,7 @@ public interface WindowsPeBinaryFileExtension extends ScoExtension {
     static Builder builder(UnaryOperator<Builder> spec) { return spec.apply(builder()); }
     static Builder builder() { return new Builder(); }
 
-    default WindowsPeBinaryFileExtension update(UnaryOperator<Builder> builder) { return builder.apply(builder()).build(); }
+    default WindowsPeBinaryFileExtension update(UnaryOperator<Builder> builder) { return builder.apply(builder().from(this)).build(); }
 
     @JsonProperty("pe_type")
     @NotNull

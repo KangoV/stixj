@@ -64,7 +64,7 @@ public interface NetworkSocketExtension extends ScoExtension {
     static Builder builder(UnaryOperator<Builder> spec) { return spec.apply(builder()); }
     static Builder builder() { return new Builder(); }
 
-    default NetworkSocketExtension update(UnaryOperator<Builder> builder) { return builder.apply(builder()).build(); }
+    default NetworkSocketExtension update(UnaryOperator<Builder> builder) { return builder.apply(builder().from(this)).build(); }
 
     @JsonProperty("address_family")
     @NotNull

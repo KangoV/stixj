@@ -55,7 +55,7 @@ public interface WindowsRegistryValueType extends CustomProperties, Serializable
     static Builder builder() { return new Builder(); }
 
     default WindowsRegistryValueType update(UnaryOperator<Builder> builder) {
-        return builder.apply(builder()).build();
+        return builder.apply(builder().from(this)).build();
     }
 
     @JsonProperty("name")

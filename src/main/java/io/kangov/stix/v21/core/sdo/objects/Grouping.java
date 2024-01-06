@@ -90,7 +90,7 @@ public interface Grouping extends SdoObject {
     static Builder builder() { return new Builder(); }
 
     default Grouping update(UnaryOperator<Builder> builder) {
-        return builder.apply(builder()).build();
+        return builder.apply(builder().from(this)).build();
     }
 
     @JsonProperty("name")

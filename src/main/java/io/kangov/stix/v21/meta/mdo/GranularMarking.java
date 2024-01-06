@@ -60,7 +60,7 @@ public interface GranularMarking {
     static Builder builder() { return new Builder(); }
 
     default GranularMarking update(UnaryOperator<Builder> builder) {
-        return builder.apply(builder()).build();
+        return builder.apply(builder().from(this)).build();
     }
 
 

@@ -83,7 +83,7 @@ public interface File extends ScoObject {
     static Builder builder() { return new Builder(); }
 
     default File update(UnaryOperator<Builder> builder) {
-        return builder.apply(builder()).build();
+        return builder.apply(builder().from(this)).build();
     }
 
     @JsonSerialize(using = ScoExtensionsSerializer.class)

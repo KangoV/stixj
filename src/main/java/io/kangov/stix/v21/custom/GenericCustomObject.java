@@ -47,7 +47,7 @@ public interface GenericCustomObject extends CustomObject {
     static Builder builder() { return new Builder(); }
 
     default GenericCustomObject update(UnaryOperator<Builder> builder) {
-        return builder.apply(builder()).build();
+        return builder.apply(builder().from(this)).build();
     }
 
 }

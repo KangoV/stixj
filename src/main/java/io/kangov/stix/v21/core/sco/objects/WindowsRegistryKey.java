@@ -61,7 +61,7 @@ public interface WindowsRegistryKey extends ScoObject {
     static Builder builder() { return new Builder(); }
 
     default WindowsRegistryKey update(UnaryOperator<Builder> builder) {
-        return builder.apply(builder()).build();
+        return builder.apply(builder().from(this)).build();
     }
 
     @JsonProperty("key")

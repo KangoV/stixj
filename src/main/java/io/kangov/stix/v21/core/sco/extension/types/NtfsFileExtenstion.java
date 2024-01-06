@@ -49,7 +49,7 @@ public interface NtfsFileExtenstion extends ScoExtension {
     static Builder builder(UnaryOperator<Builder> spec) { return spec.apply(builder()); }
     static Builder builder() { return new Builder(); }
 
-    default NtfsFileExtenstion update(UnaryOperator<Builder> builder) { return builder.apply(builder()).build(); }
+    default NtfsFileExtenstion update(UnaryOperator<Builder> builder) { return builder.apply(builder().from(this)).build(); }
 
     @JsonProperty("sid")
     Optional<String> getSid();

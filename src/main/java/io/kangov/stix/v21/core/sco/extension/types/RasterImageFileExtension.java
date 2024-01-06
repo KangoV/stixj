@@ -49,7 +49,7 @@ public interface RasterImageFileExtension extends ScoExtension {
     static Builder builder(UnaryOperator<Builder> spec) { return spec.apply(builder()); }
     static Builder builder() { return new Builder(); }
 
-    default RasterImageFileExtension update(UnaryOperator<Builder> builder) { return builder.apply(builder()).build(); }
+    default RasterImageFileExtension update(UnaryOperator<Builder> builder) { return builder.apply(builder().from(this)).build(); }
 
     //@TODO Spec is missing direction about limits: Value likely needs to be MUST be positive
     @JsonProperty("image_height")

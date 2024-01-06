@@ -60,7 +60,7 @@ public interface Ipv4Address extends ScoObject {
     static Builder builder() { return new Builder(); }
 
     default Ipv4Address update(UnaryOperator<Builder> builder) {
-        return builder.apply(builder()).build();
+        return builder.apply(builder().from(this)).build();
     }
 
     // TODO  Consider using regexp to validate:

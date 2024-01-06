@@ -51,7 +51,7 @@ public interface MacAddress extends ScoObject {
     static Builder builder() { return new Builder(); }
 
     default MacAddress update(UnaryOperator<Builder> builder) {
-        return builder.apply(builder()).build();
+        return builder.apply(builder().from(this)).build();
     }
 
     @JsonProperty("value")

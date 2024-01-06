@@ -90,7 +90,7 @@ public interface Process extends ScoObject {
     static Builder builder() { return new Builder(); }
 
     default Process update(UnaryOperator<Builder> builder) {
-        return builder.apply(builder()).build();
+        return builder.apply(builder().from(this)).build();
     }
 
     @JsonProperty("is_hidden")

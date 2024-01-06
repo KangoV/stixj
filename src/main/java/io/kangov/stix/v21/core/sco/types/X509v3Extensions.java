@@ -79,7 +79,7 @@ public interface X509v3Extensions extends CustomProperties, Serializable {
     static Builder builder() { return new Builder(); }
 
     default X509v3Extensions update(UnaryOperator<Builder> builder) {
-        return builder.apply(builder()).build();
+        return builder.apply(builder().from(this)).build();
     }
 
     @JsonProperty("basic_constraints")

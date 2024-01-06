@@ -57,7 +57,7 @@ public interface HttpRequestExtension extends ScoExtension {
     static Builder builder(UnaryOperator<Builder> spec) { return spec.apply(builder()); }
     static Builder builder() { return new Builder(); }
 
-    default HttpRequestExtension update(UnaryOperator<Builder> builder) { return builder.apply(builder()).build(); }
+    default HttpRequestExtension update(UnaryOperator<Builder> builder) { return builder.apply(builder().from(this)).build(); }
 
     @JsonProperty("request_method")
     @NotNull

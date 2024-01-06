@@ -55,7 +55,7 @@ public interface UnixAccountExtension extends ScoExtension {
     static Builder builder(UnaryOperator<Builder> spec) { return spec.apply(builder()); }
     static Builder builder() { return new Builder(); }
 
-    default UnixAccountExtension update(UnaryOperator<Builder> builder) { return builder.apply(builder()).build(); }
+    default UnixAccountExtension update(UnaryOperator<Builder> builder) { return builder.apply(builder().from(this)).build(); }
 
     @JsonProperty("gid")
     Optional<Long> getGid();

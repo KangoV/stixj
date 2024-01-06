@@ -72,7 +72,7 @@ public interface MarkingDefinition extends MdoObject {
     static Builder builder() { return new Builder(); }
 
     default MarkingDefinition update(UnaryOperator<Builder> builder) {
-        return builder.apply(builder()).build();
+        return builder.apply(builder().from(this)).build();
     }
 
     /**

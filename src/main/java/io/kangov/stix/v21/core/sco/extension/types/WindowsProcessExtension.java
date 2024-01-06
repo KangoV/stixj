@@ -55,7 +55,7 @@ public interface WindowsProcessExtension extends ScoExtension {
     static Builder builder(UnaryOperator<Builder> spec) { return spec.apply(builder()); }
     static Builder builder() { return new Builder(); }
 
-    default WindowsProcessExtension update(UnaryOperator<Builder> builder) { return builder.apply(builder()).build(); }
+    default WindowsProcessExtension update(UnaryOperator<Builder> builder) { return builder.apply(builder().from(this)).build(); }
 
     //@TODO Add business rule for having at least 1 property
 

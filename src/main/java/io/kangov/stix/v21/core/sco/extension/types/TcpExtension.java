@@ -53,7 +53,7 @@ public interface TcpExtension extends ScoExtension {
     static Builder builder(UnaryOperator<Builder> spec) { return spec.apply(builder()); }
     static Builder builder() { return new Builder(); }
 
-    default TcpExtension update(UnaryOperator<Builder> builder) { return builder.apply(builder()).build(); }
+    default TcpExtension update(UnaryOperator<Builder> builder) { return builder.apply(builder().from(this)).build(); }
 
     /**
      * Specifies the source TCP flags, as the union of all TCP flags observed

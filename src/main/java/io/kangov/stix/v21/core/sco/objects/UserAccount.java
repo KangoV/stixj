@@ -75,7 +75,7 @@ public interface UserAccount extends ScoObject {
     static Builder builder() { return new Builder(); }
 
     default UserAccount update(UnaryOperator<Builder> builder) {
-        return builder.apply(builder()).build();
+        return builder.apply(builder().from(this)).build();
     }
 
     @JsonProperty("user_id")

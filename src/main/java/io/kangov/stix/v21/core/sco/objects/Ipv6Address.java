@@ -58,7 +58,7 @@ public interface Ipv6Address extends ScoObject {
     static Builder builder() { return new Builder(); }
 
     default Ipv6Address update(UnaryOperator<Builder> builder) {
-        return builder.apply(builder()).build();
+        return builder.apply(builder().from(this)).build();
     }
 
     // TODO  Consider using regexp to validate:

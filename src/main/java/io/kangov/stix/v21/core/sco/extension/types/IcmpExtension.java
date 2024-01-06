@@ -49,7 +49,7 @@ public interface IcmpExtension extends ScoExtension {
     static Builder builder(UnaryOperator<Builder> spec) { return spec.apply(builder()); }
     static Builder builder() { return new Builder(); }
 
-    default IcmpExtension update(UnaryOperator<Builder> builder) { return builder.apply(builder()).build(); }
+    default IcmpExtension update(UnaryOperator<Builder> builder) { return builder.apply(builder().from(this)).build(); }
 
     @JsonProperty("icmp_type_hex")
     @Pattern(regexp = "^([a-fA-F0-9]{2})+$")

@@ -72,7 +72,7 @@ public interface CourseOfAction extends SdoObject {
     static Builder builder() { return new Builder(); }
 
     default CourseOfAction update(UnaryOperator<Builder> builder) {
-        return builder.apply(builder()).build();
+        return builder.apply(builder().from(this)).build();
     }
 
     @NotBlank

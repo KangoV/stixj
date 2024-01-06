@@ -90,7 +90,7 @@ public interface X509Certificate extends ScoObject {
     static Builder builder() { return new Builder(); }
 
     default X509Certificate update(UnaryOperator<Builder> builder) {
-        return builder.apply(builder()).build();
+        return builder.apply(builder().from(this)).build();
     }
     
     @JsonProperty("is_self_signed")
