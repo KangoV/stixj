@@ -82,7 +82,7 @@ public class ReferencesTest {
 
 
     private <T extends Bundleable> T getObject(Bundle bundle, TestBundle.Ref<T> ref) {
-        var object = bundle.stream(ref.type()).filter(o -> o.getId().equals(ref.id())).findFirst().orElse(null);
+        var object = bundle.find(ref.type()).filter(o -> o.getId().equals(ref.id())).findFirst().orElse(null);
         assertThat(object).isNotNull();
         return (T) object;
     }

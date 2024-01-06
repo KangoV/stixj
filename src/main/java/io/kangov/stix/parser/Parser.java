@@ -49,7 +49,7 @@ public class Parser {
     public @Valid <T extends Bundleable> T read(String str, Class<T> type) {
         var reader = new Reader(this);
         var bundle = reader.read(str);
-        var objectOpt = bundle.stream(type).findFirst();
+        var objectOpt = bundle.find(type).findFirst();
         return objectOpt.orElse(null);
     }
 

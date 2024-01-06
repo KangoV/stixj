@@ -11,10 +11,10 @@ import jakarta.validation.constraints.Size;
 import org.immutables.serial.Serial;
 import org.immutables.value.Value;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.kangov.stix.v21.StixObject.ID;
@@ -70,8 +70,20 @@ public interface Bundle extends StixObject, SpecVersion {
     @JsonProperty(value = "objects" /*, access = JsonProperty.Access.WRITE_ONLY */)
     Set<Bundleable> getObjects();
 
-    default <T extends Bundleable> Set<T> find(Class<T> type) {
-        return stream(type).collect(Collectors.toUnmodifiableSet());
+    default Optional<Bundleable> find(String id) {
+        return find(o -> o.getId().equals(id)).findFirst();
+    }
+
+    default Bundleable get(String id) {
+        return find(id).orElseThrow(() -> new IllegalStateException("Object id "+id+" not found"));
+    }
+
+    default <T extends Bundleable> Optional<T> find(String id, Class<T> type) {
+        return find(type, o -> o.getId().equals(id)).findFirst();
+    }
+
+    default <T extends Bundleable> T get(String id, Class<T> type) {
+        return find(id, type).orElseThrow(() -> new IllegalStateException("Object id "+id+" not found"));
     }
 
     /**
@@ -80,7 +92,7 @@ public interface Bundle extends StixObject, SpecVersion {
      * @param filter the predicate to match objects in this bundle against
      * @return a stream that emits objects from this bundle matching the provided predicate
      */
-    default Stream<Bundleable> stream(Predicate<Bundleable> filter) {
+    default Stream<Bundleable> find(Predicate<Bundleable> filter) {
         return getObjects().stream().filter(filter);
     }
 
@@ -90,8 +102,8 @@ public interface Bundle extends StixObject, SpecVersion {
      * @param filter to match objects in this bundle against
      * @return a stream that emits objects of {@code type} from this bundle matching the provided {@code filter}
      */
-    default <T extends Bundleable> Stream<T> stream(Class<T> type, Predicate<T> filter) {
-        return stream(type).filter(filter);
+    default <T extends Bundleable> Stream<T> find(Class<T> type, Predicate<T> filter) {
+        return find(type).filter(filter);
     }
 
     /**
@@ -100,7 +112,7 @@ public interface Bundle extends StixObject, SpecVersion {
      * @param type  to match objects in this bundle against
      * @return a stream that emits objects from this bundle matching the provided {@code filter}
      */
-    default <T extends Bundleable> Stream<T> stream(Class<T> type) {
-        return (Stream<T>) stream(obj -> type.isAssignableFrom(obj.getClass()));
+    default <T extends Bundleable> Stream<T> find(Class<T> type) {
+        return (Stream<T>) find(obj -> type.isAssignableFrom(obj.getClass()));
     }
 }

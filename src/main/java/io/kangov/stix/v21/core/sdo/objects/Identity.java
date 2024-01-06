@@ -86,7 +86,7 @@ public interface Identity extends SdoObject {
     static Builder builder() { return new Builder(); }
 
     default Identity update(UnaryOperator<Builder> builder) {
-        return builder.apply(builder()).build();
+        return builder.apply(builder().from(this)).build();
     }
 
     // Note for the labels attribute:
