@@ -14,6 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Dictionary;
+
 import static io.kangov.stix.util.TestUtils.loadResource;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DirectoryTest extends TestBases {
 
     private static final Logger log = LoggerFactory.getLogger(DirectoryTest.class);
-    private static final Class<? extends Bundleable> TYPE = Directory.class;
+    private static final Class<Directory> TYPE = Directory.class;
 
     private static String json;
 
@@ -43,7 +45,7 @@ public class DirectoryTest extends TestBases {
 
     @Test
     void testWrite() {
-        var object = parser.read(json);
+        var object = parser.read(json).get();
         var string = parser.write(object);
         assertThat(string).isNotNull();
     }

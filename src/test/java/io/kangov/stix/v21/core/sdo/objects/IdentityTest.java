@@ -35,15 +35,15 @@ public class IdentityTest extends TestBases {
 
     @Test
     void test_deser() {
-        var expected = parser.read(json_object, TYPE);
+        var expected = parser.read(json_object, TYPE).get();
         var json = parser.write(expected);
-        var actual = parser.read(json).get(expected.getId(), TYPE);
+        var actual = parser.read(json).get().get(expected.getId(), TYPE);
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 
     @Test
     void test_Name_not_blank() {
-        var original = parser.read(json_object, TYPE);
+        var original = parser.read(json_object, TYPE).get();
         var modified = original.update(b -> b.name(null));
         var violations = validator.validate(modified);
         violations.forEach(v -> System.out.println("got: "+v.getMessage()));
@@ -53,7 +53,7 @@ public class IdentityTest extends TestBases {
     @Test
     void test_negative_confidence() {
         // container constraint, "Set<@Min(2) String>, so should generate a violation
-        var original = parser.read(json_object, TYPE);
+        var original = parser.read(json_object, TYPE).get();
         var modified = original.update(b -> b.confidence(-2));
         var violations = validator.validate(modified);
         assertThat(violations).isNotNull();
@@ -70,7 +70,7 @@ public class IdentityTest extends TestBases {
         range(0, MOCK_COUNT).forEach(i -> {
             var expected = mock.mockIdentity();
             var string = parser.write(expected);
-            var actual = parser.read(string, TYPE);
+            var actual = parser.read(string, TYPE).get();
             assertThat(actual).as("(%s) -- expected json: %s", i, string).isEqualTo(expected);
         });
     }

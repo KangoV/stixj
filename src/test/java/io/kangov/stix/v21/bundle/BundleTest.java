@@ -32,7 +32,7 @@ public class BundleTest extends TestBases {
 
     @Test
     void testReadPerformance() {
-        var bundle = parser.read(TestBundle.BUNDLE_JSON);
+        var bundle = parser.read(TestBundle.BUNDLE_JSON).get();
         testPerformance(() -> parser.write(bundle), "write_bundle");
     }
 

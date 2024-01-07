@@ -19,11 +19,11 @@ public class TestBases {
 
     protected void checkBundle(Parser parser, String bundle) {
         log.debug("reading initial bundle...");
-        var obj1  = parser.read(bundle);
+        var obj1  = parser.read(bundle).get();
         log.debug("writing bundle...");
         var json2 = parser.write(obj1);
         log.debug("reading bundle again...");
-        var obj2  = parser.read(json2);
+        var obj2  = parser.read(json2).get();
         assertThat(obj1).isEqualTo(obj2);
         log.debug("ok");
     }

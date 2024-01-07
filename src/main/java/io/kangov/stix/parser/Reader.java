@@ -32,7 +32,7 @@ public class Reader {
         this.objectCache = parser.objectCache();
     }
 
-    public @Valid Bundle read(String str) {
+    public Bundle read(String str) {
         JsonNode rootNode = null;
         try {
             rootNode = objectMapper.readTree(str);
@@ -50,12 +50,12 @@ public class Reader {
         return processObject(rootNode);
     }
 
-    @Valid Bundle processObject(JsonNode rootNode) {
+    Bundle processObject(JsonNode rootNode) {
         var obj = processNode((ObjectNode) rootNode, objectCache);
         return Bundle.create(b -> b.addObject(obj));
     }
 
-    @Valid Bundle processBundle(JsonNode rootNode) {
+    Bundle processBundle(JsonNode rootNode) {
         try {
             if (rootNode instanceof ObjectNode bundleNode) {
                 var builder = Bundle
@@ -80,7 +80,7 @@ public class Reader {
 
     }
 
-    @Valid Bundleable processNode(ObjectNode objectNode, Cache cache) {
+    Bundleable processNode(ObjectNode objectNode, Cache cache) {
         try {
             log.trace("Deserialising: {}", objectNode.get(ID).asText());
             var object = objectMapper.treeToValue(objectNode, Bundleable.class);

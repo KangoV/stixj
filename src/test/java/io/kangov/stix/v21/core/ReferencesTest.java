@@ -31,7 +31,7 @@ public class ReferencesTest {
 
     @BeforeEach
     void setup() {
-        bundle = parser.read(TestBundle.BUNDLE_JSON);
+        bundle = parser.read(TestBundle.BUNDLE_JSON).get();
     }
 
     @Test

@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FileTest extends TestBases {
 
     private static final Logger log = LoggerFactory.getLogger(FileTest.class);
-    private static final Class<? extends Bundleable> TYPE = File.class;
+    private static final Class<File> TYPE = File.class;
 
     private static String object_json;
     private static String bundle_json;
@@ -70,7 +70,7 @@ public class FileTest extends TestBases {
 
     @Test
     void testReadWriteObject() {
-        var object = parser.read(object_json);
+        var object = parser.read(object_json).get();
         var string = parser.write(object);
         assertThat(string).isNotNull();
     }
@@ -90,9 +90,9 @@ public class FileTest extends TestBases {
 
     @Test
     void testDeserBundle() {
-        var bundle1 = parser.read(bundle_json);
+        var bundle1 = parser.read(bundle_json).get();
         var json1 = parser.write(bundle1);
-        var bundle2 = parser.read(json1);
+        var bundle2 = parser.read(json1).get();
         assertThat(bundle2).isEqualTo(bundle1);
     }
 }
